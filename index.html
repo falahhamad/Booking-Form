@@ -2,7 +2,12 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+      إجبار المتصفح على وضع سطح المكتب 
+      width=1280: عرض ثابت
+      user-scalable=yes: السماح بالتكبير
+    -->
+    <meta name="viewport" content="width=1280, user-scalable=yes">
     <title>استمارة التخرج - التعديل النهائي</title>
     
     <!-- Tailwind CSS -->
@@ -16,9 +21,29 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+        /* --- إعدادات الصفحة الأساسية --- */
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f1f5f9;
+            /* ضمان أن الخلفية تغطي كامل العرض الإجباري */
+            min-width: 1280px;
+            position: relative; /* ضروري لتصحيح تموضع التنبيهات */
+            min-height: 100vh;
+        }
+
+        /* --- حل مشكلة ظهور التنبيه في الجانب (SweetAlert2 Fix) --- */
+        .swal2-container {
+            position: absolute !important; /* التغيير من fixed إلى absolute */
+            width: 100% !important;
+            min-width: 1280px !important; /* إجبار الحاوية على أخذ عرض سطح المكتب */
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            /* ضمان التوسيط */
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            z-index: 99999 !important;
         }
 
         /* --- تصميم بطاقات الخيارات --- */
@@ -210,7 +235,7 @@
                 </h2>
                 <div class="w-full">
                     <label class="block text-gray-700 font-bold mb-2 text-sm">الاسم الرباعي</label>
-                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 text-xl font-bold" placeholder="     مثلا فلاح حمد احمد جاسم...   " required oninput="updateProgress()">
+                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 text-xl font-bold" placeholder=" مثلا فلاح حمد احمد جاسم..." required oninput="updateProgress()">
                 </div>
             </section>
 
@@ -508,16 +533,16 @@
                 </div>
             </section>
 
+            <!-- زر الإرسال الثابت في نهاية الصفحة -->
+            <div class="w-full flex justify-center py-8 no-print mt-8 border-t border-gray-200">
+                <button onclick="processAndSend()" class="w-full md:w-1/2 p-4 bg-green-600 text-white rounded-full shadow-xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-2 font-bold text-lg ring-4 ring-green-200 group">
+                    <span class="group-hover:animate-pulse"><i class="fas fa-paper-plane text-xl ml-2"></i></span>
+                    إرسال واعتماد الطلب
+                </button>
+            </div>
+
         </form>
     </main>
-
-    <!-- زر الإرسال العائم -->
-    <div class="fixed bottom-6 left-6 z-50 flex flex-col gap-3 no-print">
-        <button onclick="processAndSend()" class="p-4 bg-green-600 text-white rounded-full shadow-xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-2 font-bold text-sm ring-4 ring-green-200 group">
-            <span class="group-hover:animate-pulse"><i class="fas fa-paper-plane text-lg ml-2"></i></span>
-            إرسال واعتماد الطلب
-        </button>
-    </div>
 
     <script>
         // ==================================================================
@@ -774,8 +799,8 @@
             // 2. تعديل الـ Head لفرض وضع سطح المكتب
             let headContent = document.head.innerHTML;
             
-            // الكود السحري: استبدال Viewport بآخر ثابت العرض (1200px)
-            const desktopViewport = '<meta name="viewport" content="width=1200, user-scalable=yes">';
+            // الكود السحري: استبدال Viewport بآخر ثابت العرض (1280px)
+            const desktopViewport = '<meta name="viewport" content="width=1280, user-scalable=yes">';
             if (headContent.includes('<meta name="viewport"')) {
                 // استبدال الميتا تاغ الموجود
                 headContent = headContent.replace(/<meta name="viewport"[^>]*>/gi, desktopViewport);
@@ -794,7 +819,7 @@
             background-color: #f1f5f9; 
             padding-bottom: 50px; 
             /* ضمان أن الخلفية تمتد لتغطي العرض الكامل حتى لو كانت الشاشة صغيرة */
-            min-width: 1200px; 
+            min-width: 1280px; 
         }
         .no-print { display: none !important; }
         input:focus, textarea:focus { outline: none; box-shadow: none; border-color: #e2e8f0; }
