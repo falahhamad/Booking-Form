@@ -56,7 +56,8 @@
         /* --- مربعات رفع الصور --- */
         .upload-container-wrapper {
             width: 100%;
-            max-width: 180px;
+            /* الحجم الكبير 350px */
+            max-width: 350px;
             margin: 0 auto;
         }
 
@@ -209,7 +210,7 @@
                 </h2>
                 <div class="w-full">
                     <label class="block text-gray-700 font-bold mb-2 text-sm">الاسم الرباعي</label>
-                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50" placeholder="     مثلا فلاح حمد احمد جاسم...   " required oninput="updateProgress()">
+                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 text-xl font-bold" placeholder="     مثلا فلاح حمد احمد جاسم...   " required oninput="updateProgress()">
                 </div>
             </section>
 
@@ -261,10 +262,12 @@
                                     <div class="upload-container-wrapper">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 text-center">الجهة اليمنى</label>
                                         <div id="upload-sash-right"></div>
+                                        <textarea name="sashRightText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                     </div>
                                     <div class="upload-container-wrapper">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 text-center">الجهة اليسرى</label>
                                         <div id="upload-sash-left"></div>
+                                        <textarea name="sashLeftText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -275,6 +278,7 @@
                                     <div class="upload-container-wrapper">
                                         <label class="block text-xs font-bold text-gray-500 mb-2 text-center">صورة النقش</label>
                                         <div id="upload-sash-side-1"></div>
+                                        <textarea name="sashSideText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -285,9 +289,11 @@
                              <div class="grid grid-cols-2 gap-4 justify-items-center">
                                 <div class="upload-container-wrapper">
                                     <div id="upload-sash-back-1"></div>
+                                    <textarea name="sashBack1Text" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                 </div>
                                 <div class="upload-container-wrapper">
                                     <div id="upload-sash-back-2"></div>
+                                    <textarea name="sashBack2Text" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -302,15 +308,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون الوشاح</label>
-                                <input type="text" name="sashColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: ماروني">
+                                <input type="text" name="sashColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: ماروني">
                             </div>
                             <div>
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون الكركوشة</label>
-                                <input type="text" name="sashTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: ذهبي">
+                                <input type="text" name="sashTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: ذهبي">
                             </div>
                             <div>
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون النقش</label>
-                                <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أبيض">
+                                <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أبيض">
                             </div>
                         </div>
                     </div>
@@ -325,10 +331,10 @@
                         <div class="flex flex-col md:flex-row gap-4 items-stretch">
                              <!-- مربع الملاحظات -->
                             <div class="flex-1">
-                                <textarea name="sashNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-purple-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                                <textarea name="sashNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-purple-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
                              <!-- صورة الملاحظة -->
-                            <div class="w-full md:w-[180px] flex-shrink-0 flex flex-col">
+                            <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
                                 <label class="block text-purple-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
                                     <div id="upload-sash-notes"></div>
@@ -386,6 +392,7 @@
                                 <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (فوق القبعة)</h3>
                                 <div class="upload-container-wrapper">
                                     <div id="upload-cap-top"></div>
+                                    <textarea name="capTopText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-indigo-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                 </div>
                             </div>
 
@@ -393,6 +400,7 @@
                                 <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (طوق القبعة)</h3>
                                 <div class="upload-container-wrapper">
                                     <div id="upload-cap-rim"></div>
+                                    <textarea name="capRimText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-indigo-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                 </div>
                             </div>
                         </div>
@@ -407,15 +415,15 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون القبعة</label>
-                                <input type="text" name="capColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أسود">
+                                <input type="text" name="capColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أسود">
                             </div>
                             <div id="capEmbroideryColorField">
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون النقش</label>
-                                <input type="text" name="capEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: ذهبي">
+                                <input type="text" name="capEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: ذهبي">
                             </div>
                             <div>
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون الكركوشة</label>
-                                <input type="text" name="capTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أصفر">
+                                <input type="text" name="capTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أصفر">
                             </div>
                         </div>
                     </div>
@@ -428,9 +436,9 @@
                         </h3>
                          <div class="flex flex-col md:flex-row gap-4 items-stretch">
                             <div class="flex-1">
-                                <textarea name="capNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-indigo-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                                <textarea name="capNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-indigo-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
-                            <div class="w-full md:w-[180px] flex-shrink-0 flex flex-col">
+                            <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
                                 <label class="block text-indigo-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
                                     <div id="upload-cap-notes"></div>
@@ -474,7 +482,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-gray-600 text-xs font-bold mb-1">لون الروب</label>
-                                <input type="text" name="gownColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أسود">
+                                <input type="text" name="gownColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أسود">
                             </div>
                         </div>
                     </div>
@@ -487,9 +495,9 @@
                         </h3>
                          <div class="flex flex-col md:flex-row gap-4 items-stretch">
                             <div class="flex-1">
-                                <textarea name="gownNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-emerald-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                                <textarea name="gownNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-emerald-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
-                            <div class="w-full md:w-[180px] flex-shrink-0 flex flex-col">
+                            <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
                                 <label class="block text-emerald-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
                                     <div id="upload-gown-notes"></div>
@@ -689,195 +697,123 @@
             }
         }
 
+        // =========================================================
+        // الدالة المعدلة لتوليد نسخة طبق الأصل مع إجبار وضع سطح المكتب
+        // =========================================================
         function generateExactStaticHTML(fullName) {
-            const date = new Date().toLocaleDateString('en-GB'); 
+            // 1. نسخ المحتوى وتجميد المدخلات
+            const originalContainer = document.getElementById('main-form-container');
+            const clone = originalContainer.cloneNode(true);
+            const originalInputs = originalContainer.querySelectorAll('input, textarea, select');
+            const clonedInputs = clone.querySelectorAll('input, textarea, select');
+
+            for (let i = 0; i < originalInputs.length; i++) {
+                const orig = originalInputs[i];
+                const cln = clonedInputs[i];
+                
+                // إزالة الـ Placeholder لمنع ظهور النص الباهت
+                cln.removeAttribute('placeholder');
+
+                if (orig.tagName === 'INPUT' || orig.tagName === 'SELECT') {
+                    // التحقق من القيمة الفارغة للنصوص
+                    let val = orig.value;
+                    if(val.trim() === "") {
+                        val = "ــــــــ"; // تعبئة الفراغ
+                        cln.style.color = "#9ca3af"; // لون رمادي للنص الافتراضي
+                    } else {
+                        cln.style.color = "#000000"; // لون أسود للنص المدخل
+                    }
+                    cln.setAttribute('value', val);
+
+                    if (orig.type === 'checkbox' || orig.type === 'radio') {
+                        if (orig.checked) cln.setAttribute('checked', 'checked');
+                    }
+                } else if (orig.tagName === 'TEXTAREA') {
+                    let val = orig.value;
+                    if(val.trim() === "") {
+                        val = "ــــــــ";
+                        cln.style.color = "#9ca3af";
+                    } else {
+                        cln.style.color = "#000000";
+                    }
+                    cln.textContent = val;
+                }
+                
+                cln.setAttribute('readonly', 'true');
+                cln.classList.add('pointer-events-none', 'bg-white'); 
+            }
+
+            // تنظيف العناصر التفاعلية
+            clone.querySelectorAll('*').forEach(el => {
+                el.removeAttribute('onclick'); el.removeAttribute('onchange'); el.removeAttribute('oninput'); el.removeAttribute('onsubmit');
+            });
+            clone.querySelectorAll('.img-actions').forEach(btn => btn.remove());
+            clone.querySelectorAll('input[type="file"]').forEach(inp => inp.remove());
+            clone.querySelectorAll('.option-card').forEach(card => { card.style.cursor = 'default'; card.style.pointerEvents = 'none'; });
             
-            const getVal = (name) => document.querySelector(`[name="${name}"]`)?.value || '-';
-            const getImg = (id) => imageStore[id] ? `<img src="${imageStore[id]}" style="width:100%;height:100%;object-fit:contain;">` : '<div style="color:#cbd5e1;font-size:0.8rem;">لا توجد صورة</div>';
-
-            const createSection = (title, iconClass, colorClass, content) => `
-                <div style="background:white; border:1px solid #e2e8f0; border-radius:16px; padding:24px; margin-bottom:24px; position:relative; overflow:hidden;">
-                     <div style="position:absolute; top:0; right:0; width:6px; height:100%;" class="${colorClass}"></div>
-                     <h2 style="font-size:1.25rem; font-weight:bold; color:#1f2937; margin-bottom:16px; display:flex; align-items:center; gap:8px;">
-                        <i class="${iconClass}" style="color:inherit;"></i> ${title}
-                     </h2>
-                     ${content}
-                </div>
-            `;
-
-            const createSelectedBox = (label, value) => `
-                <div style="text-align:center; margin-bottom:24px;">
-                    <div style="font-size:0.875rem; font-weight:bold; color:#4b5563; margin-bottom:8px;">${label}</div>
-                    <div style="display:inline-block; background:#f0f9ff; color:#0369a1; padding:12px 32px; border-radius:12px; border:2px solid #bae6fd; font-weight:bold; font-size:1.1rem;">
-                        ${value}
-                    </div>
-                </div>
-            `;
-
-            const createImageGrid = (title, images) => {
-                if (images.every(img => img.includes('لا توجد صورة'))) return ''; 
-                const cols = images.length > 1 ? 'grid-template-columns: 1fr 1fr;' : 'grid-template-columns: 1fr; max-width:300px; margin:0 auto;';
-                return `
-                <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:16px; margin-bottom:16px;">
-                    ${title ? `<h3 style="font-size:0.9rem; font-weight:bold; color:#4b5563; text-align:center; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:8px;">${title}</h3>` : ''}
-                    <div style="display:grid; ${cols} gap:16px; justify-items:center;">
-                        ${images.map(img => `
-                            <div style="width:100%; aspect-ratio:1/1; background:white; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center;">
-                                ${img}
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>`;
-            };
-
-            const createDetailsGrid = (items) => `
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:16px; padding-top:16px; border-top:1px solid #f1f5f9;">
-                    ${items.map(item => `
-                        <div style="background:#f9fafb; padding:12px; border-radius:8px;">
-                            <div style="font-size:0.8rem; color:#6b7280; font-weight:bold; margin-bottom:4px;">${item.label}</div>
-                            <div style="font-size:0.95rem; color:#1f2937; font-weight:bold;">${item.val}</div>
-                        </div>
-                    `).join('')}
-                </div>
-            `;
-
-            const createNotesLayout = (noteText, imageKey, colorCode) => {
-                const imgVal = imageStore[imageKey];
-                const hasNote = noteText && noteText !== '-' && noteText.trim().length > 0;
-                const hasImg = !!imgVal;
-
-                if (!hasNote && !hasImg) return '';
-
-                return `
-                    <div style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed #cbd5e1;">
-                        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
-                            <div style="flex: 1; min-width: 200px;">
-                                <h4 style="font-size: 0.9rem; font-weight: bold; color: ${colorCode}; margin-bottom: 8px;">ملاحظات إضافية</h4>
-                                <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; min-height: 120px; font-size: 0.9rem; color: #334155; white-space: pre-wrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">${noteText || 'لا توجد ملاحظات'}</div>
-                            </div>
-                            ${hasImg ? `
-                            <div style="width: 150px; flex-shrink: 0;">
-                                 <h4 style="font-size: 0.8rem; font-weight: bold; color: ${colorCode}; margin-bottom: 8px; text-align: center;">صورة مع الملاحظة</h4>
-                                 <div style="width: 100%; aspect-ratio: 1/1; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-                                    <img src="${imgVal}" style="width: 100%; height: 100%; object-fit: cover;">
-                                 </div>
-                            </div>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            };
-
-            // 1. Info
-            const infoContent = `
-                <div style="margin-top:16px;">
-                    <div style="font-size:0.875rem; font-weight:bold; color:#4b5563; margin-bottom:8px;">الاسم الرباعي</div>
-                    <div style="background:#f3f4f6; padding:16px; border-radius:12px; font-weight:bold; color:#111827; font-size:1.1rem;">${fullName}</div>
-                </div>
-            `;
-
-            // 2. Sash
-            const sashType = getVal('sashType');
-            let sashContent = '';
-            if(sashType && !sashType.includes('لا اريد')) {
-                sashContent += createSelectedBox('نوع الوشاح', sashType);
+            // معالجة مربعات الصور
+            clone.querySelectorAll('.upload-box').forEach(box => {
+                box.style.pointerEvents = 'none'; 
+                box.style.cursor = 'default';
                 
-                let embroideryContent = '';
-                
-                if(sashType.includes('جانبي')) {
-                    embroideryContent += createImageGrid('النقش من الامام (الوشاح الجانبي)', [getImg('upload-sash-side-1')]);
+                if(box.classList.contains('has-image')) {
+                    box.style.borderStyle = 'solid';
                 } else {
-                    embroideryContent += createImageGrid('النقش من الامام (الوشاح ذو الجانبين)', [
-                        `<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">الجهة اليمنى</div>${getImg('upload-sash-right')}</div>`, 
-                        `<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">الجهة اليسرى</div>${getImg('upload-sash-left')}</div>`
-                    ]);
+                    // استبدال المحتوى برسالة "لم يتم إرفاق صورة"
+                    box.innerHTML = `
+                        <div class="flex flex-col items-center justify-center text-gray-400 opacity-70">
+                            <i class="fas fa-image-slash text-2xl mb-2"></i>
+                            <span class="text-[10px] font-bold">لم يتم ارفاق صورة</span>
+                        </div>
+                    `;
+                    box.style.backgroundColor = "#f8fafc";
+                    box.style.borderColor = "#e2e8f0";
                 }
-                
-                if(sashType.includes('ملكي')) {
-                    embroideryContent += createImageGrid('النقش من الخلف (خاص بالوشاح الملكي)', [getImg('upload-sash-back-1'), getImg('upload-sash-back-2')]);
-                }
-                
-                sashContent += `<div style="margin-bottom:24px;">${embroideryContent}</div>`;
+            });
 
-                sashContent += createDetailsGrid([
-                    {label: 'لون الوشاح', val: getVal('sashColor')},
-                    {label: 'لون الكركوشة', val: getVal('sashTasselColor')},
-                    {label: 'لون النقش', val: getVal('sashEmbroideryColor')},
-                ]);
-                sashContent += createNotesLayout(getVal('sashNotes'), 'upload-sash-notes', '#9333ea');
+            // 2. تعديل الـ Head لفرض وضع سطح المكتب
+            let headContent = document.head.innerHTML;
+            
+            // الكود السحري: استبدال Viewport بآخر ثابت العرض (1200px)
+            const desktopViewport = '<meta name="viewport" content="width=1200, user-scalable=yes">';
+            if (headContent.includes('<meta name="viewport"')) {
+                // استبدال الميتا تاغ الموجود
+                headContent = headContent.replace(/<meta name="viewport"[^>]*>/gi, desktopViewport);
             } else {
-                sashContent = '<div style="text-align:center; color:#ef4444; font-weight:bold; padding:20px;">لا اريد وشاح</div>';
+                // إضافة الميتا تاغ إذا لم يكن موجوداً
+                headContent += desktopViewport;
             }
 
-            // 3. Cap
-            const capType = getVal('capType');
-            let capContent = '';
-            if(capType && !capType.includes('لا اريد')) {
-                capContent += createSelectedBox('نوع القبعة', capType);
-                const capLoc = getVal('capEmbroideryLoc');
-                if(capLoc && !capLoc.includes('لا اريد')) {
-                    capContent += createSelectedBox('مكان النقش على القبعة', capLoc);
-                    const capImages = [];
-                    if(capLoc.includes('فوق') || capLoc.includes('دبل')) capImages.push(`<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">النقش فوق القبعة</div>${getImg('upload-cap-top')}</div>`);
-                    if(capLoc.includes('طوق') || capLoc.includes('دبل')) capImages.push(`<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">النقش على الطوق</div>${getImg('upload-cap-rim')}</div>`);
-                    if(capImages.length > 0) capContent += createImageGrid('صور النقش', capImages);
-                }
-                capContent += createDetailsGrid([
-                    {label: 'لون القبعة', val: getVal('capColor')},
-                    {label: 'لون النقش', val: getVal('capEmbroideryColor')},
-                    {label: 'لون الكركوشة', val: getVal('capTasselColor')},
-                ]);
-                capContent += createNotesLayout(getVal('capNotes'), 'upload-cap-notes', '#4f46e5');
-            } else {
-                capContent = '<div style="text-align:center; color:#ef4444; font-weight:bold; padding:20px;">لا اريد قبعة</div>';
-            }
-
-            // 4. Gown
-            const gownType = getVal('gownType');
-            let gownContent = '';
-            if(gownType && !gownType.includes('لا اريد')) {
-                gownContent += createSelectedBox('نوع الروب', gownType);
-                gownContent += createDetailsGrid([
-                    {label: 'لون الروب', val: getVal('gownColor')},
-                ]);
-                gownContent += createNotesLayout(getVal('gownNotes'), 'upload-gown-notes', '#059669');
-            } else {
-                gownContent = '<div style="text-align:center; color:#ef4444; font-weight:bold; padding:20px;">لا اريد روب</div>';
-            }
-
-            return `
-<!DOCTYPE html>
+            return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>${fullName}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    ${headContent}
     <style>
-        body { font-family: 'Tajawal', sans-serif; background-color: #fff; padding: 40px; margin:0; }
-        @media print { body { padding: 0; } }
-        .bg-blue-500 { background-color: #3b82f6; }
-        .bg-purple-500 { background-color: #a855f7; }
-        .bg-indigo-500 { background-color: #6366f1; }
-        .bg-emerald-500 { background-color: #10b981; }
+        /* تنسيقات إضافية خاصة بملف العرض فقط */
+        body { 
+            background-color: #f1f5f9; 
+            padding-bottom: 50px; 
+            /* ضمان أن الخلفية تمتد لتغطي العرض الكامل حتى لو كانت الشاشة صغيرة */
+            min-width: 1200px; 
+        }
+        .no-print { display: none !important; }
+        input:focus, textarea:focus { outline: none; box-shadow: none; border-color: #e2e8f0; }
+        .img-actions { display: none !important; }
+        /* إظهار شريط تمرير عند الحاجة */
+        html { overflow-x: auto; }
     </style>
 </head>
-<body>
-    <div style="max-width:800px; margin:0 auto;">
-        <div style="text-align:center; margin-bottom:40px;">
-            <h1 style="font-size:2rem; font-weight:800; color:#1f2937; margin:0;">نموذج طلب تخرج</h1>
-            <p style="font-size:1.5rem; font-weight:bold; color:#2563eb; margin:8px 0;">${fullName}</p>
-            <p style="color:#9ca3af; font-size:0.9rem;">${date}</p>
+<body class="min-h-screen bg-gray-50">
+    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-100 mb-6">
+        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+             <h1 class="text-lg font-bold text-gray-800">استمارة الطالب: ${fullName}</h1>
+             <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">نسخة للعرض فقط</span>
         </div>
-
-        ${createSection('قسم المعلومات', 'fas fa-user-graduate', 'bg-blue-500', infoContent)}
-        ${createSection('أولاً: الوشاح', 'fas fa-ribbon', 'bg-purple-500', sashContent)}
-        ${createSection('ثانياً: القبعة', 'fas fa-graduation-cap', 'bg-indigo-500', capContent)}
-        ${createSection('ثالثاً: الروب', 'fas fa-tshirt', 'bg-emerald-500', gownContent)}
-
-        <div style="text-align:center; margin-top:40px; border-top:1px solid #e5e7eb; padding-top:20px; color:#9ca3af; font-size:0.8rem;">
-            تم إنشاء هذا المستند إلكترونياً
-        </div>
-    </div>
+    </header>
+    ${clone.outerHTML}
+    <footer class="text-center py-8 text-gray-400 text-xs mt-8 border-t border-gray-200">
+        تم حفظ هذه النسخة بتاريخ ${new Date().toLocaleDateString('ar-EG')}
+    </footer>
 </body>
 </html>`;
         }
