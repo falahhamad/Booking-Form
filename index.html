@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استمارة التخرج - الإصدار النهائي</title>
+    <title>استمارة التخرج - التعديل النهائي</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,14 +18,14 @@
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #f8fafc;
+            background-color: #f1f5f9;
         }
 
         /* --- تصميم بطاقات الخيارات --- */
         .option-card {
             cursor: pointer;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.75rem;
             padding: 0.75rem;
             font-size: 0.9rem;
             transition: all 0.2s ease-in-out;
@@ -35,28 +35,28 @@
             justify-content: center;
             text-align: center;
             background-color: white;
-            min-height: 70px;
-            font-weight: 500;
+            min-height: 60px;
+            font-weight: 600;
             color: #475569;
             position: relative;
         }
 
         .option-card:hover {
             border-color: #94a3b8;
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         /* حالات التفعيل */
-        .option-card.active-purple { background-color: #f3e8ff; border-color: #9333ea; color: #6b21a8; box-shadow: 0 0 0 1px #9333ea; }
-        .option-card.active-indigo { background-color: #e0e7ff; border-color: #4f46e5; color: #3730a3; box-shadow: 0 0 0 1px #4f46e5; }
-        .option-card.active-emerald { background-color: #d1fae5; border-color: #059669; color: #065f46; box-shadow: 0 0 0 1px #059669; }
-        .option-card.active-gray { background-color: #f3f4f6; border-color: #6b7280; color: #374151; }
+        .option-card.active-purple { background-color: #f3e8ff; border-color: #9333ea; color: #6b21a8; box-shadow: 0 0 0 2px #9333ea; }
+        .option-card.active-indigo { background-color: #e0e7ff; border-color: #4f46e5; color: #3730a3; box-shadow: 0 0 0 2px #4f46e5; }
+        .option-card.active-emerald { background-color: #d1fae5; border-color: #059669; color: #065f46; box-shadow: 0 0 0 2px #059669; }
+        .option-card.active-gray { background-color: #f3f4f6; border-color: #6b7280; color: #374151; box-shadow: 0 0 0 2px #9ca3af; }
 
         /* --- مربعات رفع الصور --- */
         .upload-container-wrapper {
             width: 100%;
-            max-width: 200px;
+            max-width: 180px;
             margin: 0 auto;
         }
 
@@ -122,6 +122,7 @@
         }
 
         .custom-input { transition: all 0.2s; }
+        .custom-input:focus { transform: translateY(-1px); }
         .hidden { display: none !important; }
         
         /* شاشة التحميل */
@@ -141,7 +142,37 @@
             margin-bottom: 20px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- ستايل العناوين الفرعية --- */
+        .subsection-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f5f9;
+        }
         
+        .subsection-container {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        /* تنسيق العنوان الفرعي الصغير داخل القسم */
+        .inner-subtitle {
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: inline-block;
+            border-right: 4px solid;
+            padding-right: 8px;
+        }
+
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
@@ -156,7 +187,7 @@
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-40 no-print border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-            <h1 class="text-lg font-bold text-gray-800">استمارة التخرج الإلكترونية</h1>
+            <h1 class="text-lg font-bold text-gray-800">استمارة زي التخرج الالكتروني</h1>
             <div class="w-full md:w-1/2 flex flex-col items-center">
                 <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden shadow-inner">
                     <div id="progress-bar" class="bg-gradient-to-l from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
@@ -173,27 +204,30 @@
             <!-- 1. Info Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-1.5 h-full bg-blue-500"></div>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-user-graduate text-blue-500"></i> قسم المعلومات
+                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-user-graduate text-blue-500 bg-blue-50 p-2 rounded-lg"></i> قسم المعلومات
                 </h2>
                 <div class="w-full">
                     <label class="block text-gray-700 font-bold mb-2 text-sm">الاسم الرباعي</label>
-                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50" placeholder="ادخل هنا الاسم الرباعي" required oninput="updateProgress()">
+                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50" placeholder="     مثلا فلاح حمد احمد جاسم...   " required oninput="updateProgress()">
                 </div>
             </section>
 
             <!-- 2. Sash Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-1.5 h-full bg-purple-500"></div>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-ribbon text-purple-500"></i> أولاً: الوشاح
+                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-ribbon text-purple-500 bg-purple-50 p-2 rounded-lg"></i> أولاً: الوشاح
                 </h2>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-bold mb-3 text-sm">اختيار نوع الوشاح</label>
+                <!-- 1. نوع الوشاح -->
+                <div class="subsection-container border-purple-100">
+                    <h3 class="subsection-title text-purple-800">
+                        <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
+                        نوع الوشاح
+                    </h3>
                     <input type="hidden" id="sashType" name="sashType" onchange="handleSashChange()">
-                    
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 card-grid">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'عادي', this, 'purple')">عادي</div>
                         <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'مثلث', this, 'purple')">مثلث</div>
                         <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'ملكي فرعوني', this, 'purple')">ملكي فرعوني</div>
@@ -210,65 +244,93 @@
                     </div>
                 </div>
 
-                <div id="sashContentWrapper" class="hidden transition-all">
-                    <div id="sashSectionTwoSides" class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 hidden">
-                        <h3 class="font-bold text-sm text-purple-700 mb-4 border-b pb-2 border-purple-100">1. النقش من الامام (الوشاح ذو الجانبين)</h3>
-                        <div class="grid grid-cols-2 gap-4 justify-items-center">
-                            <div class="upload-container-wrapper">
-                                <label class="block text-xs text-gray-500 mb-1 text-center">الجهة اليمنى</label>
-                                <div id="upload-sash-right"></div>
-                            </div>
-                            <div class="upload-container-wrapper">
-                                <label class="block text-xs text-gray-500 mb-1 text-center">الجهة اليسرى</label>
-                                <div id="upload-sash-left"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="sashSectionOneSide" class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 hidden">
-                         <h3 class="font-bold text-sm text-purple-700 mb-4 border-b pb-2 border-purple-100">1. النقش من الامام (الوشاح الجانبي)</h3>
-                         <div class="flex justify-center">
-                            <div class="upload-container-wrapper">
-                                <label class="block text-xs text-gray-500 mb-1 text-center">النقش على الوشاح</label>
-                                <div id="upload-sash-side-1"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="sashSectionBack" class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200 hidden">
-                        <h3 class="font-bold text-sm text-purple-700 mb-4 border-b pb-2 border-purple-100">2. النقش من الخلف (خاص بالوشاح الملكي)</h3>
-                         <div class="grid grid-cols-2 gap-4 justify-items-center">
-                            <div class="upload-container-wrapper">
-                                <div id="upload-sash-back-1"></div>
-                            </div>
-                            <div class="upload-container-wrapper">
-                                <div id="upload-sash-back-2"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
-                        <div>
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون الوشاح</label>
-                            <input type="text" name="sashColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا ماروني...">
-                        </div>
-                         <div>
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون الكركوشة</label>
-                            <input type="text" name="sashTasselColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا اخضر او ابيض...">
-                        </div>
-                         <div>
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون النقش</label>
-                            <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا ابيض او فضي...">
-                        </div>
+                <div id="sashContentWrapper" class="hidden space-y-4">
+                    <!-- 2. النقش على الوشاح -->
+                    <div class="subsection-container border-purple-100 bg-purple-50/30">
+                        <h3 class="subsection-title text-purple-800">
+                            <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
+                            النقش على الوشاح
+                        </h3>
                         
-                        <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 bg-gray-50 p-4 rounded-xl border border-purple-100">
-                            <div class="md:col-span-2">
-                                <label class="block text-purple-700 text-sm font-bold mb-2">ملاحظات إضافية</label>
-                                <textarea name="sashNotes" class="custom-input w-full p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-purple-400" rows="7" placeholder="اكتب أي ملاحظات أو تفاصيل إضافية هنا..."></textarea>
+                        <div class="mb-4">
+                            <h4 class="inner-subtitle text-purple-700 border-purple-400">النقش من الامام</h4>
+                            
+                            <!-- Two Sides -->
+                            <div id="sashSectionTwoSides" class="hidden">
+                                <div class="grid grid-cols-2 gap-4 justify-items-center">
+                                    <div class="upload-container-wrapper">
+                                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">الجهة اليمنى</label>
+                                        <div id="upload-sash-right"></div>
+                                    </div>
+                                    <div class="upload-container-wrapper">
+                                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">الجهة اليسرى</label>
+                                        <div id="upload-sash-left"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="flex flex-col items-center">
-                                <label class="block text-purple-700 text-xs font-bold mb-2 text-center">صورة مع الملاحظة (اختياري)</label>
+
+                            <!-- One Side -->
+                            <div id="sashSectionOneSide" class="hidden">
+                                <div class="flex justify-center">
+                                    <div class="upload-container-wrapper">
+                                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">صورة النقش</label>
+                                        <div id="upload-sash-side-1"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="sashSectionBack" class="hidden pt-4 border-t border-purple-200/60">
+                            <h4 class="inner-subtitle text-purple-700 border-purple-400">النقش من الخلف (خاص بالوشاح الملكي)</h4>
+                             <div class="grid grid-cols-2 gap-4 justify-items-center">
                                 <div class="upload-container-wrapper">
+                                    <div id="upload-sash-back-1"></div>
+                                </div>
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-sash-back-2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. تنسيق الألوان -->
+                    <div class="subsection-container border-purple-100">
+                        <h3 class="subsection-title text-purple-800">
+                            <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
+                            تنسيق الالوان
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الوشاح</label>
+                                <input type="text" name="sashColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: ماروني">
+                            </div>
+                            <div>
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الكركوشة</label>
+                                <input type="text" name="sashTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: ذهبي">
+                            </div>
+                            <div>
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون النقش</label>
+                                <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أبيض">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. ملاحظات إضافية (معدل) -->
+                    <div class="subsection-container border-purple-100">
+                        <h3 class="subsection-title text-purple-800">
+                            <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">4</span>
+                            ملاحظات اظافية
+                        </h3>
+                        
+                        <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                             <!-- مربع الملاحظات -->
+                            <div class="flex-1">
+                                <textarea name="sashNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-purple-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                            </div>
+                             <!-- صورة الملاحظة -->
+                            <div class="w-full md:w-[180px] flex-shrink-0 flex flex-col">
+                                <label class="block text-purple-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
+                                <div class="upload-container-wrapper w-full">
                                     <div id="upload-sash-notes"></div>
                                 </div>
                             </div>
@@ -280,74 +342,97 @@
             <!-- 3. Cap Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-1.5 h-full bg-indigo-500"></div>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-graduation-cap text-indigo-500"></i> ثانياً: القبعة
+                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-graduation-cap text-indigo-500 bg-indigo-50 p-2 rounded-lg"></i> ثانياً: القبعة
                 </h2>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-bold mb-3 text-sm">اختيار نوع القبعة</label>
+                <!-- 1. نوع القبعة -->
+                <div class="subsection-container border-indigo-100">
+                    <h3 class="subsection-title text-indigo-800">
+                        <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
+                        نوع القبعة
+                    </h3>
                     <input type="hidden" id="capType" name="capType" onchange="handleCapTypeChange()">
-
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 card-grid">
-                        <div class="option-card hover:bg-indigo-50" onclick="selectOption('capType', 'قبعة عادية', this, 'indigo')">قبعة عادية</div>
-                        <div class="option-card hover:bg-indigo-50" onclick="selectOption('capType', 'قبعة ملكية', this, 'indigo')">قبعة ملكية</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="option-card hover:bg-indigo-50" onclick="selectOption('capType', 'قبعة عادية', this, 'indigo')">   قبعة دائرية عدلة (عادية)   </div>
+                        <div class="option-card hover:bg-indigo-50" onclick="selectOption('capType', 'قبعة ملكية', this, 'indigo')">قبعة مثلث (ملكية)</div>
                         <div class="option-card hover:bg-red-50" onclick="selectOption('capType', 'لا اريد قبعة', this, 'gray')">
                             <span class="text-red-500 font-bold">لا اريد قبعة</span>
                         </div>
                     </div>
                 </div>
 
-                <div id="capContentWrapper" class="hidden transition-all">
-                    <div class="mb-6">
-                        <label class="block text-gray-700 font-bold mb-3 text-sm">مكان النقش على القبعة</label>
-                        <input type="hidden" id="capEmbroideryLoc" name="capEmbroideryLoc" onchange="handleCapEmbroideryChange()">
-
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 card-grid">
-                            <div class="option-card hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'فوق القبعة', this, 'indigo')">فوق القبعة</div>
-                            <div class="option-card hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'طوق القبعة', this, 'indigo')">طوق القبعة</div>
-                            <div class="option-card hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'دبل نقش', this, 'indigo')">دبل نقش</div>
-                            <div class="option-card hover:bg-red-50" onclick="selectOption('capEmbroideryLoc', 'لا اريد نقش', this, 'gray')">لا اريد نقش</div>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row gap-4 justify-center">
-                        <div id="capSectionTop" class="hidden w-full md:w-1/2 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                            <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">1. النقش فوق القبعة</h3>
-                            <div class="upload-container-wrapper">
-                                <div id="upload-cap-top"></div>
-                            </div>
-                        </div>
-
-                        <div id="capSectionRim" class="hidden w-full md:w-1/2 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
-                            <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">2. النقش على طوق القبعة</h3>
-                            <div class="upload-container-wrapper">
-                                <div id="upload-cap-rim"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t border-gray-100">
-                        <div>
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون القبعة</label>
-                            <input type="text" name="capColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا اسود...">
-                        </div>
-                        <div id="capEmbroideryColorField">
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون النقش</label>
-                            <input type="text" name="capEmbroideryColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا ابيض...">
-                        </div>
-                         <div>
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون الكركوشة</label>
-                            <input type="text" name="capTasselColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا اخضر...">
-                        </div>
+                <div id="capContentWrapper" class="hidden space-y-4">
+                    <!-- 2. النقش على القبعة -->
+                    <div class="subsection-container border-indigo-100 bg-indigo-50/30">
+                        <h3 class="subsection-title text-indigo-800">
+                            <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
+                            النقش على القبعة
+                        </h3>
                         
-                        <div class="md:col-span-3 grid grid-cols-1 md:grid-cols-3 gap-4 mt-2 bg-gray-50 p-4 rounded-xl border border-indigo-100">
-                            <div class="md:col-span-2">
-                                <label class="block text-indigo-700 text-sm font-bold mb-2">ملاحظات إضافية</label>
-                                <textarea name="capNotes" class="custom-input w-full p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-indigo-400" rows="7" placeholder="اكتب أي ملاحظات أو تفاصيل إضافية هنا..."></textarea>
+                        <div class="mb-4">
+                            <label class="block text-gray-600 text-xs font-bold mb-2 text-center">حدد مكان النقش أولاً</label>
+                            <input type="hidden" id="capEmbroideryLoc" name="capEmbroideryLoc" onchange="handleCapEmbroideryChange()">
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'فوق القبعة', this, 'indigo')">فوق القبعة</div>
+                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'طوق القبعة', this, 'indigo')">طوق القبعة</div>
+                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'دبل نقش', this, 'indigo')">دبل نقش</div>
+                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-red-50" onclick="selectOption('capEmbroideryLoc', 'لا اريد نقش', this, 'gray')">لا اريد نقش</div>
                             </div>
-                            <div class="flex flex-col items-center">
-                                <label class="block text-indigo-700 text-xs font-bold mb-2 text-center">صورة مع الملاحظة (اختياري)</label>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-4 justify-center">
+                            <div id="capSectionTop" class="hidden w-full md:w-1/2 p-3 rounded-lg border border-indigo-100 bg-white">
+                                <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (فوق القبعة)</h3>
                                 <div class="upload-container-wrapper">
+                                    <div id="upload-cap-top"></div>
+                                </div>
+                            </div>
+
+                            <div id="capSectionRim" class="hidden w-full md:w-1/2 p-3 rounded-lg border border-indigo-100 bg-white">
+                                <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (طوق القبعة)</h3>
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-cap-rim"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. تنسيق الألوان -->
+                    <div class="subsection-container border-indigo-100">
+                        <h3 class="subsection-title text-indigo-800">
+                            <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
+                            تنسيق الالوان
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون القبعة</label>
+                                <input type="text" name="capColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أسود">
+                            </div>
+                            <div id="capEmbroideryColorField">
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون النقش</label>
+                                <input type="text" name="capEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: ذهبي">
+                            </div>
+                            <div>
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الكركوشة</label>
+                                <input type="text" name="capTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أصفر">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. ملاحظات إضافية (معدل) -->
+                    <div class="subsection-container border-indigo-100">
+                        <h3 class="subsection-title text-indigo-800">
+                            <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">4</span>
+                            ملاحظات اظافية
+                        </h3>
+                         <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                            <div class="flex-1">
+                                <textarea name="capNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-indigo-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                            </div>
+                            <div class="w-full md:w-[180px] flex-shrink-0 flex flex-col">
+                                <label class="block text-indigo-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
+                                <div class="upload-container-wrapper w-full">
                                     <div id="upload-cap-notes"></div>
                                 </div>
                             </div>
@@ -359,15 +444,18 @@
             <!-- 4. Gown Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                  <div class="absolute top-0 right-0 w-1.5 h-full bg-emerald-500"></div>
-                <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-tshirt text-emerald-500"></i> ثالثاً: الروب
+                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
+                    <i class="fas fa-tshirt text-emerald-500 bg-emerald-50 p-2 rounded-lg"></i> ثالثاً: الروب
                 </h2>
 
-                <div class="mb-6">
-                    <label class="block text-gray-700 font-bold mb-3 text-sm">نوع الروب</label>
+                <!-- 1. نوع الروب -->
+                <div class="subsection-container border-emerald-100">
+                    <h3 class="subsection-title text-emerald-800">
+                        <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
+                        نوع الروب
+                    </h3>
                     <input type="hidden" id="gownType" name="gownType" onchange="handleGownChange()">
-                    
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 card-grid">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <div class="option-card hover:bg-emerald-50" onclick="selectOption('gownType', 'روب خليجي', this, 'emerald')">روب خليجي</div>
                         <div class="option-card hover:bg-emerald-50" onclick="selectOption('gownType', 'روب امريكي', this, 'emerald')">روب امريكي</div>
                         <div class="option-card hover:bg-red-50" onclick="selectOption('gownType', 'لا اريد روب', this, 'gray')">
@@ -376,23 +464,36 @@
                     </div>
                 </div>
 
-                <div id="gownContentWrapper" class="hidden transition-all">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-gray-600 text-sm font-bold mb-1">لون الروب</label>
-                            <input type="text" name="gownColor" class="custom-input w-full p-2 border border-gray-300 rounded-lg text-sm" placeholder="مثلا اسود...">
+                <div id="gownContentWrapper" class="hidden space-y-4">
+                    <!-- 2. تنسيق الألوان -->
+                    <div class="subsection-container border-emerald-100">
+                        <h3 class="subsection-title text-emerald-800">
+                            <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
+                            تنسيق الالوان
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الروب</label>
+                                <input type="text" name="gownColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-sm bg-gray-50" placeholder="مثلا: أسود">
+                            </div>
                         </div>
                     </div>
                     
-                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 bg-gray-50 p-4 rounded-xl border border-emerald-100">
-                        <div class="md:col-span-2">
-                            <label class="block text-emerald-700 text-sm font-bold mb-2">ملاحظات إضافية</label>
-                            <textarea name="gownNotes" class="custom-input w-full p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-emerald-400" rows="7" placeholder="اكتب أي ملاحظات أو تفاصيل إضافية هنا..."></textarea>
-                        </div>
-                        <div class="flex flex-col items-center">
-                            <label class="block text-emerald-700 text-xs font-bold mb-2 text-center">صورة مع الملاحظة (اختياري)</label>
-                            <div class="upload-container-wrapper">
-                                <div id="upload-gown-notes"></div>
+                    <!-- 3. ملاحظات إضافية (معدل) -->
+                    <div class="subsection-container border-emerald-100">
+                        <h3 class="subsection-title text-emerald-800">
+                            <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
+                            ملاحظات اظافية
+                        </h3>
+                         <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                            <div class="flex-1">
+                                <textarea name="gownNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-sm resize-none shadow-sm focus:border-emerald-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                            </div>
+                            <div class="w-full md:w-[180px] flex-shrink-0 flex flex-col">
+                                <label class="block text-emerald-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
+                                <div class="upload-container-wrapper w-full">
+                                    <div id="upload-gown-notes"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -431,9 +532,6 @@
             updateProgress();
         });
 
-        // -----------------------------------------------------------
-        // Functions (Selection, Logic, Upload) - Same as before
-        // -----------------------------------------------------------
         function selectOption(inputId, value, element, theme) {
             const input = document.getElementById(inputId);
             input.value = value;
@@ -505,8 +603,8 @@
                 <div class="upload-box group" onclick="document.getElementById('file-${id}').click()">
                     <input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="processFile(event, '${id}')">
                     <div class="upload-placeholder">
-                        <i class="fas fa-cloud-upload-alt text-2xl text-blue-200 group-hover:text-blue-500 transition mb-2"></i>
-                        <span class="text-xs font-bold text-gray-400">اضغط لإضافة صورة</span>
+                        <i class="fas fa-cloud-upload-alt text-xl text-blue-200 group-hover:text-blue-500 transition mb-2"></i>
+                        <span class="text-[10px] font-bold text-gray-400 block">صورة</span>
                     </div>
                 </div>`;
         }
@@ -548,9 +646,6 @@
             document.getElementById('progress-text').innerText = completedSections === 4 ? "مكتمل" : `قيد التعبئة`;
         }
 
-        // ==================================================================
-        // SEND LOGIC (Updated to match screenshot layout)
-        // ==================================================================
         async function processAndSend() {
             const fullName = document.querySelector('[name="fullName"]').value.trim();
             if (!fullName) { Swal.fire('خطأ', 'يرجى كتابة الاسم الرباعي أولاً', 'error'); return; }
@@ -646,7 +741,6 @@
                 </div>
             `;
 
-            // *** New: Side-by-Side Notes Layout ***
             const createNotesLayout = (noteText, imageKey, colorCode) => {
                 const imgVal = imageStore[imageKey];
                 const hasNote = noteText && noteText !== '-' && noteText.trim().length > 0;
@@ -657,17 +751,13 @@
                 return `
                     <div style="margin-top: 24px; padding-top: 16px; border-top: 1px dashed #cbd5e1;">
                         <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
-                            
-                            <!-- Notes Text Section (Right) -->
                             <div style="flex: 1; min-width: 200px;">
                                 <h4 style="font-size: 0.9rem; font-weight: bold; color: ${colorCode}; margin-bottom: 8px;">ملاحظات إضافية</h4>
                                 <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; min-height: 120px; font-size: 0.9rem; color: #334155; white-space: pre-wrap; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">${noteText || 'لا توجد ملاحظات'}</div>
                             </div>
-
-                            <!-- Note Image Section (Left) -->
                             ${hasImg ? `
                             <div style="width: 150px; flex-shrink: 0;">
-                                 <h4 style="font-size: 0.8rem; font-weight: bold; color: ${colorCode}; margin-bottom: 8px; text-align: center;">صورة مع الملاحظة (اختياري)</h4>
+                                 <h4 style="font-size: 0.8rem; font-weight: bold; color: ${colorCode}; margin-bottom: 8px; text-align: center;">صورة مع الملاحظة</h4>
                                  <div style="width: 100%; aspect-ratio: 1/1; border: 2px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
                                     <img src="${imgVal}" style="width: 100%; height: 100%; object-fit: cover;">
                                  </div>
@@ -677,8 +767,6 @@
                     </div>
                 `;
             };
-
-            // --- BUILD SECTIONS ---
 
             // 1. Info
             const infoContent = `
@@ -692,30 +780,31 @@
             const sashType = getVal('sashType');
             let sashContent = '';
             if(sashType && !sashType.includes('لا اريد')) {
-                sashContent += createSelectedBox('اختيار نوع الوشاح', sashType);
+                sashContent += createSelectedBox('نوع الوشاح', sashType);
+                
+                let embroideryContent = '';
                 
                 if(sashType.includes('جانبي')) {
-                    sashContent += createImageGrid('النقش من الامام (الوشاح الجانبي)', [getImg('upload-sash-side-1')]);
+                    embroideryContent += createImageGrid('النقش من الامام (الوشاح الجانبي)', [getImg('upload-sash-side-1')]);
                 } else {
-                    sashContent += createImageGrid('النقش من الامام (الوشاح ذو الجانبين)', [
+                    embroideryContent += createImageGrid('النقش من الامام (الوشاح ذو الجانبين)', [
                         `<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">الجهة اليمنى</div>${getImg('upload-sash-right')}</div>`, 
                         `<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">الجهة اليسرى</div>${getImg('upload-sash-left')}</div>`
                     ]);
                 }
+                
                 if(sashType.includes('ملكي')) {
-                    sashContent += createImageGrid('النقش من الخلف (خاص بالوشاح الملكي)', [getImg('upload-sash-back-1'), getImg('upload-sash-back-2')]);
+                    embroideryContent += createImageGrid('النقش من الخلف (خاص بالوشاح الملكي)', [getImg('upload-sash-back-1'), getImg('upload-sash-back-2')]);
                 }
+                
+                sashContent += `<div style="margin-bottom:24px;">${embroideryContent}</div>`;
 
-                // Basic Details
                 sashContent += createDetailsGrid([
                     {label: 'لون الوشاح', val: getVal('sashColor')},
                     {label: 'لون الكركوشة', val: getVal('sashTasselColor')},
                     {label: 'لون النقش', val: getVal('sashEmbroideryColor')},
                 ]);
-
-                // Side-by-Side Notes
                 sashContent += createNotesLayout(getVal('sashNotes'), 'upload-sash-notes', '#9333ea');
-
             } else {
                 sashContent = '<div style="text-align:center; color:#ef4444; font-weight:bold; padding:20px;">لا اريد وشاح</div>';
             }
@@ -724,8 +813,7 @@
             const capType = getVal('capType');
             let capContent = '';
             if(capType && !capType.includes('لا اريد')) {
-                capContent += createSelectedBox('اختيار نوع القبعة', capType);
-                
+                capContent += createSelectedBox('نوع القبعة', capType);
                 const capLoc = getVal('capEmbroideryLoc');
                 if(capLoc && !capLoc.includes('لا اريد')) {
                     capContent += createSelectedBox('مكان النقش على القبعة', capLoc);
@@ -734,16 +822,12 @@
                     if(capLoc.includes('طوق') || capLoc.includes('دبل')) capImages.push(`<div style="text-align:center;"><div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">النقش على الطوق</div>${getImg('upload-cap-rim')}</div>`);
                     if(capImages.length > 0) capContent += createImageGrid('صور النقش', capImages);
                 }
-
                 capContent += createDetailsGrid([
                     {label: 'لون القبعة', val: getVal('capColor')},
                     {label: 'لون النقش', val: getVal('capEmbroideryColor')},
                     {label: 'لون الكركوشة', val: getVal('capTasselColor')},
                 ]);
-
-                // Side-by-Side Notes
                 capContent += createNotesLayout(getVal('capNotes'), 'upload-cap-notes', '#4f46e5');
-
             } else {
                 capContent = '<div style="text-align:center; color:#ef4444; font-weight:bold; padding:20px;">لا اريد قبعة</div>';
             }
@@ -753,19 +837,14 @@
             let gownContent = '';
             if(gownType && !gownType.includes('لا اريد')) {
                 gownContent += createSelectedBox('نوع الروب', gownType);
-                
                 gownContent += createDetailsGrid([
                     {label: 'لون الروب', val: getVal('gownColor')},
                 ]);
-
-                // Side-by-Side Notes
                 gownContent += createNotesLayout(getVal('gownNotes'), 'upload-gown-notes', '#059669');
-
             } else {
                 gownContent = '<div style="text-align:center; color:#ef4444; font-weight:bold; padding:20px;">لا اريد روب</div>';
             }
 
-            // --- FINAL HTML ---
             return `
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -796,7 +875,7 @@
         ${createSection('ثالثاً: الروب', 'fas fa-tshirt', 'bg-emerald-500', gownContent)}
 
         <div style="text-align:center; margin-top:40px; border-top:1px solid #e5e7eb; padding-top:20px; color:#9ca3af; font-size:0.8rem;">
-            تم إنشاء هذا المستند إلكترونياً - نسخة أرشيفية
+            تم إنشاء هذا المستند إلكترونياً
         </div>
     </div>
 </body>
