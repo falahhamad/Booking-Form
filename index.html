@@ -2,18 +2,13 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <!-- 
-      إجبار المتصفح على وضع سطح المكتب 
-      width=1280: عرض ثابت
-      user-scalable=yes: السماح بالتكبير
-    -->
     <meta name="viewport" content="width=1280, user-scalable=yes">
-    <title>استمارة التخرج - التعديل النهائي</title>
+    <title>استمارة التخرج - النسخة المحمية</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- الخطوط والأيقونات -->
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -25,28 +20,22 @@
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f1f5f9;
-            /* ضمان أن الخلفية تغطي كامل العرض الإجباري */
             min-width: 1280px;
-            position: relative; /* ضروري لتصحيح تموضع التنبيهات */
+            position: relative;
             min-height: 100vh;
         }
 
-        /* --- حل مشكلة ظهور التنبيه في الجانب (SweetAlert2 Fix) --- */
         .swal2-container {
-            position: absolute !important; /* التغيير من fixed إلى absolute */
+            position: absolute !important;
             width: 100% !important;
-            min-width: 1280px !important; /* إجبار الحاوية على أخذ عرض سطح المكتب */
+            min-width: 1280px !important;
             height: 100% !important;
-            top: 0 !important;
-            left: 0 !important;
-            /* ضمان التوسيط */
+            top: 0 !important; left: 0 !important;
             display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
+            align-items: center !important; justify-content: center !important;
             z-index: 99999 !important;
         }
 
-        /* --- تصميم بطاقات الخيارات --- */
         .option-card {
             cursor: pointer;
             border: 1px solid #cbd5e1;
@@ -54,166 +43,90 @@
             padding: 0.75rem;
             font-size: 0.9rem;
             transition: all 0.2s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            background-color: white;
-            min-height: 60px;
-            font-weight: 600;
-            color: #475569;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; background-color: white;
+            min-height: 60px; font-weight: 600; color: #475569;
             position: relative;
         }
+        .option-card:hover { border-color: #94a3b8; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
 
-        .option-card:hover {
-            border-color: #94a3b8;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        /* حالات التفعيل */
+        /* Active States */
         .option-card.active-purple { background-color: #f3e8ff; border-color: #9333ea; color: #6b21a8; box-shadow: 0 0 0 2px #9333ea; }
         .option-card.active-indigo { background-color: #e0e7ff; border-color: #4f46e5; color: #3730a3; box-shadow: 0 0 0 2px #4f46e5; }
         .option-card.active-emerald { background-color: #d1fae5; border-color: #059669; color: #065f46; box-shadow: 0 0 0 2px #059669; }
         .option-card.active-gray { background-color: #f3f4f6; border-color: #6b7280; color: #374151; box-shadow: 0 0 0 2px #9ca3af; }
 
-        /* --- مربعات رفع الصور --- */
-        .upload-container-wrapper {
-            width: 100%;
-            /* الحجم الكبير 350px */
-            max-width: 350px;
-            margin: 0 auto;
-        }
-
+        /* Upload Boxes */
+        .upload-container-wrapper { width: 100%; max-width: 350px; margin: 0 auto; }
         .upload-box {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border: 2px dashed #cbd5e1;
-            border-radius: 0.75rem;
-            position: relative;
-            background-color: #f8fafc;
-            transition: all 0.3s ease;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%; aspect-ratio: 1 / 1;
+            border: 2px dashed #cbd5e1; border-radius: 0.75rem;
+            position: relative; background-color: #f8fafc;
+            transition: all 0.3s ease; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
         }
+        .upload-box:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .upload-box.has-image { border-style: solid; border-color: #e2e8f0; background-color: #fff; }
+        .upload-placeholder { text-align: center; color: #94a3b8; pointer-events: none; padding: 1rem; }
+        .uploaded-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
-        .upload-box:hover {
-            border-color: #3b82f6;
-            background-color: #eff6ff;
-        }
-
-        .upload-box.has-image {
-            border-style: solid;
-            border-color: #e2e8f0;
-            background-color: #fff;
-        }
-
-        .upload-placeholder {
-            text-align: center;
-            color: #94a3b8;
-            pointer-events: none;
-            padding: 1rem;
-        }
-        
-        .uploaded-img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* أزرار التحكم بالصورة */
         .img-actions {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            display: flex;
-            gap: 5px;
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 10;
+            position: absolute; top: 5px; right: 5px;
+            display: flex; gap: 5px; opacity: 0; transition: opacity 0.2s; z-index: 10;
         }
         .upload-box:hover .img-actions { opacity: 1; }
-
         .action-btn {
-            width: 24px; height: 24px;
-            border-radius: 50%;
+            width: 24px; height: 24px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; color: white;
+            font-size: 0.7rem; color: white; border: none; cursor: pointer;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            border: none; cursor: pointer;
         }
 
         .custom-input { transition: all 0.2s; }
         .custom-input:focus { transform: translateY(-1px); }
         .hidden { display: none !important; }
         
-        /* شاشة التحميل */
+        /* Loading */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95);
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
+            background: rgba(255,255,255,0.95); z-index: 9999;
+            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
         }
         .loader {
             border: 5px solid #f3f3f3; border-top: 5px solid #3b82f6;
             border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;
             margin-bottom: 20px;
         }
+        #loading-text { font-size: 1.2rem; font-weight: bold; color: #1e293b; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- ستايل العناوين الفرعية --- */
+        /* Subsections */
         .subsection-title {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #f1f5f9;
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 1rem; font-weight: 700; margin-bottom: 1rem;
+            padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9;
         }
-        
         .subsection-container {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
+            background-color: #ffffff; border: 1px solid #e2e8f0;
+            border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem;
         }
-
-        /* تنسيق العنوان الفرعي الصغير داخل القسم */
         .inner-subtitle {
-            font-size: 0.9rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            display: inline-block;
-            border-right: 4px solid;
-            padding-right: 8px;
+            font-size: 0.9rem; font-weight: 800; margin-bottom: 1rem;
+            display: inline-block; border-right: 4px solid; padding-right: 8px;
         }
-
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
 <body class="min-h-screen pb-24">
 
-    <!-- Loading Overlay -->
     <div id="loading-overlay">
         <div class="loader"></div>
-        <h3 class="text-xl font-bold text-gray-800">جاري تجهيز وإرسال الاستمارة...</h3>
+        <h3 id="loading-text" class="text-xl font-bold text-gray-800">جاري المعالجة...</h3>
     </div>
 
-    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-40 no-print border-b border-gray-100">
         <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-            <h1 class="text-lg font-bold text-gray-800">استمارة زي التخرج الالكتروني</h1>
+            <h1 class="text-lg font-bold text-gray-800">استمارة زي التخرج الذكية</h1>
             <div class="w-full md:w-1/2 flex flex-col items-center">
                 <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden shadow-inner">
                     <div id="progress-bar" class="bg-gradient-to-l from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
@@ -223,30 +136,30 @@
         </div>
     </header>
 
-    <!-- Main Form Container -->
     <main id="main-form-container" class="max-w-4xl mx-auto mt-6 px-4 space-y-6">
         <form id="gradForm" onsubmit="return false;">
 
-            <!-- 1. Info Section -->
+            <!-- Info Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-1.5 h-full bg-blue-500"></div>
                 <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                     <i class="fas fa-user-graduate text-blue-500 bg-blue-50 p-2 rounded-lg"></i> قسم المعلومات
                 </h2>
                 <div class="w-full">
-                    <label class="block text-gray-700 font-bold mb-2 text-sm">الاسم الرباعي</label>
-                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 text-xl font-bold" placeholder=" مثلا فلاح حمد احمد جاسم..." required oninput="updateProgress()">
+                    <label class="block text-gray-700 font-bold mb-2 text-sm">الاسم الرباعي (إجباري)</label>
+                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 text-xl font-bold" placeholder="اكتب اسمك الرباعي كاملاً..." required oninput="updateProgress()">
+                    <!-- تم إضافة ID هنا لسهولة الحذف لاحقاً -->
+                    <p id="name-warning-msg" class="text-xs text-red-500 mt-1 mr-1 font-bold"><i class="fas fa-exclamation-circle ml-1"></i> تنبيه: يجب كتابة الاسم مكوناً من 4 مقاطع على الأقل لضمان عدم تشابه الأسماء.</p>
                 </div>
             </section>
 
-            <!-- 2. Sash Section -->
+            <!-- Sash Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-1.5 h-full bg-purple-500"></div>
                 <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                     <i class="fas fa-ribbon text-purple-500 bg-purple-50 p-2 rounded-lg"></i> أولاً: الوشاح
                 </h2>
 
-                <!-- 1. نوع الوشاح -->
                 <div class="subsection-container border-purple-100">
                     <h3 class="subsection-title text-purple-800">
                         <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
@@ -271,17 +184,13 @@
                 </div>
 
                 <div id="sashContentWrapper" class="hidden space-y-4">
-                    <!-- 2. النقش على الوشاح -->
                     <div class="subsection-container border-purple-100 bg-purple-50/30">
                         <h3 class="subsection-title text-purple-800">
                             <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
                             النقش على الوشاح
                         </h3>
-                        
                         <div class="mb-4">
                             <h4 class="inner-subtitle text-purple-700 border-purple-400">النقش من الامام</h4>
-                            
-                            <!-- Two Sides -->
                             <div id="sashSectionTwoSides" class="hidden">
                                 <div class="grid grid-cols-2 gap-4 justify-items-center">
                                     <div class="upload-container-wrapper">
@@ -296,8 +205,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- One Side -->
                             <div id="sashSectionOneSide" class="hidden">
                                 <div class="flex justify-center">
                                     <div class="upload-container-wrapper">
@@ -308,7 +215,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div id="sashSectionBack" class="hidden pt-4 border-t border-purple-200/60">
                             <h4 class="inner-subtitle text-purple-700 border-purple-400">النقش من الخلف (خاص بالوشاح الملكي)</h4>
                              <div class="grid grid-cols-2 gap-4 justify-items-center">
@@ -323,8 +229,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 3. تنسيق الألوان -->
                     <div class="subsection-container border-purple-100">
                         <h3 class="subsection-title text-purple-800">
                             <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
@@ -345,20 +249,15 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 4. ملاحظات إضافية (معدل) -->
                     <div class="subsection-container border-purple-100">
                         <h3 class="subsection-title text-purple-800">
                             <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">4</span>
                             ملاحظات اظافية
                         </h3>
-                        
                         <div class="flex flex-col md:flex-row gap-4 items-stretch">
-                             <!-- مربع الملاحظات -->
                             <div class="flex-1">
                                 <textarea name="sashNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-purple-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
-                             <!-- صورة الملاحظة -->
                             <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
                                 <label class="block text-purple-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
@@ -370,14 +269,12 @@
                 </div>
             </section>
 
-            <!-- 3. Cap Section -->
+            <!-- Cap Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-1.5 h-full bg-indigo-500"></div>
                 <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                     <i class="fas fa-graduation-cap text-indigo-500 bg-indigo-50 p-2 rounded-lg"></i> ثانياً: القبعة
                 </h2>
-
-                <!-- 1. نوع القبعة -->
                 <div class="subsection-container border-indigo-100">
                     <h3 class="subsection-title text-indigo-800">
                         <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
@@ -392,15 +289,12 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="capContentWrapper" class="hidden space-y-4">
-                    <!-- 2. النقش على القبعة -->
                     <div class="subsection-container border-indigo-100 bg-indigo-50/30">
                         <h3 class="subsection-title text-indigo-800">
                             <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
                             النقش على القبعة
                         </h3>
-                        
                         <div class="mb-4">
                             <label class="block text-gray-600 text-xs font-bold mb-2 text-center">حدد مكان النقش أولاً</label>
                             <input type="hidden" id="capEmbroideryLoc" name="capEmbroideryLoc" onchange="handleCapEmbroideryChange()">
@@ -411,7 +305,6 @@
                                 <div class="option-card text-sm py-2 min-h-[40px] hover:bg-red-50" onclick="selectOption('capEmbroideryLoc', 'لا اريد نقش', this, 'gray')">لا اريد نقش</div>
                             </div>
                         </div>
-
                         <div class="flex flex-col md:flex-row gap-4 justify-center">
                             <div id="capSectionTop" class="hidden w-full md:w-1/2 p-3 rounded-lg border border-indigo-100 bg-white">
                                 <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (فوق القبعة)</h3>
@@ -420,7 +313,6 @@
                                     <textarea name="capTopText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-indigo-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
                                 </div>
                             </div>
-
                             <div id="capSectionRim" class="hidden w-full md:w-1/2 p-3 rounded-lg border border-indigo-100 bg-white">
                                 <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (طوق القبعة)</h3>
                                 <div class="upload-container-wrapper">
@@ -430,8 +322,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 3. تنسيق الألوان -->
                     <div class="subsection-container border-indigo-100">
                         <h3 class="subsection-title text-indigo-800">
                             <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
@@ -452,8 +342,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- 4. ملاحظات إضافية (معدل) -->
                     <div class="subsection-container border-indigo-100">
                         <h3 class="subsection-title text-indigo-800">
                             <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">4</span>
@@ -474,14 +362,12 @@
                 </div>
             </section>
 
-            <!-- 4. Gown Section -->
+            <!-- Gown Section -->
             <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
                  <div class="absolute top-0 right-0 w-1.5 h-full bg-emerald-500"></div>
                 <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
                     <i class="fas fa-tshirt text-emerald-500 bg-emerald-50 p-2 rounded-lg"></i> ثالثاً: الروب
                 </h2>
-
-                <!-- 1. نوع الروب -->
                 <div class="subsection-container border-emerald-100">
                     <h3 class="subsection-title text-emerald-800">
                         <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
@@ -496,9 +382,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="gownContentWrapper" class="hidden space-y-4">
-                    <!-- 2. تنسيق الألوان -->
                     <div class="subsection-container border-emerald-100">
                         <h3 class="subsection-title text-emerald-800">
                             <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
@@ -511,8 +395,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- 3. ملاحظات إضافية (معدل) -->
                     <div class="subsection-container border-emerald-100">
                         <h3 class="subsection-title text-emerald-800">
                             <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
@@ -533,9 +415,8 @@
                 </div>
             </section>
 
-            <!-- زر الإرسال الثابت في نهاية الصفحة -->
             <div class="w-full flex justify-center py-8 no-print mt-8 border-t border-gray-200">
-                <button onclick="processAndSend()" class="w-full md:w-1/2 p-4 bg-green-600 text-white rounded-full shadow-xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-2 font-bold text-lg ring-4 ring-green-200 group">
+                <button onclick="initiateSendProcess()" class="w-full md:w-1/2 p-4 bg-green-600 text-white rounded-full shadow-xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-2 font-bold text-lg ring-4 ring-green-200 group">
                     <span class="group-hover:animate-pulse"><i class="fas fa-paper-plane text-xl ml-2"></i></span>
                     إرسال واعتماد الطلب
                 </button>
@@ -546,9 +427,9 @@
 
     <script>
         // ==================================================================
-        // ضع رابط سكربت جوجل شيت هنا
+        // رابط السكربت (تأكد من تحديثه إذا قمت بعمل Deploy جديد)
         // ==================================================================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyG5tdDdvBIjKHT7qDA_uZEjTUf83jwMvFRaiU869BbZY-1IvDankYLTWtCBkRP-Ce8DA/exec"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxp_GUP-5YMOVMxQKjTVL65CYPKqLB3r6b3f_wAAGRXvJUiSsmUoVKF3AfTco95bdp6Jg/exec"; 
         // ==================================================================
 
         const uploadIDs = [
@@ -564,6 +445,21 @@
             initUploadBoxes();
             updateProgress();
         });
+
+        function isValidQuadrupleName(name) {
+            if (!name) return false;
+            const parts = name.trim().split(/\s+/).filter(part => part.length > 0);
+            return parts.length >= 4;
+        }
+
+        function normalizeArabicName(name) {
+            if (!name) return "";
+            return name.trim()
+                .replace(/[أإآ]/g, 'ا')  
+                .replace(/ة/g, 'ه')      
+                .replace(/ى/g, 'ي')      
+                .replace(/\s+/g, ' ');   
+        }
 
         function selectOption(inputId, value, element, theme) {
             const input = document.getElementById(inputId);
@@ -679,54 +575,155 @@
             document.getElementById('progress-text').innerText = completedSections === 4 ? "مكتمل" : `قيد التعبئة`;
         }
 
-        async function processAndSend() {
-            const fullName = document.querySelector('[name="fullName"]').value.trim();
-            if (!fullName) { Swal.fire('خطأ', 'يرجى كتابة الاسم الرباعي أولاً', 'error'); return; }
+        function showLoading(show, text = "جاري المعالجة...") {
+            const overlay = document.getElementById('loading-overlay');
+            const loadingText = document.getElementById('loading-text');
+            loadingText.innerText = text;
+            overlay.style.display = show ? 'flex' : 'none';
+        }
 
-            const result = await Swal.fire({
-                title: 'تأكيد الإرسال',
-                text: "سيتم اعتماد الطلب وتوليد الملف.",
+        async function initiateSendProcess() {
+            const fullNameInput = document.querySelector('[name="fullName"]');
+            const fullName = fullNameInput.value.trim();
+
+            if (!fullName) { 
+                Swal.fire('خطأ', 'يرجى كتابة الاسم أولاً', 'error'); 
+                return; 
+            }
+
+            if (!isValidQuadrupleName(fullName)) {
+                Swal.fire({
+                    title: 'تنبيه هام',
+                    text: 'يجب كتابة الاسم الرباعي كاملاً (4 أسماء على الأقل) لضمان دقة التسجيل وتجنب تشابه الأسماء.',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً، سأصحح الاسم',
+                    confirmButtonColor: '#d97706'
+                });
+                fullNameInput.focus();
+                return; 
+            }
+
+            const confirmResult = await Swal.fire({
+                title: 'تأكيد الطلب',
+                text: `هل أنت متأكد من إرسال البيانات للاسم: ${fullName}؟`,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#16a34a',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'نعم',
+                confirmButtonText: 'نعم، تحقق وأرسل',
                 cancelButtonText: 'إلغاء'
             });
 
-            if (!result.isConfirmed) return;
+            if (!confirmResult.isConfirmed) return;
 
-            document.getElementById('loading-overlay').style.display = 'flex';
+            showLoading(true, "جاري التحقق من السجلات السابقة...");
+
+            try {
+                const checkResponse = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: 'check', name: fullName }) 
+                });
+                
+                const checkData = await checkResponse.json();
+
+                showLoading(false);
+
+                if (checkData.exists) {
+                    await Swal.fire({
+                        title: 'انت مسجل مسبقاً!',
+                        text: 'هناك تسجيلاً سابقاً لك  هل ترغب في استبداله أم حجز جديد؟',
+                        icon: 'warning',
+                        showDenyButton: true,
+                        confirmButtonText: 'استبدال التسجيل القديم',
+                        denyButtonText: 'تسجيل وحجز ثاني',
+                        confirmButtonColor: '#d97706',
+                        denyButtonColor: '#2563eb'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            finalizeSubmission(fullName, 'replace');
+                        } else if (result.isDenied) {
+                            finalizeSubmission(fullName, 'second');
+                        }
+                    });
+                } else {
+                    finalizeSubmission(fullName, 'new');
+                }
+
+            } catch (error) {
+                showLoading(false);
+                console.error(error);
+                Swal.fire({
+                    title: 'تنبيه',
+                    text: 'حدث خطأ في الاتصال. سيتم الحفظ كملف جديد.',
+                    icon: 'info',
+                    confirmButtonText: 'موافق'
+                }).then(() => {
+                    finalizeSubmission(fullName, 'new');
+                });
+            }
+        }
+
+        async function finalizeSubmission(fullName, actionType) {
+            let loadingMsg = "جاري حفظ الاستمارة...";
+            if (actionType === 'replace') loadingMsg = "جاري حذف القديم وحفظ الجديد...";
+            
+            showLoading(true, loadingMsg);
+
+            let fileName = "";
+            const dateStr = new Date().toISOString().split('T')[0];
+            const timeSuffix = new Date().getTime().toString().slice(-4);
+            
+            if (actionType === 'replace') {
+                fileName = `${fullName} (أعادة)_${dateStr}.html`; 
+            } else if (actionType === 'second') {
+                fileName = `${fullName} (2)_${dateStr}_${timeSuffix}.html`;
+            } else {
+                fileName = `${fullName}_${dateStr}_${timeSuffix}.html`;
+            }
 
             const htmlContent = generateExactStaticHTML(fullName);
-            const dateStr = new Date().toISOString().split('T')[0];
-            const fileName = `${fullName}_${dateStr}.html`;
-            
+
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ filename: fileName, html: htmlContent })
+                    body: JSON.stringify({ 
+                        action: actionType === 'second' ? 'new' : actionType, 
+                        rawName: fullName,      
+                        filename: fileName, 
+                        html: htmlContent 
+                    })
                 });
                 
                 const data = await response.json();
-                document.getElementById('loading-overlay').style.display = 'none';
+                showLoading(false);
 
                 if (data.result === 'success') {
-                    Swal.fire('تم الإرسال!', `تم حفظ الملف باسم: ${fileName}`, 'success').then(() => location.reload());
+                    // =====================================================
+                    // استخراج الاسم الأول للرسالة (أول كلمة فقط)
+                    // =====================================================
+                    const firstName = fullName.trim().split(/\s+/)[0];
+
+                    let msg = "";
+                    if (actionType === 'replace') {
+                        msg = `تم تسليم طلبك الجديد، شكرًا لك يا ${firstName}.`;
+                    } else if (actionType === 'second') {
+                        msg = `تم تسليم طلبك الثاني، شكرًا لك يا ${firstName}.`;
+                    } else {
+                        // تسجيل جديد عادي
+                        msg = `تم تسليم طلبك، شكرًا لك يا ${firstName}.`;
+                    }
+                        
+                    Swal.fire('تمت العملية بنجاح!', msg, 'success').then(() => location.reload());
                 } else {
-                    throw new Error(data.error);
+                    throw new Error(data.error || 'حدث خطأ غير معروف');
                 }
             } catch (error) {
-                document.getElementById('loading-overlay').style.display = 'none';
+                showLoading(false);
                 Swal.fire('خطأ', 'فشل الإرسال، تحقق من الإنترنت', 'error');
             }
         }
 
-        // =========================================================
-        // الدالة المعدلة لتوليد نسخة طبق الأصل مع إجبار وضع سطح المكتب
-        // =========================================================
         function generateExactStaticHTML(fullName) {
-            // 1. نسخ المحتوى وتجميد المدخلات
             const originalContainer = document.getElementById('main-form-container');
             const clone = originalContainer.cloneNode(true);
             const originalInputs = originalContainer.querySelectorAll('input, textarea, select');
@@ -736,17 +733,15 @@
                 const orig = originalInputs[i];
                 const cln = clonedInputs[i];
                 
-                // إزالة الـ Placeholder لمنع ظهور النص الباهت
                 cln.removeAttribute('placeholder');
 
                 if (orig.tagName === 'INPUT' || orig.tagName === 'SELECT') {
-                    // التحقق من القيمة الفارغة للنصوص
                     let val = orig.value;
                     if(val.trim() === "") {
-                        val = "ــــــــ"; // تعبئة الفراغ
-                        cln.style.color = "#9ca3af"; // لون رمادي للنص الافتراضي
+                        val = "ــــــــ"; 
+                        cln.style.color = "#9ca3af"; 
                     } else {
-                        cln.style.color = "#000000"; // لون أسود للنص المدخل
+                        cln.style.color = "#000000"; 
                     }
                     cln.setAttribute('value', val);
 
@@ -768,7 +763,6 @@
                 cln.classList.add('pointer-events-none', 'bg-white'); 
             }
 
-            // تنظيف العناصر التفاعلية
             clone.querySelectorAll('*').forEach(el => {
                 el.removeAttribute('onclick'); el.removeAttribute('onchange'); el.removeAttribute('oninput'); el.removeAttribute('onsubmit');
             });
@@ -776,7 +770,10 @@
             clone.querySelectorAll('input[type="file"]').forEach(inp => inp.remove());
             clone.querySelectorAll('.option-card').forEach(card => { card.style.cursor = 'default'; card.style.pointerEvents = 'none'; });
             
-            // معالجة مربعات الصور
+            // حذف رسالة التحذير الخاصة بالاسم الرباعي من النسخة المحفوظة
+            const warningMsg = clone.querySelector('#name-warning-msg');
+            if (warningMsg) warningMsg.remove();
+
             clone.querySelectorAll('.upload-box').forEach(box => {
                 box.style.pointerEvents = 'none'; 
                 box.style.cursor = 'default';
@@ -784,7 +781,6 @@
                 if(box.classList.contains('has-image')) {
                     box.style.borderStyle = 'solid';
                 } else {
-                    // استبدال المحتوى برسالة "لم يتم إرفاق صورة"
                     box.innerHTML = `
                         <div class="flex flex-col items-center justify-center text-gray-400 opacity-70">
                             <i class="fas fa-image-slash text-2xl mb-2"></i>
@@ -796,16 +792,11 @@
                 }
             });
 
-            // 2. تعديل الـ Head لفرض وضع سطح المكتب
             let headContent = document.head.innerHTML;
-            
-            // الكود السحري: استبدال Viewport بآخر ثابت العرض (1280px)
             const desktopViewport = '<meta name="viewport" content="width=1280, user-scalable=yes">';
             if (headContent.includes('<meta name="viewport"')) {
-                // استبدال الميتا تاغ الموجود
                 headContent = headContent.replace(/<meta name="viewport"[^>]*>/gi, desktopViewport);
             } else {
-                // إضافة الميتا تاغ إذا لم يكن موجوداً
                 headContent += desktopViewport;
             }
 
@@ -814,17 +805,14 @@
 <head>
     ${headContent}
     <style>
-        /* تنسيقات إضافية خاصة بملف العرض فقط */
         body { 
             background-color: #f1f5f9; 
             padding-bottom: 50px; 
-            /* ضمان أن الخلفية تمتد لتغطي العرض الكامل حتى لو كانت الشاشة صغيرة */
             min-width: 1280px; 
         }
         .no-print { display: none !important; }
         input:focus, textarea:focus { outline: none; box-shadow: none; border-color: #e2e8f0; }
         .img-actions { display: none !important; }
-        /* إظهار شريط تمرير عند الحاجة */
         html { overflow-x: auto; }
     </style>
 </head>
