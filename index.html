@@ -3,263 +3,398 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1280, user-scalable=yes">
-    <title>استمارة التخرج - النسخة المحمية</title>
+    <title>استمارة التخرج - النسخة النهائية</title>
     
-    <!-- Tailwind CSS -->
+    <!-- المكتبات الخارجية -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
     <style>
-        /* --- إعدادات الصفحة الأساسية --- */
+        /* ========================================= */
+        /* --- ستايلات النسخة 5 الأصلية (كما هي) --- */
+        /* ========================================= */
         body {
             font-family: 'Tajawal', sans-serif;
             background-color: #f1f5f9;
+            width: 1280px;
             min-width: 1280px;
+            margin: 0 auto; 
+            padding: 0;
             position: relative;
             min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 20px; 
         }
 
+        /* إصلاح النوافذ المنبثقة لتظهر في الوسط */
         .swal2-container {
-            position: absolute !important;
-            width: 100% !important;
-            min-width: 1280px !important;
-            height: 100% !important;
+            position: fixed !important;
             top: 0 !important; left: 0 !important;
+            width: 100% !important; height: 100% !important; 
             display: flex !important;
-            align-items: center !important; justify-content: center !important;
-            z-index: 99999 !important;
+            align-items: center !important; 
+            justify-content: center !important; 
+            padding: 0 !important; 
+            z-index: 999999 !important;
+            background: rgba(0,0,0,0.7) !important;
         }
 
+        .swal2-popup {
+            font-size: 1.8rem !important;
+            width: 700px !important; 
+            padding: 3rem !important;
+            border-radius: 2rem !important;
+        }
+        .swal2-title { font-size: 3rem !important; margin-bottom: 1.5rem !important; }
+        .swal2-html-container { font-size: 2.2rem !important; }
+        .swal2-styled { font-size: 1.8rem !important; padding: 1.2rem 3rem !important; }
+
+        /* البطاقات */
         .option-card {
             cursor: pointer;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            font-size: 0.9rem;
+            border: 5px solid #cbd5e1;
+            border-radius: 1.2rem;
+            padding: 2rem 1rem;
+            font-size: 1.7rem; 
             transition: all 0.2s ease-in-out;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             text-align: center; background-color: white;
-            min-height: 60px; font-weight: 600; color: #475569;
+            min-height: 140px; 
+            font-weight: 900; 
+            color: #1e293b;
             position: relative;
         }
-        .option-card:hover { border-color: #94a3b8; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .option-card:hover { border-color: #64748b; transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15); }
 
-        /* Active States */
-        .option-card.active-purple { background-color: #f3e8ff; border-color: #9333ea; color: #6b21a8; box-shadow: 0 0 0 2px #9333ea; }
-        .option-card.active-indigo { background-color: #e0e7ff; border-color: #4f46e5; color: #3730a3; box-shadow: 0 0 0 2px #4f46e5; }
-        .option-card.active-emerald { background-color: #d1fae5; border-color: #059669; color: #065f46; box-shadow: 0 0 0 2px #059669; }
-        .option-card.active-gray { background-color: #f3f4f6; border-color: #6b7280; color: #374151; box-shadow: 0 0 0 2px #9ca3af; }
+        .option-card.active-purple { background-color: #f3e8ff; border-color: #9333ea; color: #581c87; box-shadow: 0 0 0 5px #d8b4fe; }
+        .option-card.active-indigo { background-color: #e0e7ff; border-color: #4f46e5; color: #312e81; box-shadow: 0 0 0 5px #a5b4fc; }
+        .option-card.active-emerald { background-color: #d1fae5; border-color: #059669; color: #064e3b; box-shadow: 0 0 0 5px #6ee7b7; }
+        .option-card.active-gray { background-color: #f3f4f6; border-color: #4b5563; color: #111827; box-shadow: 0 0 0 5px #9ca3af; }
 
-        /* Upload Boxes */
-        .upload-container-wrapper { width: 100%; max-width: 350px; margin: 0 auto; }
+        /* صناديق الرفع */
+        .upload-container-wrapper { width: 100%; max-width: 100%; margin: 0 auto; }
         .upload-box {
             width: 100%; aspect-ratio: 1 / 1;
-            border: 2px dashed #cbd5e1; border-radius: 0.75rem;
+            border: 5px dashed #94a3b8; border-radius: 1.5rem;
             position: relative; background-color: #f8fafc;
             transition: all 0.3s ease; overflow: hidden;
             display: flex; align-items: center; justify-content: center;
         }
         .upload-box:hover { border-color: #3b82f6; background-color: #eff6ff; }
-        .upload-box.has-image { border-style: solid; border-color: #e2e8f0; background-color: #fff; }
-        .upload-placeholder { text-align: center; color: #94a3b8; pointer-events: none; padding: 1rem; }
+        .upload-box.has-image { border-style: solid; border-color: #cbd5e1; background-color: #fff; border-width: 5px; }
+        
+        .upload-placeholder { text-align: center; color: #64748b; pointer-events: none; padding: 1rem; }
+        .upload-placeholder i { font-size: 5rem !important; margin-bottom: 1.5rem; } 
+        .upload-placeholder span { font-size: 1.8rem !important; font-weight: 900; }
+
         .uploaded-img { width: 100%; height: 100%; object-fit: contain; display: block; }
 
+        /* --- إصلاح أزرار التحكم بالصورة لتظهر ملونة --- */
         .img-actions {
-            position: absolute; top: 5px; right: 5px;
-            display: flex; gap: 5px; opacity: 0; transition: opacity 0.2s; z-index: 10;
+            position: absolute; top: 15px; right: 15px;
+            display: flex; gap: 15px; z-index: 50; opacity: 1 !important;
         }
-        .upload-box:hover .img-actions { opacity: 1; }
         .action-btn {
-            width: 24px; height: 24px; border-radius: 50%;
+            width: 60px; height: 60px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            font-size: 0.7rem; color: white; border: none; cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            font-size: 1.8rem; color: white !important; border: none; cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.4); border: 3px solid white;
         }
+        /* فرض الألوان بقوة */
+        .btn-edit { background-color: #3b82f6 !important; }
+        .btn-delete { background-color: #ef4444 !important; }
+        .action-btn i { color: white !important; }
 
-        .custom-input { transition: all 0.2s; }
-        .custom-input:focus { transform: translateY(-1px); }
+        .custom-input { transition: all 0.2s; padding: 1.2rem !important; border-width: 4px !important; }
+        .custom-input:focus { transform: translateY(-3px); border-color: #3b82f6; }
         .hidden { display: none !important; }
         
         /* Loading */
         #loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.95); z-index: 9999;
+            background: rgba(255,255,255,0.98); z-index: 99999;
             display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+            min-width: 1280px; 
         }
         .loader {
-            border: 5px solid #f3f3f3; border-top: 5px solid #3b82f6;
-            border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            border: 12px solid #f3f3f3; border-top: 12px solid #3b82f6;
+            border-radius: 50%; width: 120px; height: 120px; animation: spin 1s linear infinite;
+            margin-bottom: 40px;
         }
-        #loading-text { font-size: 1.2rem; font-weight: bold; color: #1e293b; }
+        #loading-text { font-size: 3rem; font-weight: 900; color: #1e293b; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Subsections */
         .subsection-title {
-            display: flex; align-items: center; gap: 0.5rem;
-            font-size: 1rem; font-weight: 700; margin-bottom: 1rem;
-            padding-bottom: 0.5rem; border-bottom: 2px solid #f1f5f9;
+            display: flex; align-items: center; gap: 1.5rem;
+            font-size: 2.2rem; font-weight: 900; margin-bottom: 2rem;
+            padding-bottom: 1.5rem; border-bottom: 5px solid #f1f5f9;
         }
         .subsection-container {
-            background-color: #ffffff; border: 1px solid #e2e8f0;
-            border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 1rem;
+            background-color: #ffffff; border: 4px solid #cbd5e1;
+            border-radius: 2rem; padding: 2.5rem; margin-bottom: 2.5rem;
         }
         .inner-subtitle {
-            font-size: 0.9rem; font-weight: 800; margin-bottom: 1rem;
-            display: inline-block; border-right: 4px solid; padding-right: 8px;
+            font-size: 1.6rem; font-weight: 900; margin-bottom: 2rem;
+            display: inline-block; border-right: 8px solid; padding-right: 16px;
         }
+
+        /* ========================================= */
+        /* --- ستايلات المحرر الجديد --- */
+        /* ========================================= */
+        #image-editor-modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #0f172a;
+            z-index: 200000; display: none; flex-direction: column;
+            min-width: 1280px; 
+            touch-action: none;
+        }
+        .editor-header {
+            display: flex; justify-content: space-between; items-center; 
+            padding: 30px 50px; height: 140px; background-color: #1e293b;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5); z-index: 10;
+        }
+        .top-action-btn {
+            display: flex; align-items: center; gap: 15px; 
+            padding: 15px 40px; border-radius: 3rem;
+            font-weight: 900; font-size: 2rem; 
+            cursor: pointer; transition: all 0.2s; border: none;
+        }
+        .btn-cancel-edit { color: #f1f5f9; background: #334155; }
+        .btn-save-edit { background: #3b82f6; color: white; }
+        
+        .header-controls { display: flex; align-items: center; gap: 30px; }
+        .history-btn {
+            background: rgba(255,255,255,0.1); color: white;
+            width: 70px; height: 70px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; cursor: pointer; transition: 0.2s;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .history-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .editor-workspace {
+            flex: 1; position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center; 
+            padding: 40px; background-color: #000;
+            touch-action: none;
+        }
+        /* إطار القص */
+        .cropper-view-box { outline: 6px solid #22c55e !important; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85); }
+        .cropper-line { background-color: transparent !important; }
+        .cropper-point {
+            width: 50px !important; height: 50px !important; 
+            background-color: #22c55e !important; border-radius: 50% !important; 
+            border: 5px solid white !important; margin: -25px !important; opacity: 1 !important;
+        }
+        .cropper-center { display: none !important; }
+        
+        .floating-toolbar {
+            position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+            background: #1e293b; border: 3px solid #334155;
+            padding: 20px 60px; border-radius: 5rem;
+            display: flex; gap: 80px; box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            width: 80%; justify-content: center; z-index: 20;
+        }
+        .tool-btn {
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            color: #94a3b8; background: transparent; border: none; cursor: pointer; padding: 10px;
+        }
+        .tool-btn i { font-size: 4rem; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
+        .tool-btn span { font-size: 1.8rem; font-weight: 800; }
+        .tool-btn:hover, .tool-btn.active { color: #60a5fa; transform: scale(1.1); }
+
+        /* شريط التدوير */
+        .rotation-controls {
+            position: absolute; bottom: 240px; left: 50%; transform: translateX(-50%);
+            width: 80%; max-width: 900px;
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 20px; z-index: 40;
+            background: rgba(30, 41, 59, 0.9); padding: 15px 30px;
+            border-radius: 4rem; border: 2px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+        .mini-rotate-btn {
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            width: 55px; height: 55px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; font-size: 1.5rem; transition: 0.2s;
+        }
+        .mini-rotate-btn:active { background: #3b82f6; transform: scale(0.95); }
+        .rotation-slider {
+            -webkit-appearance: none; flex-grow: 1; height: 8px;
+            background: rgba(255,255,255,0.2); border-radius: 5px; outline: none; margin: 0 15px;
+        }
+        .rotation-slider::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%;
+            background: #3b82f6; cursor: pointer; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        .rotation-label { color: #94a3b8; font-size: 1.2rem; font-weight: bold; width: 40px; text-align: center; }
+
+        /* زر حفظ التغييرات العائم */
+        #btn-floating-save {
+            position: absolute; bottom: 360px; left: 50%; transform: translateX(-50%) scale(0.5); 
+            background: #22c55e; color: white; padding: 15px 60px; border-radius: 4rem;
+            font-size: 2.2rem; font-weight: 900; box-shadow: 0 15px 40px rgba(34, 197, 94, 0.6);
+            display: flex; align-items: center; gap: 15px; z-index: 50; border: 4px solid white;
+            cursor: pointer; opacity: 0; pointer-events: none; 
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #btn-floating-save.visible { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+
         @media print { .no-print { display: none !important; } }
     </style>
 </head>
-<body class="min-h-screen pb-24">
+<body class="min-h-screen pb-40">
 
     <div id="loading-overlay">
         <div class="loader"></div>
-        <h3 id="loading-text" class="text-xl font-bold text-gray-800">جاري المعالجة...</h3>
+        <h3 id="loading-text">جاري المعالجة...</h3>
     </div>
 
-    <header class="bg-white shadow-sm sticky top-0 z-40 no-print border-b border-gray-100">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-3">
-            <h1 class="text-lg font-bold text-gray-800">استمارة زي التخرج الذكية</h1>
-            <div class="w-full md:w-1/2 flex flex-col items-center">
-                <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden shadow-inner">
-                    <div id="progress-bar" class="bg-gradient-to-l from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-40 no-print border-b-8 border-gray-200 mb-10 w-full">
+        <div class="w-full px-10 py-6 flex flex-row justify-between items-center gap-8">
+            <h1 class="text-4xl font-black text-gray-900">استمارة زي التخرج الذكية</h1>
+            <div class="w-1/2 flex flex-col items-center">
+                <div class="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner border-2 border-gray-300">
+                    <div id="progress-bar" class="bg-gradient-to-l from-blue-600 to-blue-800 h-8 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
                 </div>
-                <span id="progress-text" class="text-xs font-bold text-blue-600 mt-1">جاري البدء...</span>
+                <span id="progress-text" class="text-2xl font-black text-blue-800 mt-3">جاري البدء...</span>
             </div>
         </div>
     </header>
 
-    <main id="main-form-container" class="max-w-4xl mx-auto mt-6 px-4 space-y-6">
+    <!-- Main Content -->
+    <main id="main-form-container" class="w-full mt-10 px-10 space-y-10">
         <form id="gradForm" onsubmit="return false;">
 
             <!-- Info Section -->
-            <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-1.5 h-full bg-blue-500"></div>
-                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-user-graduate text-blue-500 bg-blue-50 p-2 rounded-lg"></i> قسم المعلومات
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-4 h-full bg-blue-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-user-graduate text-blue-600 bg-blue-100 p-5 rounded-3xl"></i> قسم المعلومات
                 </h2>
                 <div class="w-full">
-                    <label class="block text-gray-700 font-bold mb-2 text-sm">الاسم الرباعي (إجباري)</label>
-                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-gray-50 text-xl font-bold" placeholder="اكتب اسمك الرباعي كاملاً..." required oninput="updateProgress()">
-                    <!-- تم إضافة ID هنا لسهولة الحذف لاحقاً -->
-                    <p id="name-warning-msg" class="text-xs text-red-500 mt-1 mr-1 font-bold"><i class="fas fa-exclamation-circle ml-1"></i> تنبيه: يجب كتابة الاسم مكوناً من 4 مقاطع على الأقل لضمان عدم تشابه الأسماء.</p>
+                    <label class="block text-gray-800 font-black mb-4 text-4xl">الاسم الرباعي (إجباري)</label>
+                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-8 border-4 border-gray-300 rounded-3xl focus:ring-4 focus:ring-blue-600 outline-none bg-gray-50 text-4xl font-black text-gray-900" placeholder="اكتب اسمك الرباعي كاملاً..." required oninput="window.handleNameInput()" onblur="window.cleanNameInput(this)">
+                    <p id="name-warning-msg" class="text-2xl text-red-600 mt-4 mr-3 font-black hidden">
+                        <i class="fas fa-exclamation-circle ml-2"></i> 
+                        <span id="name-warning-text">يجب كتابة الاسم مكوناً من 4 مقاطع على الأقل.</span>
+                    </p>
                 </div>
             </section>
 
             <!-- Sash Section -->
-            <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-1.5 h-full bg-purple-500"></div>
-                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-ribbon text-purple-500 bg-purple-50 p-2 rounded-lg"></i> أولاً: الوشاح
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-4 h-full bg-purple-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-ribbon text-purple-600 bg-purple-100 p-5 rounded-3xl"></i> أولاً: الوشاح
                 </h2>
 
-                <div class="subsection-container border-purple-100">
-                    <h3 class="subsection-title text-purple-800">
-                        <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
+                <div class="subsection-container border-purple-200">
+                    <h3 class="subsection-title text-purple-900">
+                        <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">1</span>
                         نوع الوشاح
                     </h3>
-                    <input type="hidden" id="sashType" name="sashType" onchange="handleSashChange()">
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'عادي', this, 'purple')">عادي</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'مثلث', this, 'purple')">مثلث</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'ملكي فرعوني', this, 'purple')">ملكي فرعوني</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'ملكي مثلث', this, 'purple')">ملكي مثلث</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'جانبي', this, 'purple')">جانبي</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'امريكي + عادي', this, 'purple')">امريكي + عادي</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'امريكي + مثلث', this, 'purple')">امريكي + مثلث</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'امريكي + ملكي فرعوني', this, 'purple')">امريكي + ملكي فرعوني</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'امريكي + ملكي مثلث', this, 'purple')">امريكي + ملكي مثلث</div>
-                        <div class="option-card hover:bg-purple-50" onclick="selectOption('sashType', 'امريكي + جانبي', this, 'purple')">امريكي + جانبي</div>
-                        <div class="option-card hover:bg-red-50 col-span-2 sm:col-span-2" onclick="selectOption('sashType', 'لا اريد وشاح', this, 'gray')">
-                            <span class="text-red-500 font-bold">لا اريد وشاح</span>
+                    <input type="hidden" id="sashType" name="sashType">
+                    <div class="grid grid-cols-4 gap-6">
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'عادي', this, 'purple')">عادي</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'مثلث', this, 'purple')">مثلث</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'ملكي فرعوني', this, 'purple')">ملكي فرعوني</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'ملكي مثلث', this, 'purple')">ملكي مثلث</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'جانبي', this, 'purple')">جانبي</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'امريكي + عادي', this, 'purple')">امريكي + عادي</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'امريكي + مثلث', this, 'purple')">امريكي + مثلث</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'امريكي + ملكي فرعوني', this, 'purple')">امريكي + ملكي فرعوني</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'امريكي + ملكي مثلث', this, 'purple')">امريكي + ملكي مثلث</div>
+                        <div class="option-card hover:bg-purple-50" onclick="window.selectOption('sashType', 'امريكي + جانبي', this, 'purple')">امريكي + جانبي</div>
+                        <div class="option-card hover:bg-red-50 col-span-2" onclick="window.selectOption('sashType', 'لا اريد وشاح', this, 'gray')">
+                            <span class="text-red-600 font-black">لا اريد وشاح</span>
                         </div>
                     </div>
                 </div>
 
-                <div id="sashContentWrapper" class="hidden space-y-4">
-                    <div class="subsection-container border-purple-100 bg-purple-50/30">
-                        <h3 class="subsection-title text-purple-800">
-                            <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
+                <div id="sashContentWrapper" class="hidden space-y-8">
+                    <div class="subsection-container border-purple-200 bg-purple-50/50">
+                        <h3 class="subsection-title text-purple-900">
+                            <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">2</span>
                             النقش على الوشاح
                         </h3>
-                        <div class="mb-4">
-                            <h4 class="inner-subtitle text-purple-700 border-purple-400">النقش من الامام</h4>
+                        <div class="mb-8">
+                            <h4 class="inner-subtitle text-purple-900 border-purple-600">النقش من الامام</h4>
                             <div id="sashSectionTwoSides" class="hidden">
-                                <div class="grid grid-cols-2 gap-4 justify-items-center">
+                                <div class="grid grid-cols-2 gap-10 justify-items-center">
                                     <div class="upload-container-wrapper">
-                                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">الجهة اليمنى</label>
+                                        <label class="block text-2xl font-black text-gray-700 mb-4 text-center">الجهة اليمنى</label>
                                         <div id="upload-sash-right"></div>
-                                        <textarea name="sashRightText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                        <textarea name="sashRightText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                     </div>
                                     <div class="upload-container-wrapper">
-                                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">الجهة اليسرى</label>
+                                        <label class="block text-2xl font-black text-gray-700 mb-4 text-center">الجهة اليسرى</label>
                                         <div id="upload-sash-left"></div>
-                                        <textarea name="sashLeftText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                        <textarea name="sashLeftText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div id="sashSectionOneSide" class="hidden">
                                 <div class="flex justify-center">
-                                    <div class="upload-container-wrapper">
-                                        <label class="block text-xs font-bold text-gray-500 mb-2 text-center">صورة النقش</label>
+                                    <div class="upload-container-wrapper w-3/5">
+                                        <label class="block text-2xl font-black text-gray-700 mb-4 text-center">صورة النقش</label>
                                         <div id="upload-sash-side-1"></div>
-                                        <textarea name="sashSideText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                        <textarea name="sashSideText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="sashSectionBack" class="hidden pt-4 border-t border-purple-200/60">
-                            <h4 class="inner-subtitle text-purple-700 border-purple-400">النقش من الخلف (خاص بالوشاح الملكي)</h4>
-                             <div class="grid grid-cols-2 gap-4 justify-items-center">
+                        <div id="sashSectionBack" class="hidden pt-8 border-t-8 border-purple-200">
+                            <h4 class="inner-subtitle text-purple-900 border-purple-600">النقش من الخلف (خاص بالوشاح الملكي)</h4>
+                             <div class="grid grid-cols-2 gap-10 justify-items-center">
                                 <div class="upload-container-wrapper">
                                     <div id="upload-sash-back-1"></div>
-                                    <textarea name="sashBack1Text" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                    <textarea name="sashBack1Text" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                 </div>
                                 <div class="upload-container-wrapper">
                                     <div id="upload-sash-back-2"></div>
-                                    <textarea name="sashBack2Text" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-purple-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                    <textarea name="sashBack2Text" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="subsection-container border-purple-100">
-                        <h3 class="subsection-title text-purple-800">
-                            <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
+                    <div class="subsection-container border-purple-200">
+                        <h3 class="subsection-title text-purple-900">
+                            <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">3</span>
                             تنسيق الالوان
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-3 gap-8">
                             <div>
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الوشاح</label>
-                                <input type="text" name="sashColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: ماروني">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الوشاح</label>
+                                <input type="text" name="sashColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: ماروني">
                             </div>
                             <div>
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الكركوشة</label>
-                                <input type="text" name="sashTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: ذهبي">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الكركوشة</label>
+                                <input type="text" name="sashTasselColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: ذهبي">
                             </div>
                             <div>
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون النقش</label>
-                                <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أبيض">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون النقش</label>
+                                <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أبيض">
                             </div>
                         </div>
                     </div>
-                    <div class="subsection-container border-purple-100">
-                        <h3 class="subsection-title text-purple-800">
-                            <span class="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">4</span>
-                            ملاحظات اظافية
+                    <div class="subsection-container border-purple-200">
+                        <h3 class="subsection-title text-purple-900">
+                            <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">4</span>
+                            ملاحظات إضافية
                         </h3>
-                        <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                        <div class="flex flex-row gap-8 items-stretch">
                             <div class="flex-1">
-                                <textarea name="sashNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-purple-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                                <textarea name="sashNotes" class="custom-input w-full h-full min-h-[250px] p-5 border-4 border-gray-300 rounded-3xl text-2xl font-bold resize-none shadow-sm focus:border-purple-500 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
-                            <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
-                                <label class="block text-purple-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
+                            <div class="w-[450px] flex-shrink-0 flex flex-col">
+                                <label class="block text-purple-900 text-2xl font-black mb-4 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
                                     <div id="upload-sash-notes"></div>
                                 </div>
@@ -270,89 +405,89 @@
             </section>
 
             <!-- Cap Section -->
-            <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-1.5 h-full bg-indigo-500"></div>
-                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-graduation-cap text-indigo-500 bg-indigo-50 p-2 rounded-lg"></i> ثانياً: القبعة
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-4 h-full bg-indigo-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-graduation-cap text-indigo-600 bg-indigo-100 p-5 rounded-3xl"></i> ثانياً: القبعة
                 </h2>
-                <div class="subsection-container border-indigo-100">
-                    <h3 class="subsection-title text-indigo-800">
-                        <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
+                <div class="subsection-container border-indigo-200">
+                    <h3 class="subsection-title text-indigo-900">
+                        <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">1</span>
                         نوع القبعة
                     </h3>
-                    <input type="hidden" id="capType" name="capType" onchange="handleCapTypeChange()">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="option-card hover:bg-indigo-50" onclick="selectOption('capType', 'قبعة عادية', this, 'indigo')">   قبعة دائرية عدلة (عادية)   </div>
-                        <div class="option-card hover:bg-indigo-50" onclick="selectOption('capType', 'قبعة ملكية', this, 'indigo')">قبعة مثلث (ملكية)</div>
-                        <div class="option-card hover:bg-red-50" onclick="selectOption('capType', 'لا اريد قبعة', this, 'gray')">
-                            <span class="text-red-500 font-bold">لا اريد قبعة</span>
+                    <input type="hidden" id="capType" name="capType">
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="option-card hover:bg-indigo-50" onclick="window.selectOption('capType', 'قبعة عادية', this, 'indigo')">   قبعة دائرية عدلة (عادية)   </div>
+                        <div class="option-card hover:bg-indigo-50" onclick="window.selectOption('capType', 'قبعة ملكية', this, 'indigo')">قبعة مثلث (ملكية)</div>
+                        <div class="option-card hover:bg-red-50" onclick="window.selectOption('capType', 'لا اريد قبعة', this, 'gray')">
+                            <span class="text-red-600 font-black">لا اريد قبعة</span>
                         </div>
                     </div>
                 </div>
-                <div id="capContentWrapper" class="hidden space-y-4">
-                    <div class="subsection-container border-indigo-100 bg-indigo-50/30">
-                        <h3 class="subsection-title text-indigo-800">
-                            <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
+                <div id="capContentWrapper" class="hidden space-y-8">
+                    <div class="subsection-container border-indigo-200 bg-indigo-50/50">
+                        <h3 class="subsection-title text-indigo-900">
+                            <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">2</span>
                             النقش على القبعة
                         </h3>
-                        <div class="mb-4">
-                            <label class="block text-gray-600 text-xs font-bold mb-2 text-center">حدد مكان النقش أولاً</label>
-                            <input type="hidden" id="capEmbroideryLoc" name="capEmbroideryLoc" onchange="handleCapEmbroideryChange()">
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'فوق القبعة', this, 'indigo')">فوق القبعة</div>
-                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'طوق القبعة', this, 'indigo')">طوق القبعة</div>
-                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-indigo-50" onclick="selectOption('capEmbroideryLoc', 'دبل نقش', this, 'indigo')">دبل نقش</div>
-                                <div class="option-card text-sm py-2 min-h-[40px] hover:bg-red-50" onclick="selectOption('capEmbroideryLoc', 'لا اريد نقش', this, 'gray')">لا اريد نقش</div>
+                        <div class="mb-8">
+                            <label class="block text-gray-800 text-3xl font-black mb-6 text-center">حدد مكان النقش أولاً</label>
+                            <input type="hidden" id="capEmbroideryLoc" name="capEmbroideryLoc">
+                            <div class="grid grid-cols-4 gap-6">
+                                <div class="option-card py-6 min-h-[120px] hover:bg-indigo-50" onclick="window.selectOption('capEmbroideryLoc', 'فوق القبعة', this, 'indigo')">فوق القبعة</div>
+                                <div class="option-card py-6 min-h-[120px] hover:bg-indigo-50" onclick="window.selectOption('capEmbroideryLoc', 'طوق القبعة', this, 'indigo')">طوق القبعة</div>
+                                <div class="option-card py-6 min-h-[120px] hover:bg-indigo-50" onclick="window.selectOption('capEmbroideryLoc', 'دبل نقش', this, 'indigo')">دبل نقش</div>
+                                <div class="option-card py-6 min-h-[120px] hover:bg-red-50" onclick="window.selectOption('capEmbroideryLoc', 'لا اريد نقش', this, 'gray')">لا اريد نقش</div>
                             </div>
                         </div>
-                        <div class="flex flex-col md:flex-row gap-4 justify-center">
-                            <div id="capSectionTop" class="hidden w-full md:w-1/2 p-3 rounded-lg border border-indigo-100 bg-white">
-                                <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (فوق القبعة)</h3>
+                        <div class="flex flex-row gap-8 justify-center">
+                            <div id="capSectionTop" class="hidden w-1/2 p-8 rounded-3xl border-4 border-indigo-200 bg-white">
+                                <h3 class="font-black text-2xl text-indigo-900 mb-5 text-center">صورة النقش (فوق القبعة)</h3>
                                 <div class="upload-container-wrapper">
                                     <div id="upload-cap-top"></div>
-                                    <textarea name="capTopText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-indigo-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                    <textarea name="capTopText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-indigo-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                 </div>
                             </div>
-                            <div id="capSectionRim" class="hidden w-full md:w-1/2 p-3 rounded-lg border border-indigo-100 bg-white">
-                                <h3 class="font-bold text-xs text-indigo-800 mb-2 text-center">صورة النقش (طوق القبعة)</h3>
+                            <div id="capSectionRim" class="hidden w-1/2 p-8 rounded-3xl border-4 border-indigo-200 bg-white">
+                                <h3 class="font-black text-2xl text-indigo-900 mb-5 text-center">صورة النقش (طوق القبعة)</h3>
                                 <div class="upload-container-wrapper">
                                     <div id="upload-cap-rim"></div>
-                                    <textarea name="capRimText" class="mt-2 w-full p-2 border border-gray-300 rounded-lg text-xl font-bold focus:ring-1 focus:ring-indigo-500 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="أو اكتب وصف النقش هنا..."></textarea>
+                                    <textarea name="capRimText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-indigo-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="subsection-container border-indigo-100">
-                        <h3 class="subsection-title text-indigo-800">
-                            <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
+                    <div class="subsection-container border-indigo-200">
+                        <h3 class="subsection-title text-indigo-900">
+                            <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">3</span>
                             تنسيق الالوان
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-3 gap-8">
                             <div>
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون القبعة</label>
-                                <input type="text" name="capColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أسود">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون القبعة</label>
+                                <input type="text" name="capColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أسود">
                             </div>
                             <div id="capEmbroideryColorField">
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون النقش</label>
-                                <input type="text" name="capEmbroideryColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: ذهبي">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون النقش</label>
+                                <input type="text" name="capEmbroideryColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: ذهبي">
                             </div>
                             <div>
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الكركوشة</label>
-                                <input type="text" name="capTasselColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أصفر">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الكركوشة</label>
+                                <input type="text" name="capTasselColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أصفر">
                             </div>
                         </div>
                     </div>
-                    <div class="subsection-container border-indigo-100">
-                        <h3 class="subsection-title text-indigo-800">
-                            <span class="bg-indigo-100 text-indigo-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">4</span>
-                            ملاحظات اظافية
+                    <div class="subsection-container border-indigo-200">
+                        <h3 class="subsection-title text-indigo-900">
+                            <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">4</span>
+                            ملاحظات إضافية
                         </h3>
-                         <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                         <div class="flex flex-row gap-8 items-stretch">
                             <div class="flex-1">
-                                <textarea name="capNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-indigo-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                                <textarea name="capNotes" class="custom-input w-full h-full min-h-[250px] p-5 border-4 border-gray-300 rounded-3xl text-2xl font-bold resize-none shadow-sm focus:border-indigo-500 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
-                            <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
-                                <label class="block text-indigo-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
+                            <div class="w-[450px] flex-shrink-0 flex flex-col">
+                                <label class="block text-indigo-900 text-2xl font-black mb-4 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
                                     <div id="upload-cap-notes"></div>
                                 </div>
@@ -363,49 +498,49 @@
             </section>
 
             <!-- Gown Section -->
-            <section class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 relative overflow-hidden">
-                 <div class="absolute top-0 right-0 w-1.5 h-full bg-emerald-500"></div>
-                <h2 class="text-xl font-bold mb-6 text-gray-800 flex items-center gap-2">
-                    <i class="fas fa-tshirt text-emerald-500 bg-emerald-50 p-2 rounded-lg"></i> ثالثاً: الروب
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                 <div class="absolute top-0 right-0 w-4 h-full bg-emerald-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-tshirt text-emerald-600 bg-emerald-100 p-5 rounded-3xl"></i> ثالثاً: الروب
                 </h2>
-                <div class="subsection-container border-emerald-100">
-                    <h3 class="subsection-title text-emerald-800">
-                        <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">1</span>
+                <div class="subsection-container border-emerald-200">
+                    <h3 class="subsection-title text-emerald-900">
+                        <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">1</span>
                         نوع الروب
                     </h3>
-                    <input type="hidden" id="gownType" name="gownType" onchange="handleGownChange()">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div class="option-card hover:bg-emerald-50" onclick="selectOption('gownType', 'روب خليجي', this, 'emerald')">روب خليجي</div>
-                        <div class="option-card hover:bg-emerald-50" onclick="selectOption('gownType', 'روب امريكي', this, 'emerald')">روب امريكي</div>
-                        <div class="option-card hover:bg-red-50" onclick="selectOption('gownType', 'لا اريد روب', this, 'gray')">
-                            <span class="text-red-500 font-bold">لا اريد روب</span>
+                    <input type="hidden" id="gownType" name="gownType">
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="option-card hover:bg-emerald-50" onclick="window.selectOption('gownType', 'روب خليجي', this, 'emerald')">روب خليجي</div>
+                        <div class="option-card hover:bg-emerald-50" onclick="window.selectOption('gownType', 'روب امريكي', this, 'emerald')">روب امريكي</div>
+                        <div class="option-card hover:bg-red-50" onclick="window.selectOption('gownType', 'لا اريد روب', this, 'gray')">
+                            <span class="text-red-600 font-black">لا اريد روب</span>
                         </div>
                     </div>
                 </div>
-                <div id="gownContentWrapper" class="hidden space-y-4">
-                    <div class="subsection-container border-emerald-100">
-                        <h3 class="subsection-title text-emerald-800">
-                            <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">2</span>
+                <div id="gownContentWrapper" class="hidden space-y-8">
+                    <div class="subsection-container border-emerald-200">
+                        <h3 class="subsection-title text-emerald-900">
+                            <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">2</span>
                             تنسيق الالوان
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-2 gap-8">
                             <div>
-                                <label class="block text-gray-600 text-xs font-bold mb-1">لون الروب</label>
-                                <input type="text" name="gownColor" class="custom-input w-full p-2.5 border border-gray-300 rounded-lg text-xl font-bold bg-gray-50" placeholder="مثلا: أسود">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الروب</label>
+                                <input type="text" name="gownColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أسود">
                             </div>
                         </div>
                     </div>
-                    <div class="subsection-container border-emerald-100">
-                        <h3 class="subsection-title text-emerald-800">
-                            <span class="bg-emerald-100 text-emerald-600 rounded-full w-6 h-6 flex items-center justify-center text-xs ml-2">3</span>
-                            ملاحظات اظافية
+                    <div class="subsection-container border-emerald-200">
+                        <h3 class="subsection-title text-emerald-900">
+                            <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">3</span>
+                            ملاحظات إضافية
                         </h3>
-                         <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                         <div class="flex flex-row gap-8 items-stretch">
                             <div class="flex-1">
-                                <textarea name="gownNotes" class="custom-input w-full h-full min-h-[180px] p-3 border border-gray-300 rounded-xl text-xl font-bold resize-none shadow-sm focus:border-emerald-400 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                                <textarea name="gownNotes" class="custom-input w-full h-full min-h-[250px] p-5 border-4 border-gray-300 rounded-3xl text-2xl font-bold resize-none shadow-sm focus:border-emerald-500 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
                             </div>
-                            <div class="w-full md:w-[350px] flex-shrink-0 flex flex-col">
-                                <label class="block text-emerald-700 text-xs font-bold mb-2 text-center">صورة توضيحية (اختياري)</label>
+                            <div class="w-[450px] flex-shrink-0 flex flex-col">
+                                <label class="block text-emerald-900 text-2xl font-black mb-4 text-center">صورة توضيحية (اختياري)</label>
                                 <div class="upload-container-wrapper w-full">
                                     <div id="upload-gown-notes"></div>
                                 </div>
@@ -415,9 +550,9 @@
                 </div>
             </section>
 
-            <div class="w-full flex justify-center py-8 no-print mt-8 border-t border-gray-200">
-                <button onclick="initiateSendProcess()" class="w-full md:w-1/2 p-4 bg-green-600 text-white rounded-full shadow-xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-2 font-bold text-lg ring-4 ring-green-200 group">
-                    <span class="group-hover:animate-pulse"><i class="fas fa-paper-plane text-xl ml-2"></i></span>
+            <div class="w-full flex justify-center py-12 no-print mt-14 border-t-8 border-gray-200">
+                <button onclick="window.initiateSendProcess()" class="w-2/3 p-10 bg-green-600 text-white rounded-full shadow-2xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-6 font-black text-4xl ring-8 ring-green-200 group">
+                    <span class="group-hover:animate-pulse"><i class="fas fa-paper-plane text-5xl ml-2"></i></span>
                     إرسال واعتماد الطلب
                 </button>
             </div>
@@ -425,51 +560,161 @@
         </form>
     </main>
 
-    <script>
-        // ==================================================================
-        // رابط السكربت (تأكد من تحديثه إذا قمت بعمل Deploy جديد)
-        // ==================================================================
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxp_GUP-5YMOVMxQKjTVL65CYPKqLB3r6b3f_wAAGRXvJUiSsmUoVKF3AfTco95bdp6Jg/exec"; 
-        // ==================================================================
+    <!-- ======================================================================== -->
+    <!-- IMAGE EDITOR MODAL (واجهة تحرير الصور الكبيرة) -->
+    <!-- ======================================================================== -->
+    <div id="image-editor-modal">
+        <!-- Header -->
+        <div class="editor-header">
+            <button onclick="window.closeEditor()" class="top-action-btn btn-cancel-edit"><i class="fas fa-times"></i> إلغاء</button>
+            
+            <!-- History Controls (Undo/Redo) -->
+            <div class="header-controls">
+                <button onclick="window.undoEdit()" class="history-btn" id="btn-undo" disabled><i class="fas fa-undo"></i></button>
+                <button onclick="window.redoEdit()" class="history-btn" id="btn-redo" disabled><i class="fas fa-redo"></i></button>
+            </div>
 
-        const uploadIDs = [
-            'upload-sash-right', 'upload-sash-left', 'upload-sash-back-1', 'upload-sash-back-2',
-            'upload-sash-side-1', 'upload-sash-notes', 
-            'upload-cap-top', 'upload-cap-rim', 'upload-cap-notes', 
-            'upload-gown-notes'
-        ];
+            <!-- الزر "إدراج" -->
+            <button onclick="window.saveEditorImage()" class="top-action-btn btn-save-edit"><i class="fas fa-check"></i> إدراج</button>
+        </div>
         
+        <div class="editor-workspace">
+            <img id="editor-image-target" src="" alt="Editing Image" style="max-width: 100%; display: block;">
+            
+            <!-- زر حفظ التغييرات العائم -->
+            <button id="btn-floating-save" onclick="window.saveIntermediateChanges()">
+                <i class="fas fa-check-circle"></i> حفظ التغييرات
+            </button>
+
+            <!-- شريط التدوير الأفقي مع الأزرار -->
+            <div class="rotation-controls">
+                <button onclick="window.rotate90(-90)" class="mini-rotate-btn" title="تدوير يسار 90°">
+                    <i class="fas fa-undo"></i>
+                </button>
+                
+                <div class="flex items-center flex-grow mx-4">
+                    <span class="rotation-label">-45°</span>
+                    <input type="range" min="-45" max="45" value="0" class="rotation-slider" oninput="window.handleRotation(this.value)">
+                    <span class="rotation-label">+45°</span>
+                </div>
+
+                <button onclick="window.rotate90(90)" class="mini-rotate-btn" title="تدوير يمين 90°">
+                    <i class="fas fa-redo"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="floating-toolbar">
+            <button onclick="window.applyFilter()" class="tool-btn group"><i class="fas fa-wand-magic-sparkles"></i><span>فلتر</span></button>
+            <!-- زر إعادة ضبط القص -->
+            <button onclick="window.resetView()" class="tool-btn active"><i class="fas fa-crop-alt"></i><span>إعادة ضبط</span></button>
+        </div>
+    </div>
+    <!-- ======================================================================== -->
+
+    <script>
+        // --- GLOBAL CONFIG ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxp_GUP-5YMOVMxQKjTVL65CYPKqLB3r6b3f_wAAGRXvJUiSsmUoVKF3AfTco95bdp6Jg/exec"; 
+        
+        const uploadIDs = ['upload-sash-right', 'upload-sash-left', 'upload-sash-back-1', 'upload-sash-back-2', 'upload-sash-side-1', 'upload-sash-notes', 'upload-cap-top', 'upload-cap-rim', 'upload-cap-notes', 'upload-gown-notes'];
         const imageStore = {};
+        
+        // --- Editor Variables (Stack & State) ---
+        let currentEditorCropper = null;
+        let currentEditingUploadId = null;
+        let editHistory = []; 
+        let historyIndex = -1; 
+        let filterIndex = 0;
+        const filters = ['', 'grayscale(100%)', 'sepia(0.5)', 'contrast(150%) brightness(110%)'];
+        let currentBaseRotation = 0; 
+        let currentFineRotation = 0; 
+
+        // --- WINDOW BINDING (لضمان العمل في كل مكان) ---
+        window.selectOption = selectOption;
+        window.handleSashChange = handleSashChange;
+        window.handleCapTypeChange = handleCapTypeChange;
+        window.handleGownChange = handleGownChange;
+        window.handleCapEmbroideryChange = handleCapEmbroideryChange;
+        window.handleNameInput = handleNameInput;
+        window.cleanNameInput = cleanNameInput;
+        window.processFileForEditor = processFileForEditor;
+        window.reEditImage = reEditImage;
+        window.removeImage = removeImage;
+        window.closeEditor = closeEditor;
+        window.saveEditorImage = saveEditorImage;
+        window.saveIntermediateChanges = saveIntermediateChanges;
+        window.undoEdit = undoEdit;
+        window.redoEdit = redoEdit;
+        window.applyFilter = applyFilter;
+        window.handleRotation = handleRotation;
+        window.rotate90 = rotate90;
+        window.resetView = resetView;
+        window.initiateSendProcess = initiateSendProcess;
 
         document.addEventListener('DOMContentLoaded', () => {
             initUploadBoxes();
             updateProgress();
         });
 
-        function isValidQuadrupleName(name) {
-            if (!name) return false;
-            const parts = name.trim().split(/\s+/).filter(part => part.length > 0);
-            return parts.length >= 4;
+        // ----------------------------------------------------
+        // دوال النسخة 5 الأصلية (Global Scope)
+        // ----------------------------------------------------
+        function cleanNameInput(inputElement) {
+            let val = inputElement.value;
+            if (!val) return;
+            val = val.replace(/[^\u0621-\u064A\s]/g, '');
+            val = val.replace(/\s+/g, ' ').trim();
+            inputElement.value = val;
+            handleNameInput(); 
         }
 
-        function normalizeArabicName(name) {
-            if (!name) return "";
-            return name.trim()
-                .replace(/[أإآ]/g, 'ا')  
-                .replace(/ة/g, 'ه')      
-                .replace(/ى/g, 'ي')      
-                .replace(/\s+/g, ' ');   
+        function validateNameSmart(name) {
+            name = name.trim();
+            if (name.length === 0) return { valid: false, msg: "" };
+            if (/[^ \u0621-\u064A]/.test(name)) return { valid: false, msg: "يسمح فقط بالحروف العربية (بدون أرقام أو رموز)." };
+            if (/(.)\1{2,}/.test(name)) return { valid: false, msg: "الاسم يحتوي على تكرار مبالغ فيه للحروف." };
+            const parts = name.split(' ').filter(p => p.length > 1); 
+            if (parts.length < 4) return { valid: false, msg: "يجب كتابة الاسم الرباعي كاملاً (4 مقاطع)." };
+            return { valid: true, msg: "" };
+        }
+
+        function handleNameInput() {
+            const input = document.getElementById('input-fullName');
+            const warningP = document.getElementById('name-warning-msg');
+            const warningText = document.getElementById('name-warning-text');
+            const result = validateNameSmart(input.value);
+            
+            if (!input.value.trim()) {
+                warningP.classList.add('hidden'); 
+            } else if (!result.valid) {
+                warningP.classList.remove('hidden');
+                warningText.textContent = result.msg;
+                input.classList.add('border-red-400');
+                input.classList.remove('border-gray-300', 'border-green-500');
+            } else {
+                warningP.classList.add('hidden');
+                input.classList.remove('border-red-400', 'border-gray-300');
+                input.classList.add('border-green-500'); 
+            }
+            updateProgress();
         }
 
         function selectOption(inputId, value, element, theme) {
             const input = document.getElementById(inputId);
+            if(!input) return;
             input.value = value;
+            
             const parent = element.parentElement;
             parent.querySelectorAll('.option-card').forEach(c => {
                 c.classList.remove('active-purple', 'active-indigo', 'active-emerald', 'active-gray');
             });
             element.classList.add(`active-${theme}`);
-            input.dispatchEvent(new Event('change'));
+            
+            if (inputId === 'sashType') handleSashChange();
+            else if (inputId === 'capType') handleCapTypeChange();
+            else if (inputId === 'gownType') handleGownChange();
+            else if (inputId === 'capEmbroideryLoc') handleCapEmbroideryChange();
+            
             updateProgress();
         }
 
@@ -478,18 +723,10 @@
             const wrapper = document.getElementById('sashContentWrapper');
             if (!val || val.includes('لا اريد')) { wrapper.classList.add('hidden'); updateProgress(); return; }
             wrapper.classList.remove('hidden');
-            if (val.includes('جانبي')) {
-                document.getElementById('sashSectionTwoSides').classList.add('hidden');
-                document.getElementById('sashSectionOneSide').classList.remove('hidden');
-            } else {
-                document.getElementById('sashSectionTwoSides').classList.remove('hidden');
-                document.getElementById('sashSectionOneSide').classList.add('hidden');
-            }
-            if (val.includes('ملكي')) {
-                document.getElementById('sashSectionBack').classList.remove('hidden');
-            } else {
-                document.getElementById('sashSectionBack').classList.add('hidden');
-            }
+            
+            document.getElementById('sashSectionTwoSides').classList.toggle('hidden', val.includes('جانبي'));
+            document.getElementById('sashSectionOneSide').classList.toggle('hidden', !val.includes('جانبي'));
+            document.getElementById('sashSectionBack').classList.toggle('hidden', !val.includes('ملكي'));
             updateProgress();
         }
 
@@ -504,12 +741,11 @@
             const loc = document.getElementById('capEmbroideryLoc').value;
             const top = document.getElementById('capSectionTop');
             const rim = document.getElementById('capSectionRim');
-            const colorField = document.getElementById('capEmbroideryColorField');
-            top.classList.add('hidden'); rim.classList.add('hidden'); colorField.classList.remove('hidden');
+            top.classList.add('hidden'); rim.classList.add('hidden'); 
+            
             if (loc === 'فوق القبعة') top.classList.remove('hidden');
             else if (loc === 'طوق القبعة') rim.classList.remove('hidden');
             else if (loc.includes('دبل')) { top.classList.remove('hidden'); rim.classList.remove('hidden'); }
-            else if (loc.includes('لا اريد')) colorField.classList.add('hidden');
         }
 
         function handleGownChange() {
@@ -519,55 +755,235 @@
             updateProgress();
         }
 
+        // --- UPLOAD LOGIC ---
         function initUploadBoxes() {
             uploadIDs.forEach(id => {
-                const container = document.getElementById(id);
-                if(container && !container.querySelector('.upload-box')) renderEmptyBox(id);
+                const c = document.getElementById(id);
+                if(c && !c.querySelector('.upload-box')) renderEmptyBox(id);
             });
         }
 
         function renderEmptyBox(id) {
-            const container = document.getElementById(id);
-            container.innerHTML = `
-                <div class="upload-box group" onclick="document.getElementById('file-${id}').click()">
-                    <input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="processFile(event, '${id}')">
-                    <div class="upload-placeholder">
-                        <i class="fas fa-cloud-upload-alt text-xl text-blue-200 group-hover:text-blue-500 transition mb-2"></i>
-                        <span class="text-[10px] font-bold text-gray-400 block">صورة</span>
-                    </div>
-                </div>`;
+            document.getElementById(id).innerHTML = `<div class="upload-box group" onclick="document.getElementById('file-${id}').click()"><input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="window.processFileForEditor(event, '${id}')"><div class="upload-placeholder"><i class="fas fa-cloud-upload-alt group-hover:text-blue-500 transition mb-2"></i><span class="block">ارفق صورة</span></div></div>`;
         }
 
+        // --- عرض الصورة مع أزرار التحكم (قلم وحذف) ---
         function renderImageBox(id, base64) {
-            const container = document.getElementById(id);
-            container.innerHTML = `
+            // هنا نستخدم الكلاسات الجديدة للأزرار (أزرق وأحمر)
+            document.getElementById(id).innerHTML = `
                 <div class="upload-box has-image relative">
                     <img src="${base64}" class="uploaded-img">
                     <div class="img-actions">
-                        <button onclick="changeImage(event, '${id}')" class="action-btn bg-blue-500"><i class="fas fa-pen"></i></button>
-                        <button onclick="removeImage(event, '${id}')" class="action-btn bg-red-500"><i class="fas fa-trash"></i></button>
+                        <button onclick="window.reEditImage(event, '${id}')" class="action-btn btn-edit">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button onclick="window.removeImage(event, '${id}')" class="action-btn btn-delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
-                    <input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="processFile(event, '${id}')">
+                    <input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="window.processFileForEditor(event, '${id}')">
                 </div>`;
         }
 
-        function processFile(event, id) {
+        function processFileForEditor(event, id) {
             const file = event.target.files[0];
             if(!file) return;
             const reader = new FileReader();
             reader.onload = (e) => {
-                imageStore[id] = e.target.result;
-                renderImageBox(id, e.target.result);
+                openEditor(id, e.target.result);
+                event.target.value = '';
             };
             reader.readAsDataURL(file);
         }
 
-        function changeImage(e, id) { e.stopPropagation(); document.getElementById(`file-${id}`).click(); }
-        function removeImage(e, id) { e.stopPropagation(); delete imageStore[id]; renderEmptyBox(id); }
+        function reEditImage(e, id) {
+            e.stopPropagation();
+            const currentSrc = imageStore[id];
+            if(currentSrc) {
+                openEditor(id, currentSrc);
+            }
+        }
 
+        function removeImage(e, id) { 
+            e.stopPropagation(); 
+            delete imageStore[id]; 
+            renderEmptyBox(id); 
+        }
+
+        // --- EDITOR LOGIC ---
+        function openEditor(id, imageSrc) {
+            currentEditingUploadId = id;
+            const modal = document.getElementById('image-editor-modal');
+            const imgTarget = document.getElementById('editor-image-target');
+            
+            // Reset History Stack
+            editHistory = [imageSrc];
+            historyIndex = 0;
+            updateHistoryButtons();
+
+            // Reset Rotation State
+            currentBaseRotation = 0;
+            currentFineRotation = 0;
+            document.querySelector('.rotation-slider').value = 0;
+
+            imgTarget.src = imageSrc;
+            filterIndex = 0; imgTarget.style.filter = '';
+            modal.style.display = 'flex';
+            document.getElementById('btn-floating-save').classList.remove('visible');
+
+            initCropper(imgTarget);
+        }
+
+        function initCropper(imgElement) {
+            if(currentEditorCropper) { currentEditorCropper.destroy(); }
+            
+            setTimeout(() => {
+                currentEditorCropper = new Cropper(imgElement, {
+                    viewMode: 1, 
+                    dragMode: 'move', 
+                    autoCropArea: 0.8,
+                    background: false, 
+                    minContainerWidth: 800, 
+                    minContainerHeight: 600,
+                    cropstart: function() {
+                        document.getElementById('btn-floating-save').classList.add('visible');
+                    }
+                });
+            }, 50);
+        }
+
+        // --- COMBINED ROTATION LOGIC ---
+        function applyCombinedRotation() {
+            if(currentEditorCropper) {
+                let total = currentBaseRotation + parseFloat(currentFineRotation);
+                currentEditorCropper.rotateTo(total);
+                document.getElementById('btn-floating-save').classList.add('visible');
+            }
+        }
+
+        function handleRotation(value) {
+            currentFineRotation = value;
+            applyCombinedRotation();
+        }
+
+        function rotate90(degrees) {
+            currentBaseRotation += degrees;
+            applyCombinedRotation();
+        }
+
+        // --- FILTER HANDLER ---
+        function applyFilter() {
+            filterIndex = (filterIndex + 1) % filters.length;
+            const f = filters[filterIndex];
+            const c = document.querySelector('.cropper-canvas'); if(c) c.style.filter = f;
+            document.getElementById('editor-image-target').style.filter = f;
+            document.getElementById('btn-floating-save').classList.add('visible');
+        }
+
+        // --- BAKING CHANGES (Commit Layer) ---
+        function saveIntermediateChanges() {
+            if (!currentEditorCropper) return;
+            
+            let canvas = currentEditorCropper.getCroppedCanvas({ fillColor: '#fff' });
+            
+            if(filterIndex > 0) {
+                const fCanvas = document.createElement('canvas');
+                fCanvas.width = canvas.width;
+                fCanvas.height = canvas.height;
+                const ctx = fCanvas.getContext('2d');
+                ctx.filter = filters[filterIndex];
+                ctx.drawImage(canvas, 0, 0);
+                canvas = fCanvas; 
+            }
+
+            const newImageBase64 = canvas.toDataURL('image/jpeg');
+            addToHistory(newImageBase64);
+            loadState(newImageBase64);
+            
+            currentBaseRotation = 0;
+            currentFineRotation = 0;
+            document.querySelector('.rotation-slider').value = 0;
+            filterIndex = 0; 
+            document.getElementById('editor-image-target').style.filter = '';
+            
+            setTimeout(() => {
+                currentEditorCropper.clear(); 
+                document.getElementById('btn-floating-save').classList.remove('visible');
+            }, 100);
+        }
+
+        function resetView() {
+            if(currentEditorCropper) {
+                currentEditorCropper.crop();
+                currentBaseRotation = 0;
+                currentFineRotation = 0;
+                document.querySelector('.rotation-slider').value = 0;
+                currentEditorCropper.rotateTo(0);
+            }
+        }
+
+        function addToHistory(newBase64) {
+            editHistory = editHistory.slice(0, historyIndex + 1);
+            editHistory.push(newBase64);
+            historyIndex++;
+            updateHistoryButtons();
+        }
+
+        function undoEdit() {
+            if(historyIndex > 0) {
+                historyIndex--;
+                loadState(editHistory[historyIndex]);
+                updateHistoryButtons();
+            }
+        }
+
+        function redoEdit() {
+            if(historyIndex < editHistory.length - 1) {
+                historyIndex++;
+                loadState(editHistory[historyIndex]);
+                updateHistoryButtons();
+            }
+        }
+
+        function loadState(base64) {
+            currentEditorCropper.replace(base64);
+            document.getElementById('btn-floating-save').classList.remove('visible');
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('btn-undo').disabled = (historyIndex <= 0);
+            document.getElementById('btn-redo').disabled = (historyIndex >= editHistory.length - 1);
+        }
+        
+        function saveEditorImage() {
+            if (!currentEditorCropper) return;
+            let canvas = currentEditorCropper.getCroppedCanvas({ maxWidth: 1200, fillColor: '#fff' });
+            if(filterIndex > 0) {
+                const fCanvas = document.createElement('canvas');
+                fCanvas.width = canvas.width; fCanvas.height = canvas.height;
+                const ctx = fCanvas.getContext('2d');
+                ctx.filter = filters[filterIndex];
+                ctx.drawImage(canvas, 0, 0);
+                canvas = fCanvas;
+            }
+            const base64 = canvas.toDataURL('image/jpeg', 0.9);
+            imageStore[currentEditingUploadId] = base64; 
+            renderImageBox(currentEditingUploadId, base64);
+            closeEditor();
+        }
+        
+        function closeEditor() {
+            document.getElementById('image-editor-modal').style.display = 'none';
+            if(currentEditorCropper) { currentEditorCropper.destroy(); currentEditorCropper = null; }
+        }
+
+        // --- Utils & Submit ---
         function updateProgress() {
             let completedSections = 0;
-            if (document.getElementById('input-fullName').value.trim().length > 0) completedSections++;
+            const nameInput = document.getElementById('input-fullName');
+            const nameStatus = validateNameSmart(nameInput.value);
+            if (nameInput.value.trim().length > 0 && nameStatus.valid) completedSections++;
+
             if (document.getElementById('sashType').value) completedSections++;
             if (document.getElementById('capType').value) completedSections++;
             if (document.getElementById('gownType').value) completedSections++;
@@ -584,17 +1000,16 @@
 
         async function initiateSendProcess() {
             const fullNameInput = document.querySelector('[name="fullName"]');
-            const fullName = fullNameInput.value.trim();
+            cleanNameInput(fullNameInput);
+            const fullName = fullNameInput.value;
+            const validation = validateNameSmart(fullName);
 
-            if (!fullName) { 
-                Swal.fire('خطأ', 'يرجى كتابة الاسم أولاً', 'error'); 
-                return; 
-            }
+            if (!fullName) { Swal.fire('خطأ', 'يرجى كتابة الاسم أولاً', 'error'); return; }
 
-            if (!isValidQuadrupleName(fullName)) {
+            if (!validation.valid) {
                 Swal.fire({
-                    title: 'تنبيه هام',
-                    text: 'يجب كتابة الاسم الرباعي كاملاً (4 أسماء على الأقل) لضمان دقة التسجيل وتجنب تشابه الأسماء.',
+                    title: 'تنبيه في الاسم',
+                    text: validation.msg,
                     icon: 'warning',
                     confirmButtonText: 'حسناً، سأصحح الاسم',
                     confirmButtonColor: '#d97706'
@@ -625,7 +1040,6 @@
                 });
                 
                 const checkData = await checkResponse.json();
-
                 showLoading(false);
 
                 if (checkData.exists) {
@@ -639,11 +1053,8 @@
                         confirmButtonColor: '#d97706',
                         denyButtonColor: '#2563eb'
                     }).then((result) => {
-                        if (result.isConfirmed) {
-                            finalizeSubmission(fullName, 'replace');
-                        } else if (result.isDenied) {
-                            finalizeSubmission(fullName, 'second');
-                        }
+                        if (result.isConfirmed) { finalizeSubmission(fullName, 'replace'); } 
+                        else if (result.isDenied) { finalizeSubmission(fullName, 'second'); }
                     });
                 } else {
                     finalizeSubmission(fullName, 'new');
@@ -652,12 +1063,7 @@
             } catch (error) {
                 showLoading(false);
                 console.error(error);
-                Swal.fire({
-                    title: 'تنبيه',
-                    text: 'حدث خطأ في الاتصال. سيتم الحفظ كملف جديد.',
-                    icon: 'info',
-                    confirmButtonText: 'موافق'
-                }).then(() => {
+                Swal.fire({ title: 'تنبيه', text: 'حدث خطأ في الاتصال. سيتم الحفظ كملف جديد.', icon: 'info', confirmButtonText: 'موافق' }).then(() => {
                     finalizeSubmission(fullName, 'new');
                 });
             }
@@ -666,53 +1072,33 @@
         async function finalizeSubmission(fullName, actionType) {
             let loadingMsg = "جاري حفظ الاستمارة...";
             if (actionType === 'replace') loadingMsg = "جاري حذف القديم وحفظ الجديد...";
-            
             showLoading(true, loadingMsg);
 
             let fileName = "";
             const dateStr = new Date().toISOString().split('T')[0];
             const timeSuffix = new Date().getTime().toString().slice(-4);
             
-            if (actionType === 'replace') {
-                fileName = `${fullName} (أعادة)_${dateStr}.html`; 
-            } else if (actionType === 'second') {
-                fileName = `${fullName} (2)_${dateStr}_${timeSuffix}.html`;
-            } else {
-                fileName = `${fullName}_${dateStr}_${timeSuffix}.html`;
-            }
+            if (actionType === 'replace') { fileName = `${fullName} (أعادة)_${dateStr}.html`; } 
+            else if (actionType === 'second') { fileName = `${fullName} (2)_${dateStr}_${timeSuffix}.html`; } 
+            else { fileName = `${fullName}_${dateStr}_${timeSuffix}.html`; }
 
             const htmlContent = generateExactStaticHTML(fullName);
 
             try {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify({ 
-                        action: actionType === 'second' ? 'new' : actionType, 
-                        rawName: fullName,      
-                        filename: fileName, 
-                        html: htmlContent 
-                    })
+                    body: JSON.stringify({ action: actionType === 'second' ? 'new' : actionType, rawName: fullName, filename: fileName, html: htmlContent })
                 });
                 
                 const data = await response.json();
                 showLoading(false);
 
                 if (data.result === 'success') {
-                    // =====================================================
-                    // استخراج الاسم الأول للرسالة (أول كلمة فقط)
-                    // =====================================================
                     const firstName = fullName.trim().split(/\s+/)[0];
-
                     let msg = "";
-                    if (actionType === 'replace') {
-                        msg = `تم تسليم طلبك الجديد، شكرًا لك يا ${firstName}.`;
-                    } else if (actionType === 'second') {
-                        msg = `تم تسليم طلبك الثاني، شكرًا لك يا ${firstName}.`;
-                    } else {
-                        // تسجيل جديد عادي
-                        msg = `تم تسليم طلبك، شكرًا لك يا ${firstName}.`;
-                    }
-                        
+                    if (actionType === 'replace') msg = `تم تسليم طلبك الجديد، شكرًا لك يا ${firstName}.`;
+                    else if (actionType === 'second') msg = `تم تسليم طلبك الثاني، شكرًا لك يا ${firstName}.`;
+                    else msg = `تم تسليم طلبك، شكرًا لك يا ${firstName}.`;
                     Swal.fire('تمت العملية بنجاح!', msg, 'success').then(() => location.reload());
                 } else {
                     throw new Error(data.error || 'حدث خطأ غير معروف');
@@ -732,99 +1118,73 @@
             for (let i = 0; i < originalInputs.length; i++) {
                 const orig = originalInputs[i];
                 const cln = clonedInputs[i];
-                
-                cln.removeAttribute('placeholder');
+                cln.removeAttribute('placeholder'); cln.removeAttribute('oninput'); cln.removeAttribute('onblur');
+                cln.classList.remove('border-red-400', 'border-green-500'); cln.classList.add('border-gray-300');
 
                 if (orig.tagName === 'INPUT' || orig.tagName === 'SELECT') {
                     let val = orig.value;
-                    if(val.trim() === "") {
-                        val = "ــــــــ"; 
-                        cln.style.color = "#9ca3af"; 
-                    } else {
-                        cln.style.color = "#000000"; 
-                    }
+                    if(val.trim() === "") { val = "ــــــــ"; cln.style.color = "#9ca3af"; } 
+                    else { cln.style.color = "#000000"; }
                     cln.setAttribute('value', val);
-
-                    if (orig.type === 'checkbox' || orig.type === 'radio') {
-                        if (orig.checked) cln.setAttribute('checked', 'checked');
-                    }
+                    if (orig.type === 'checkbox' || orig.type === 'radio') { if (orig.checked) cln.setAttribute('checked', 'checked'); }
                 } else if (orig.tagName === 'TEXTAREA') {
                     let val = orig.value;
-                    if(val.trim() === "") {
-                        val = "ــــــــ";
-                        cln.style.color = "#9ca3af";
-                    } else {
-                        cln.style.color = "#000000";
-                    }
+                    if(val.trim() === "") { val = "ــــــــ"; cln.style.color = "#9ca3af"; } 
+                    else { cln.style.color = "#000000"; }
                     cln.textContent = val;
                 }
-                
-                cln.setAttribute('readonly', 'true');
-                cln.classList.add('pointer-events-none', 'bg-white'); 
+                cln.setAttribute('readonly', 'true'); cln.classList.add('pointer-events-none', 'bg-white'); 
             }
 
-            clone.querySelectorAll('*').forEach(el => {
-                el.removeAttribute('onclick'); el.removeAttribute('onchange'); el.removeAttribute('oninput'); el.removeAttribute('onsubmit');
-            });
+            clone.querySelectorAll('*').forEach(el => { el.removeAttribute('onclick'); el.removeAttribute('onchange'); el.removeAttribute('oninput'); el.removeAttribute('onsubmit'); });
             clone.querySelectorAll('.img-actions').forEach(btn => btn.remove());
             clone.querySelectorAll('input[type="file"]').forEach(inp => inp.remove());
             clone.querySelectorAll('.option-card').forEach(card => { card.style.cursor = 'default'; card.style.pointerEvents = 'none'; });
-            
-            // حذف رسالة التحذير الخاصة بالاسم الرباعي من النسخة المحفوظة
-            const warningMsg = clone.querySelector('#name-warning-msg');
-            if (warningMsg) warningMsg.remove();
+            const warningMsg = clone.querySelector('#name-warning-msg'); if (warningMsg) warningMsg.remove();
 
             clone.querySelectorAll('.upload-box').forEach(box => {
-                box.style.pointerEvents = 'none'; 
-                box.style.cursor = 'default';
-                
-                if(box.classList.contains('has-image')) {
-                    box.style.borderStyle = 'solid';
-                } else {
-                    box.innerHTML = `
-                        <div class="flex flex-col items-center justify-center text-gray-400 opacity-70">
-                            <i class="fas fa-image-slash text-2xl mb-2"></i>
-                            <span class="text-[10px] font-bold">لم يتم ارفاق صورة</span>
-                        </div>
-                    `;
-                    box.style.backgroundColor = "#f8fafc";
-                    box.style.borderColor = "#e2e8f0";
+                box.style.pointerEvents = 'none'; box.style.cursor = 'default';
+                if(box.classList.contains('has-image')) { box.style.borderStyle = 'solid'; } 
+                else {
+                    box.innerHTML = `<div class="flex flex-col items-center justify-center text-gray-400 opacity-70"><i class="fas fa-image-slash mb-2" style="font-size: 4rem;"></i><span class="font-bold text-2xl">لم يتم ارفاق صورة</span></div>`;
+                    box.style.backgroundColor = "#f8fafc"; box.style.borderColor = "#e2e8f0";
                 }
             });
 
             let headContent = document.head.innerHTML;
             const desktopViewport = '<meta name="viewport" content="width=1280, user-scalable=yes">';
-            if (headContent.includes('<meta name="viewport"')) {
-                headContent = headContent.replace(/<meta name="viewport"[^>]*>/gi, desktopViewport);
-            } else {
-                headContent += desktopViewport;
-            }
+            if (headContent.includes('<meta name="viewport"')) { headContent = headContent.replace(/<meta name="viewport"[^>]*>/gi, desktopViewport); } 
+            else { headContent += desktopViewport; }
+
+            headContent = headContent.replace(/<script.*cropper.*><\/script>/g, '').replace(/<link.*cropper.*>/g, '');
 
             return `<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     ${headContent}
     <style>
-        body { 
-            background-color: #f1f5f9; 
-            padding-bottom: 50px; 
-            min-width: 1280px; 
-        }
+        body { background-color: #f1f5f9; padding-bottom: 50px; min-width: 1280px; width: 1280px; margin: 0 auto; position: relative; font-size: 20px; }
+        .swal2-container { position: absolute !important; width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; padding-top: 220px !important; align-items: flex-start !important; }
+        .swal2-popup { font-size: 1.8rem !important; width: 650px !important; padding: 2.5rem !important; border-radius: 1.5rem !important; }
+        .swal2-title { font-size: 2.8rem !important; margin-bottom: 1rem !important; }
+        .swal2-html-container { font-size: 2rem !important; }
+        .swal2-styled { font-size: 1.5rem !important; padding: 1rem 2rem !important; }
         .no-print { display: none !important; }
         input:focus, textarea:focus { outline: none; box-shadow: none; border-color: #e2e8f0; }
         .img-actions { display: none !important; }
         html { overflow-x: auto; }
+        #image-editor-modal { display: none !important; }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
-    <header class="bg-white shadow-sm sticky top-0 z-40 border-b border-gray-100 mb-6">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-             <h1 class="text-lg font-bold text-gray-800">استمارة الطالب: ${fullName}</h1>
-             <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">نسخة للعرض فقط</span>
+    <header class="bg-white shadow-lg sticky top-0 z-40 border-b-8 border-gray-200 mb-10 w-full">
+        <div class="w-full px-10 py-6 flex justify-between items-center">
+             <h1 class="text-4xl font-black text-gray-900">استمارة الطالب: ${fullName}</h1>
+             <span class="text-2xl font-black text-blue-800 bg-blue-100 px-6 py-3 rounded-full">نسخة للعرض فقط</span>
         </div>
     </header>
     ${clone.outerHTML}
-    <footer class="text-center py-8 text-gray-400 text-xs mt-8 border-t border-gray-200">
+    <footer class="text-center py-12 text-gray-600 text-2xl font-black mt-16 border-t-8 border-gray-200">
         تم حفظ هذه النسخة بتاريخ ${new Date().toLocaleDateString('ar-EG')}
     </footer>
 </body>
