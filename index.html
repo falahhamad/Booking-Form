@@ -38,15 +38,15 @@
             z-index: 9999999;
             justify-content: center;
             align-items: center;
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.9); /* تعتيم أقوى للخلفية */
             backdrop-filter: blur(10px);
         }
 
         .instruction-sheet {
             background-color: #ffffff;
-            width: 98%;
-            max-width: 1260px;
-            height: 95vh;
+            width: 98%; /* عرض شبه كامل */
+            max-width: 1260px; /* استغلال كامل الـ 1280px */
+            height: 95vh; /* ارتفاع شبه كامل */
             border-radius: 3rem;
             display: flex;
             flex-direction: column;
@@ -97,7 +97,7 @@
         .instruction-body {
             flex: 1;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 2rem; /* تقليل الحواف لإعطاء مساحة للصورة */
             background-color: #fff;
             scrollbar-width: thin;
         }
@@ -126,6 +126,7 @@
         /* --- معرض الصور العملاق (Carousel) --- */
         .carousel-container {
             width: 100%;
+            /* إلغاء الحد الأقصى للعرض تقريباً ليأخذ العرض المتاح */
             max-width: 1100px; 
             margin: 0 auto 3rem auto;
             position: relative;
@@ -134,7 +135,7 @@
         /* نافذة العرض (Viewport) */
         .carousel-viewport {
             width: 100%;
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 1 / 1; /* مربع تماماً */
             background-color: #f1f5f9;
             border: 6px solid #cbd5e1;
             border-radius: 3rem;
@@ -163,13 +164,8 @@
         .carousel-slide img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* تغيير إلى cover لملء المربع */
-        }
-        
-        /* في حال كانت الصورة طولية جداً أو عرضية جداً ونريد عرضها كاملة يمكن استخدام contain */
-        .carousel-slide img.contain-mode {
-            object-fit: contain;
-            background-color: #000;
+            object-fit: contain; /* تغيير إلى contain لإظهار الصورة كاملة */
+            background-color: #f8fafc;
         }
 
         /* العنصر البديل (Placeholder) */
@@ -180,7 +176,7 @@
             color: #cbd5e1;
             text-align: center;
         }
-        .gallery-placeholder i { font-size: 18rem; margin-bottom: 2rem; }
+        .gallery-placeholder i { font-size: 18rem; margin-bottom: 2rem; } /* أيقونة أكبر */
         .gallery-placeholder span { font-size: 4.5rem; font-weight: 900; }
 
         /* --- أزرار التحكم --- */
@@ -195,7 +191,7 @@
         .carousel-btn {
             background-color: #3b82f6;
             color: white;
-            width: 110px;
+            width: 110px; /* أزرار أكبر */
             height: 110px;
             border-radius: 50%;
             border: none;
@@ -222,7 +218,7 @@
             border: 3px solid #e2e8f0;
         }
 
-        /* --- ستايلات العناصر --- */
+        /* --- ستايلات العناصر القديمة --- */
         .swal2-container { position: fixed !important; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; }
         .option-card { cursor: pointer; border: 5px solid #cbd5e1; border-radius: 1.2rem; padding: 2rem 1rem; font-size: 1.7rem; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background-color: white; min-height: 140px; font-weight: 900; color: #1e293b; position: relative; }
         .option-card:hover { border-color: #64748b; transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15); }
@@ -332,7 +328,7 @@
                     
                     <div class="carousel-viewport">
                         <div class="carousel-track" id="carousel-track">
-                            <!-- سيتم توليد الشرائح هنا بواسطة JS -->
+                            <!-- سيتم تعبئة الصور هنا ديناميكياً بواسطة JavaScript -->
                         </div>
                     </div>
 
@@ -796,16 +792,32 @@
             'upload-sash-american-1', 'upload-sash-american-2'
         ];
         const imageStore = {};
-        
-        // --- بيانات صور التعليمات ---
-        const instructionImagesData = {
-            'عادي': ['1.1 .jpg', '1.2 .jpg', '1.3.jpg', '1.4.jpg', '1.5 .jpg'],
-            'مثلث': ['2.1.jpg', '2.2.jpg', '2.3.jpg', '2.4.jpg', '2.5 .jpg'],
-            'ملكي مثلث': ['3.6.jpg', '3.1.jpg', '3.2.jpg', '3.3.jpg', '3.4.jpg', '3.5.jpg'],
-            // افتراضياً للفرعوني (من الخيار الرابع في القائمة)
-            'ملكي فرعوني': ['4.1.jpg', '4.2.jpg', '4.3.jpg', '4.4.jpg', '6.5.jpg'] 
+
+        // --- مصفوفات الصور للتعليمات ---
+        // ملاحظة: هذه الصور ستعمل فقط إذا كانت الملفات موجودة في نفس المجلد مع ملف HTML
+        const instructionImages = {
+            'عادي': [
+                '1.1 .jpg',
+                '1.2 .jpg', 
+                '1.3.jpg', 
+                '1.4.jpg', 
+                '1.5 .jpg'
+            ],
+            'مثلث': [
+                '2.1.jpg',
+                '2.2.jpg',
+                '2.3.jpg',
+                '2.4.jpg',
+                '2.5 .jpg'
+            ]
         };
 
+        // نصوص توضيحية افتراضية
+        const instructionTexts = {
+            'عادي': 'الوشاح العادي هو الخيار الكلاسيكي والأكثر شيوعاً. يتميز بتصميمه الانسيابي البسيط.',
+            'مثلث': 'الوشاح المثلث يتميز بقصة مثلثة عند الأطراف، مما يعطيه مظهراً هندسياً مميزاً.'
+        };
+        
         let currentEditorCropper = null;
         let currentEditingUploadId = null;
         let editHistory = []; 
@@ -884,25 +896,56 @@
 
         // --- دوال النافذة المنبثقة المخصصة (Carousel Logic) ---
         let currentSlideIndex = 0;
-        let currentSlidesList = [];
+        let currentSlidesCount = 0;
 
-        function showInstructionPopup(title, contentText = null, customImages = null) {
+        function showInstructionPopup(title, contentText = null, images = []) {
             const modal = document.getElementById('custom-instruction-modal');
             const titleEl = document.getElementById('modal-title');
             const textEl = document.getElementById('modal-text');
+            const track = document.getElementById('carousel-track');
             
-            // تعيين المحتوى
+            // تعيين المحتوى النصي
             titleEl.textContent = title;
             textEl.innerHTML = contentText || `
                 هنا تظهر التفاصيل الكاملة الخاصة بـ <span class="text-blue-600 font-bold">${title}</span>.
                 <br><br>
-                يمكنك التنقل بين الصور أدناه لرؤية أمثلة واقعية.
+                اضغط على الأسهم أدناه لرؤية نماذج مختلفة.
             `;
 
-            // إعداد الصور
-            currentSlidesList = customImages || [];
+            // إعداد الصور (Carousel)
+            track.innerHTML = ''; // مسح الصور القديمة
+            
+            // إذا لم يتم تمرير صور، نستخدم صور افتراضية (placeholder)
+            let slidesToRender = images;
+            if (!slidesToRender || slidesToRender.length === 0) {
+                // Fallback (placeholder if no images)
+                 slidesToRender = []; // Empty or add default logic if needed
+            }
+
+            if (slidesToRender.length > 0) {
+                slidesToRender.forEach((imgSrc, index) => {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    
+                    // استخدام مسار الصورة مباشرة
+                    // يجب أن تكون الصور في نفس مجلد ملف HTML
+                    slide.innerHTML = `<img src="${imgSrc}" alt="${title} - صورة ${index + 1}" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><i class=\'fas fa-image\'></i><span>صورة ${index + 1}</span><div style=\'font-size:1.5rem; margin-top:10px\'>تأكد من وجود الملف: ${imgSrc}</div></div>'">`;
+                    
+                    track.appendChild(slide);
+                });
+                currentSlidesCount = slidesToRender.length;
+            } else {
+                // عنصر نائب إذا لم توجد صور
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `<div class="gallery-placeholder"><i class="fas fa-info-circle"></i><span>لا توجد صور لهذا الخيار</span></div>`;
+                track.appendChild(slide);
+                currentSlidesCount = 1;
+            }
+
+            // إعادة تعيين المؤشر
             currentSlideIndex = 0;
-            renderCarouselSlides();
+            updateCarousel();
 
             // إظهار النافذة
             modal.style.display = 'flex';
@@ -911,62 +954,32 @@
             document.querySelector('.instruction-body').scrollTop = 0;
         }
 
-        function renderCarouselSlides() {
-            const track = document.getElementById('carousel-track');
-            track.innerHTML = ''; // مسح القديم
-            
-            if (currentSlidesList.length === 0) {
-                // عرض افتراضي في حال عدم وجود صور
-                track.innerHTML = `
-                    <div class="carousel-slide">
-                        <div class="gallery-placeholder">
-                            <i class="fas fa-image"></i>
-                            <span>لا توجد صور لهذا القسم</span>
-                        </div>
-                    </div>
-                `;
-                document.getElementById('slide-indicator').textContent = "0 / 0";
-                return;
-            }
-
-            currentSlidesList.forEach((imgSrc, index) => {
-                const slide = document.createElement('div');
-                slide.className = 'carousel-slide';
-                slide.innerHTML = `
-                    <img src="${imgSrc}" onerror="this.parentElement.innerHTML='<div class=\\'gallery-placeholder\\'><i class=\\'fas fa-exclamation-triangle text-yellow-500\\'></i><span>الصورة غير موجودة</span><br><small>${imgSrc}</small></div>'">
-                `;
-                track.appendChild(slide);
-            });
-            
-            updateCarouselPosition();
-        }
-
         window.closeInstructionPopup = function() {
             const modal = document.getElementById('custom-instruction-modal');
             modal.style.display = 'none';
         }
 
         window.moveSlide = function(direction) {
-            if (currentSlidesList.length === 0) return;
-            
+            if (currentSlidesCount <= 1) return;
+
             currentSlideIndex += direction;
-            if (currentSlideIndex >= currentSlidesList.length) {
+            if (currentSlideIndex >= currentSlidesCount) {
                 currentSlideIndex = 0;
             }
             if (currentSlideIndex < 0) {
-                currentSlideIndex = currentSlidesList.length - 1;
+                currentSlideIndex = currentSlidesCount - 1;
             }
-            updateCarouselPosition();
+            updateCarousel();
         }
 
-        function updateCarouselPosition() {
+        function updateCarousel() {
             const track = document.getElementById('carousel-track');
             const indicator = document.getElementById('slide-indicator');
             
-            if (currentSlidesList.length > 0) {
-                track.style.transform = `translateX(${currentSlideIndex * 100}%)`;
-                indicator.textContent = `${currentSlideIndex + 1} / ${currentSlidesList.length}`;
-            }
+            // تحريك الشريط (كل شريحة 100%)
+            track.style.transform = `translateX(${currentSlideIndex * 100}%)`;
+
+            indicator.textContent = `${currentSlideIndex + 1} / ${currentSlidesCount}`;
         }
 
         window.handleLabelInstruction = function(labelName) {
@@ -1038,9 +1051,19 @@
 
         function selectSashBase(value, element) {
             if (isInstructionMode) {
-                // جلب الصور الخاصة بهذا النوع من الوشاح
-                const images = instructionImagesData[value] || [];
-                showInstructionPopup('الوشاح: ' + value, null, images);
+                // جلب الصور الخاصة بهذا النوع إن وجدت
+                let imagesToShow = [];
+                let textToShow = null;
+
+                if (value === 'عادي') {
+                    imagesToShow = instructionImages['عادي'];
+                    textToShow = instructionTexts['عادي'];
+                } else if (value === 'مثلث') {
+                    imagesToShow = instructionImages['مثلث'];
+                    textToShow = instructionTexts['مثلث'];
+                }
+
+                showInstructionPopup('الوشاح: ' + value, textToShow, imagesToShow);
                 return;
             }
 
@@ -1054,7 +1077,7 @@
 
         function selectNoSash(element) {
             if (isInstructionMode) {
-                showInstructionPopup('خيار: لا أريد وشاح');
+                showInstructionPopup('خيار: لا أريد وشاح', 'اختر هذا الخيار إذا كنت لا ترغب بإضافة وشاح لزي التخرج الخاص بك.');
                 return;
             }
 
@@ -1073,7 +1096,7 @@
 
         function toggleAmericanCard(element) {
             if (isInstructionMode) {
-                showInstructionPopup('إضافة: + وشاح أمريكي');
+                showInstructionPopup('إضافة: + وشاح أمريكي', 'هذه إضافة اختيارية لدمج الوشاح الأمريكي مع الوشاح الذي اخترته.');
                 return;
             }
 
