@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, user-scalable=yes" id="viewport-meta">
+    <title>استمارة التخرج - النسخة الواضحة والكبيرة</title>
+    
+    <!-- المكتبات الخارجية -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+    <style>
+        /* ========================================= */
+        /* --- الأساسيات --- */
+        /* ========================================= */
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f1f5f9;
+            width: 1280px;
+            min-width: 1280px;
+            margin: 0 auto; 
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 20px; 
+        }
+
+        /* --- نافذة التعليمات المخصصة (Modal) --- */
+        #custom-instruction-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 9999999;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(15px);
+        }
+
+        .instruction-sheet {
+            background-color: #ffffff;
+            width: 98%; /* عرض كامل تقريباً */
+            max-width: 1260px;
+            height: 98vh; /* ارتفاع كامل تقريباً */
+            border-radius: 3rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+            border: 6px solid #e2e8f0;
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .instruction-header {
+            padding: 3rem;
+            background-color: #fff;
+            border-bottom: 5px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .instruction-title {
+            font-size: 4.5rem; /* تكبير العنوان */
+            font-weight: 900;
+            color: #1e293b;
+        }
+
+        .btn-close-modal {
+            background-color: #fee2e2;
+            color: #ef4444;
+            width: 100px; /* زر أكبر */
+            height: 100px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-close-modal:hover { background-color: #ef4444; color: white; }
+
+        .instruction-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 4rem 2rem;
+            background-color: #f8fafc;
+            scrollbar-width: thin;
+        }
+
+        /* --- تنسيق المجموعات داخل النافذة --- */
+        .instruction-group-item {
+            background: white;
+            border-radius: 3rem;
+            padding: 3rem;
+            margin-bottom: 5rem;
+            border: 4px solid #e2e8f0;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+
+        .group-item-title {
+            font-size: 4rem; /* تكبير خط العناوين الفرعية */
+            font-weight: 900;
+            color: #1e3a8a;
+            margin-bottom: 2rem;
+            border-right: 15px solid #3b82f6;
+            padding-right: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .group-item-desc {
+            font-size: 3rem; /* تكبير خط الوصف */
+            line-height: 1.6;
+            color: #475569;
+            margin-bottom: 3rem;
+            padding-right: 40px;
+            font-weight: 700;
+        }
+
+        /* معرض الصور الأفقي لكل عنصر (Horizontal Gallery) */
+        .item-gallery-container {
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 30px;
+            scrollbar-width: thin;
+            scrollbar-color: #3b82f6 #f1f5f9;
+            display: flex;
+            gap: 40px; /* مسافة أكبر بين الصور */
+            align-items: center;
+        }
+
+        .item-gallery-container::-webkit-scrollbar { height: 20px; }
+        .item-gallery-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
+        .item-gallery-container::-webkit-scrollbar-thumb { background-color: #3b82f6; border-radius: 10px; border: 4px solid #f1f5f9; }
+
+        .gallery-img-wrapper {
+            display: inline-block;
+            /* تكبير الصور بشكل هائل لتكون واضحة جداً */
+            width: 900px; 
+            height: 900px;
+            min-width: 900px; 
+            
+            border-radius: 2.5rem;
+            overflow: hidden;
+            border: 6px solid #e2e8f0;
+            position: relative;
+            background: #fff;
+            flex-shrink: 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gallery-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* تظهر الصورة كاملة */
+            display: block;
+            background-color: #f8fafc;
+        }
+
+        /* العنصر البديل (Placeholder) */
+        .gallery-placeholder-item {
+            width: 900px;
+            height: 900px;
+            background-color: #f1f5f9;
+            border-radius: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            border: 6px dashed #cbd5e1;
+            flex-shrink: 0;
+        }
+        .gallery-placeholder-item i { font-size: 10rem; margin-bottom: 2rem; }
+        .gallery-placeholder-item span { font-size: 3rem; font-weight: 800; }
+
+
+        /* --- Standard Elements (Old Styles Kept) --- */
+        .swal2-container { position: fixed !important; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; }
+        .option-card { cursor: pointer; border: 5px solid #cbd5e1; border-radius: 1.2rem; padding: 2rem 1rem; font-size: 1.7rem; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background-color: white; min-height: 140px; font-weight: 900; color: #1e293b; position: relative; }
+        .option-card:hover { border-color: #64748b; transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15); }
+        .option-card.active-purple { background-color: #f3e8ff; border-color: #7e22ce; color: #581c87; box-shadow: 0 0 0 6px #d8b4fe; transform: scale(1.02); z-index: 10; }
+        .option-card.active-indigo { background-color: #e0e7ff; border-color: #4f46e5; color: #312e81; box-shadow: 0 0 0 5px #a5b4fc; transform: scale(1.02); z-index: 10; }
+        .option-card.active-emerald { background-color: #d1fae5; border-color: #059669; color: #064e3b; box-shadow: 0 0 0 5px #6ee7b7; transform: scale(1.02); z-index: 10; }
+        .option-card.active-gray { background-color: #f3f4f6; border-color: #4b5563; color: #111827; box-shadow: 0 0 0 5px #9ca3af; transform: scale(1.02); z-index: 10; }
+        .checkbox-wrapper-active { background-color: #d1fae5 !important; border-color: #059669 !important; color: #064e3b !important; box-shadow: 0 0 0 4px #6ee7b7 !important; }
+        .upload-container-wrapper { width: 100%; max-width: 100%; margin: 0 auto; }
+        .upload-box { width: 100%; aspect-ratio: 1 / 1; border: 5px dashed #94a3b8; border-radius: 1.5rem; position: relative; background-color: #f8fafc; transition: all 0.3s; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .upload-box:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .upload-box.has-image { border-style: solid; border-color: #cbd5e1; background-color: #fff; border-width: 5px; }
+        .upload-placeholder { text-align: center; color: #64748b; pointer-events: none; padding: 1rem; }
+        .upload-placeholder i { font-size: 5rem !important; margin-bottom: 1.5rem; } 
+        .upload-placeholder span { font-size: 1.8rem !important; font-weight: 900; }
+        .uploaded-img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .img-actions { position: absolute; top: 15px; right: 15px; display: flex; gap: 15px; z-index: 50; opacity: 1 !important; }
+        .action-btn { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: white !important; border: none; cursor: pointer; box-shadow: 0 5px 10px rgba(0,0,0,0.4); border: 3px solid white; }
+        .btn-edit { background-color: #3b82f6 !important; }
+        .btn-delete { background-color: #ef4444 !important; }
+        .action-btn i { color: white !important; }
+        .custom-input { transition: all 0.2s; padding: 1.2rem !important; border-width: 4px !important; }
+        .custom-input:focus { transform: translateY(-3px); border-color: #3b82f6; }
+        .hidden { display: none !important; }
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.98); z-index: 99999; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-width: 1280px; }
+        .loader { border: 12px solid #f3f3f3; border-top: 12px solid #3b82f6; border-radius: 50%; width: 120px; height: 120px; animation: spin 1s linear infinite; margin-bottom: 40px; }
+        #loading-text { font-size: 3rem; font-weight: 900; color: #1e293b; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .subsection-title { 
+            display: flex; align-items: center; gap: 1.5rem; font-size: 2.2rem; font-weight: 900; 
+            margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 5px solid #f1f5f9; 
+            position: relative;
+        }
+        .subsection-container { background-color: #ffffff; border: 4px solid #cbd5e1; border-radius: 2rem; padding: 2.5rem; margin-bottom: 2.5rem; }
+        .inner-subtitle { font-size: 1.6rem; font-weight: 900; margin-bottom: 2rem; display: inline-block; border-right: 8px solid; padding-right: 16px; }
+        
+        /* Image Editor Styles */
+        #image-editor-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: #0f172a; z-index: 200000; display: none; flex-direction: column; min-width: 1280px; touch-action: none; transform-origin: top left; }
+        .editor-header { display: flex; justify-content: space-between; items-center; padding: 30px 50px; height: 140px; background-color: #1e293b; box-shadow: 0 4px 20px rgba(0,0,0,0.5); z-index: 10; }
+        .top-action-btn { display: flex; align-items: center; gap: 15px; padding: 15px 40px; border-radius: 3rem; font-weight: 900; font-size: 2rem; cursor: pointer; transition: all 0.2s; border: none; }
+        .btn-cancel-edit { color: #f1f5f9; background: #334155; }
+        .btn-save-edit { background: #3b82f6; color: white; }
+        .header-controls { display: flex; align-items: center; gap: 30px; }
+        .history-btn { background: rgba(255,255,255,0.1); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; transition: 0.2s; border: 2px solid rgba(255,255,255,0.2); }
+        .history-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .editor-workspace { flex: 1; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 40px; background-color: #000; touch-action: none; }
+        .cropper-view-box { outline: 6px solid #22c55e !important; box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85); }
+        .cropper-line { background-color: transparent !important; }
+        .cropper-point { width: 50px !important; height: 50px !important; background-color: #22c55e !important; border-radius: 50% !important; border: 5px solid white !important; margin: -25px !important; opacity: 1 !important; }
+        .cropper-center { display: none !important; }
+        .floating-toolbar { position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); background: #1e293b; border: 3px solid #334155; padding: 20px 60px; border-radius: 5rem; display: flex; gap: 80px; box-shadow: 0 30px 60px rgba(0,0,0,0.8); width: 80%; justify-content: center; z-index: 20; }
+        .tool-btn { display: flex; flex-direction: column; align-items: center; gap: 15px; color: #94a3b8; background: transparent; border: none; cursor: pointer; padding: 10px; }
+        .tool-btn i { font-size: 4rem; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5)); }
+        .tool-btn span { font-size: 1.8rem; font-weight: 800; }
+        .tool-btn:hover, .tool-btn.active { color: #60a5fa; transform: scale(1.1); }
+        .rotation-controls { position: absolute; bottom: 240px; left: 50%; transform: translateX(-50%); width: 80%; max-width: 900px; display: flex; align-items: center; justify-content: space-between; gap: 20px; z-index: 40; background: rgba(30, 41, 59, 0.9); padding: 15px 30px; border-radius: 4rem; border: 2px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
+        .mini-rotate-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem; transition: 0.2s; }
+        .mini-rotate-btn:active { background: #3b82f6; transform: scale(0.95); }
+        .rotation-slider { -webkit-appearance: none; flex-grow: 1; height: 8px; background: rgba(255,255,255,0.2); border-radius: 5px; outline: none; margin: 0 15px; }
+        .rotation-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 30px; height: 30px; border-radius: 50%; background: #3b82f6; cursor: pointer; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.5); }
+        .rotation-label { color: #94a3b8; font-size: 1.2rem; font-weight: bold; width: 40px; text-align: center; }
+        #btn-floating-save { position: absolute; bottom: 360px; left: 50%; transform: translateX(-50%) scale(0.5); background: #22c55e; color: white; padding: 15px 60px; border-radius: 4rem; font-size: 2.2rem; font-weight: 900; box-shadow: 0 15px 40px rgba(34, 197, 94, 0.6); display: flex; align-items: center; gap: 15px; z-index: 50; border: 4px solid white; cursor: pointer; opacity: 0; pointer-events: none; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #btn-floating-save.visible { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+        @media print { .no-print { display: none !important; } }
+
+        /* ========================================= */
+        /* --- وضع التعليمات (Instruction Mode) --- */
+        /* ========================================= */
+        .instruction-badge {
+            display: none; background-color: #ef4444; color: white; width: 30px; height: 30px; border-radius: 50%; align-items: center; justify-content: center; font-size: 18px; font-weight: bold; margin-right: 10px; animation: pulse-red 1.5s infinite;
+        }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+
+        /* تنسيق العناوين في وضع التعليمات */
+        body.instruction-mode .instruction-trigger {
+            cursor: help !important;
+            position: relative;
+            transition: all 0.2s;
+            border-radius: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: #fff1f2; /* خلفية حمراء فاتحة جداً عند التفعيل */
+        }
+
+        body.instruction-mode .instruction-trigger::before {
+            content: '!';
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 45px;
+            height: 45px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.4);
+            animation: bounce-badge 2s infinite;
+            z-index: 5;
+        }
+
+        @keyframes bounce-badge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* تعطيل التفاعل مع العناصر الفرعية في وضع التعليمات لتجنب التشتت */
+        body.instruction-mode .option-card, 
+        body.instruction-mode .checkbox-label {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+    </style>
+</head>
+<body class="min-h-screen pb-40">
+
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <h3 id="loading-text">جاري المعالجة...</h3>
+    </div>
+
+    <!-- نافذة التعليمات المخصصة الجديدة (Custom Modal) -->
+    <div id="custom-instruction-modal">
+        <div class="instruction-sheet">
+            <!-- الرأس الثابت -->
+            <div class="instruction-header">
+                <button class="btn-close-modal" onclick="window.closeInstructionPopup()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h3 id="modal-title" class="instruction-title">عنوان التعليمات</h3>
+            </div>
+            
+            <!-- الجسم المتغير - سيتم تعبئته ديناميكياً -->
+            <div class="instruction-body" id="instruction-content-area">
+                <!-- المحتوى يظهر هنا -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-40 no-print border-b-8 border-gray-200 mb-10 w-full">
+        <div class="w-full px-10 py-6 flex flex-row justify-between items-center gap-8">
+            <h1 class="text-4xl font-black text-gray-900">استمارة زي التخرج الذكية</h1>
+            
+            <!-- زر تفعيل وضع التعليمات -->
+            <div class="flex items-center">
+                <button onclick="window.toggleInstructionMode()" id="btn-instruction-mode" class="flex items-center gap-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-black py-3 px-6 rounded-full border-4 border-gray-300 transition-all text-2xl">
+                    <i class="fas fa-info-circle text-3xl"></i>
+                    وضع التعليمات
+                    <span id="instruction-badge" class="instruction-badge">!</span>
+                </button>
+            </div>
+
+            <div class="w-1/3 flex flex-col items-center">
+                <div class="w-full bg-gray-200 rounded-full h-8 overflow-hidden shadow-inner border-2 border-gray-300">
+                    <div id="progress-bar" class="bg-gradient-to-l from-blue-600 to-blue-800 h-8 rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+                </div>
+                <span id="progress-text" class="text-2xl font-black text-blue-800 mt-3">جاري البدء...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-form-container" class="w-full mt-10 px-10 space-y-10">
+        <form id="gradForm" onsubmit="return false;">
+
+            <!-- Info Section -->
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-4 h-full bg-blue-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-user-graduate text-blue-600 bg-blue-100 p-5 rounded-3xl"></i> قسم المعلومات
+                </h2>
+                <div class="w-full">
+                    <label class="block text-gray-800 font-black mb-4 text-4xl">الاسم الرباعي (إجباري)</label>
+                    <input type="text" name="fullName" id="input-fullName" class="custom-input w-full p-8 border-4 border-gray-300 rounded-3xl focus:ring-4 focus:ring-blue-600 outline-none bg-gray-50 text-4xl font-black text-gray-900" placeholder="اكتب اسمك الرباعي كاملاً..." required oninput="window.handleNameInput()" onblur="window.cleanNameInput(this)">
+                    <p id="name-warning-msg" class="text-2xl text-red-600 mt-4 mr-3 font-black hidden">
+                        <i class="fas fa-exclamation-circle ml-2"></i> 
+                        <span id="name-warning-text">يجب كتابة الاسم مكوناً من 4 مقاطع على الأقل.</span>
+                    </p>
+                </div>
+            </section>
+
+            <!-- Sash Section -->
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-4 h-full bg-purple-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-ribbon text-purple-600 bg-purple-100 p-5 rounded-3xl"></i> أولاً: الوشاح
+                </h2>
+
+                <div class="subsection-container border-purple-200">
+                    <!-- تعليمات نوع الوشاح -->
+                    <h3 class="subsection-title text-purple-900 instruction-trigger" onclick="window.showGroupInstruction('sash-type-group', 'أنواع الوشاح')">
+                        <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">1</span>
+                        نوع الوشاح
+                    </h3>
+                    <input type="hidden" id="sashType" name="sashType">
+                    <div class="grid grid-cols-4 gap-6">
+                        <div class="option-card hover:bg-purple-50 sash-base-card" onclick="window.selectSashBase('عادي', this)">عادي</div>
+                        <div class="option-card hover:bg-purple-50 sash-base-card" onclick="window.selectSashBase('مثلث', this)">مثلث</div>
+                        <div class="option-card hover:bg-purple-50 sash-base-card" onclick="window.selectSashBase('ملكي فرعوني', this)">ملكي فرعوني</div>
+                        <div class="option-card hover:bg-purple-50 sash-base-card" onclick="window.selectSashBase('ملكي مثلث', this)">ملكي مثلث</div>
+                        <div class="option-card hover:bg-purple-50 sash-base-card" onclick="window.selectSashBase('جانبي', this)">جانبي</div>
+                        <div class="option-card hover:bg-purple-50" id="card-american-toggle" onclick="window.toggleAmericanCard(this)">
+                            + امريكي
+                        </div>
+                        <div class="option-card hover:bg-red-50 col-span-2 sash-base-card" onclick="window.selectNoSash(this)">
+                            <span class="text-red-600 font-black">لا اريد وشاح</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="sashContentWrapper" class="hidden space-y-8">
+                    <div id="sashEndsContainer" class="subsection-container border-purple-200">
+                        <!-- تعليمات نهايات الوشاح -->
+                        <h3 class="text-3xl font-black text-purple-900 mb-6 text-center border-b-4 border-purple-100 pb-4 instruction-trigger" onclick="window.showGroupInstruction('sash-ends-group', 'نهايات الوشاح')">
+                            نوع نهايتي جهتي الوشاح من الامام
+                        </h3>
+                        <input type="hidden" id="sashEndsType" name="sashEndsType">
+                        <div class="flex flex-row justify-center gap-8">
+                            <div class="option-card w-1/3 py-4 text-3xl font-black hover:bg-purple-50" onclick="window.selectOption('sashEndsType', 'نهاية مثلثة', this, 'purple')">نهاية مثلثة</div>
+                            <div class="option-card w-1/3 py-4 text-3xl font-black hover:bg-purple-50" onclick="window.selectOption('sashEndsType', 'نهاية مائلة', this, 'purple')">نهاية مائلة</div>
+                        </div>
+                    </div>
+
+                    <div class="subsection-container border-purple-200 bg-purple-50/50">
+                        <!-- تعليمات النقش على الوشاح -->
+                        <h3 class="subsection-title text-purple-900 instruction-trigger" onclick="window.showGroupInstruction('sash-embroidery-group', 'النقش على الوشاح')">
+                            <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">2</span>
+                            النقش على الوشاح
+                        </h3>
+                        <div class="mb-8">
+                            <h4 class="inner-subtitle text-purple-900 border-purple-600">النقش من الامام</h4>
+                            <div id="sashSectionTwoSides" class="hidden">
+                                <div class="grid grid-cols-2 gap-10 justify-items-center">
+                                    <div class="upload-container-wrapper">
+                                        <label class="block text-2xl font-black text-gray-700 mb-4 text-center">الجهة اليمنى</label>
+                                        <div id="upload-sash-right"></div>
+                                        <textarea name="sashRightText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
+                                    </div>
+                                    <div class="upload-container-wrapper">
+                                        <label class="block text-2xl font-black text-gray-700 mb-4 text-center">الجهة اليسرى</label>
+                                        <div id="upload-sash-left"></div>
+                                        <textarea name="sashLeftText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="sashSectionOneSide" class="hidden">
+                                <div class="flex justify-center">
+                                    <div class="upload-container-wrapper w-3/5">
+                                        <label class="block text-2xl font-black text-gray-700 mb-4 text-center">صورة النقش</label>
+                                        <div id="upload-sash-side-1"></div>
+                                        <textarea name="sashSideText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="sashSectionBack" class="hidden pt-8 border-t-8 border-purple-200">
+                            <h4 class="inner-subtitle text-purple-900 border-purple-600">النقش من الخلف (خاص بالوشاح الملكي)</h4>
+                             <div class="grid grid-cols-2 gap-10 justify-items-center mb-6">
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-sash-back-1"></div>
+                                </div>
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-sash-back-2"></div>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <textarea name="sashBackText" class="mt-2 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش الخلفي (للصورتين)..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection-container border-purple-200">
+                        <!-- تعليمات ألوان الوشاح -->
+                        <h3 class="subsection-title text-purple-900 instruction-trigger" onclick="window.showGroupInstruction('sash-colors-group', 'تنسيق ألوان الوشاح')">
+                            <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">3</span>
+                            تنسيق الالوان
+                        </h3>
+                        <div class="grid grid-cols-3 gap-8">
+                            <div>
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الوشاح</label>
+                                <input type="text" name="sashColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: ماروني">
+                            </div>
+                            <div>
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الكركوشة</label>
+                                <input type="text" name="sashTasselColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: ذهبي">
+                            </div>
+                            <div>
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون النقش</label>
+                                <input type="text" name="sashEmbroideryColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أبيض">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection-container border-purple-200">
+                        <!-- تعليمات ملاحظات الوشاح -->
+                        <h3 class="subsection-title text-purple-900 instruction-trigger" onclick="window.showGroupInstruction('sash-notes-group', 'ملاحظات الوشاح الإضافية')">
+                            <span class="bg-purple-200 text-purple-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">4</span>
+                            ملاحظات إضافية
+                        </h3>
+                        
+                        <div id="sashSectionAmericanNotes" class="hidden mb-8 border-b-4 border-purple-100 pb-8">
+                            <h4 class="inner-subtitle text-purple-900 border-purple-600">ملاحظات حول الوشاح الامريكي</h4>
+                             <div class="grid grid-cols-2 gap-10 justify-items-center mb-6">
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-sash-american-1"></div>
+                                </div>
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-sash-american-2"></div>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <textarea name="sashAmericanText" class="mt-2 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-purple-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="ملاحظات حول الوشاح الأمريكي..."></textarea>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="inner-subtitle text-purple-900 border-purple-600">ملاحظة إضافية عامة</h4>
+                            <div class="flex flex-row gap-8 items-stretch">
+                                <div class="flex-1">
+                                    <textarea name="sashNotes" class="custom-input w-full h-full min-h-[250px] p-5 border-4 border-gray-300 rounded-3xl text-2xl font-bold resize-none shadow-sm focus:border-purple-500 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية عامة هنا..."></textarea>
+                                </div>
+                                <div class="w-[450px] flex-shrink-0 flex flex-col">
+                                    <label class="block text-purple-900 text-2xl font-black mb-4 text-center">صورة توضيحية (اختياري)</label>
+                                    <div class="upload-container-wrapper w-full">
+                                        <div id="upload-sash-notes"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cap Section -->
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-4 h-full bg-indigo-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-graduation-cap text-indigo-600 bg-indigo-100 p-5 rounded-3xl"></i> ثانياً: القبعة
+                </h2>
+                <div class="subsection-container border-indigo-200">
+                    <!-- تعليمات نوع القبعة -->
+                    <h3 class="subsection-title text-indigo-900 instruction-trigger" onclick="window.showGroupInstruction('cap-type-group', 'أنواع القبعة')">
+                        <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">1</span>
+                        نوع القبعة
+                    </h3>
+                    <input type="hidden" id="capType" name="capType">
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="option-card hover:bg-indigo-50" onclick="window.selectOption('capType', 'قبعة عادية', this, 'indigo')">   قبعة دائرية عدلة (عادية)   </div>
+                        <div class="option-card hover:bg-indigo-50" onclick="window.selectOption('capType', 'قبعة ملكية', this, 'indigo')">قبعة مثلث (ملكية)</div>
+                        <div class="option-card hover:bg-red-50" onclick="window.selectOption('capType', 'لا اريد قبعة', this, 'gray')">
+                            <span class="text-red-600 font-black">لا اريد قبعة</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="capContentWrapper" class="hidden space-y-8">
+                    <div class="subsection-container border-indigo-200 bg-indigo-50/50">
+                        <!-- تعليمات النقش على القبعة -->
+                        <h3 class="subsection-title text-indigo-900 instruction-trigger" onclick="window.showGroupInstruction('cap-embroidery-group', 'النقش على القبعة')">
+                            <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">2</span>
+                            النقش على القبعة
+                        </h3>
+                        <div class="mb-8">
+                            <label class="block text-gray-800 text-3xl font-black mb-6 text-center">حدد مكان النقش أولاً</label>
+                            <input type="hidden" id="capEmbroideryLoc" name="capEmbroideryLoc">
+                            <div class="grid grid-cols-4 gap-6">
+                                <div class="option-card py-6 min-h-[120px] hover:bg-indigo-50" onclick="window.selectOption('capEmbroideryLoc', 'فوق القبعة', this, 'indigo')">فوق القبعة</div>
+                                <div class="option-card py-6 min-h-[120px] hover:bg-indigo-50" onclick="window.selectOption('capEmbroideryLoc', 'طوق القبعة', this, 'indigo')">طوق القبعة</div>
+                                <div class="option-card py-6 min-h-[120px] hover:bg-indigo-50" onclick="window.selectOption('capEmbroideryLoc', 'دبل نقش', this, 'indigo')">دبل نقش</div>
+                                <div class="option-card py-6 min-h-[120px] hover:bg-red-50" onclick="window.selectOption('capEmbroideryLoc', 'لا اريد نقش', this, 'gray')">لا اريد نقش</div>
+                            </div>
+                        </div>
+                        <div class="flex flex-row gap-8 justify-center">
+                            <div id="capSectionTop" class="hidden w-1/2 p-8 rounded-3xl border-4 border-indigo-200 bg-white">
+                                <h3 class="font-black text-2xl text-indigo-900 mb-5 text-center">صورة النقش (فوق القبعة)</h3>
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-cap-top"></div>
+                                    <textarea name="capTopText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-indigo-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
+                                </div>
+                            </div>
+                            <div id="capSectionRim" class="hidden w-1/2 p-8 rounded-3xl border-4 border-indigo-200 bg-white">
+                                <h3 class="font-black text-2xl text-indigo-900 mb-5 text-center">صورة النقش (طوق القبعة)</h3>
+                                <div class="upload-container-wrapper">
+                                    <div id="upload-cap-rim"></div>
+                                    <textarea name="capRimText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-indigo-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف النقش..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection-container border-indigo-200">
+                        <!-- تعليمات ألوان القبعة -->
+                        <h3 class="subsection-title text-indigo-900 instruction-trigger" onclick="window.showGroupInstruction('cap-colors-group', 'تنسيق ألوان القبعة')">
+                            <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">3</span>
+                            تنسيق الالوان
+                        </h3>
+                        <div class="grid grid-cols-3 gap-8">
+                            <div>
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون القبعة</label>
+                                <input type="text" name="capColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أسود">
+                            </div>
+                            <div id="capEmbroideryColorField">
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون النقش</label>
+                                <input type="text" name="capEmbroideryColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: ذهبي">
+                            </div>
+                            <div>
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الكركوشة</label>
+                                <input type="text" name="capTasselColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أصفر">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection-container border-indigo-200">
+                        <!-- تعليمات ملاحظات القبعة -->
+                        <h3 class="subsection-title text-indigo-900 instruction-trigger" onclick="window.showGroupInstruction('cap-notes-group', 'ملاحظات القبعة الإضافية')">
+                            <span class="bg-indigo-200 text-indigo-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">4</span>
+                            ملاحظات إضافية
+                        </h3>
+                         <div class="flex flex-row gap-8 items-stretch">
+                            <div class="flex-1">
+                                <textarea name="capNotes" class="custom-input w-full h-full min-h-[250px] p-5 border-4 border-gray-300 rounded-3xl text-2xl font-bold resize-none shadow-sm focus:border-indigo-500 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                            </div>
+                            <div class="w-[450px] flex-shrink-0 flex flex-col">
+                                <label class="block text-indigo-900 text-2xl font-black mb-4 text-center">صورة توضيحية (اختياري)</label>
+                                <div class="upload-container-wrapper w-full">
+                                    <div id="upload-cap-notes"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gown Section -->
+            <section class="bg-white p-10 rounded-[2.5rem] shadow-lg border-8 border-gray-100 relative overflow-hidden">
+                 <div class="absolute top-0 right-0 w-4 h-full bg-emerald-600"></div>
+                <h2 class="text-5xl font-black mb-10 text-gray-900 flex items-center gap-6">
+                    <i class="fas fa-tshirt text-emerald-600 bg-emerald-100 p-5 rounded-3xl"></i> ثالثاً: الروب
+                </h2>
+                <div class="subsection-container border-emerald-200">
+                    <!-- تعليمات نوع الروب -->
+                    <h3 class="subsection-title text-emerald-900 instruction-trigger" onclick="window.showGroupInstruction('gown-type-group', 'أنواع الروب')">
+                        <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">1</span>
+                        نوع الروب
+                    </h3>
+                    <input type="hidden" id="gownType" name="gownType">
+                    <div class="grid grid-cols-3 gap-6">
+                        <div class="option-card hover:bg-emerald-50" onclick="window.selectOption('gownType', 'روب خليجي', this, 'emerald')">روب خليجي</div>
+                        <div class="option-card hover:bg-emerald-50" onclick="window.selectOption('gownType', 'روب امريكي', this, 'emerald')">روب امريكي</div>
+                        <div class="option-card hover:bg-red-50" onclick="window.selectOption('gownType', 'لا اريد روب', this, 'gray')">
+                            <span class="text-red-600 font-black">لا اريد روب</span>
+                        </div>
+                    </div>
+
+                    <!-- خيارات الروب الأمريكي -->
+                    <div id="americanGownOptions" class="hidden mt-8 pt-6 border-t-4 border-emerald-100">
+                        <h4 class="text-2xl font-black text-emerald-800 mb-6 text-center">خيارات الروب الأمريكي</h4>
+                        <div class="flex flex-row flex-wrap justify-center gap-6 px-4">
+                            <label class="flex items-center gap-4 cursor-pointer p-5 rounded-2xl transition border-4 border-emerald-200 bg-emerald-50/30 hover:bg-emerald-100 checkbox-label" id="label-pleats-shoulder">
+                                <input type="checkbox" name="americanGownPleats[]" value="كسرات كتف" onchange="window.toggleCheckboxStyle(this, 'emerald', 'كسرات كتف')" class="w-10 h-10 text-emerald-600 rounded-xl border-4 border-emerald-300 focus:ring-emerald-500" style="accent-color: #059669;">
+                                <span class="text-3xl font-black text-gray-800">كسرات كتف</span>
+                            </label>
+                            
+                            <label class="flex items-center gap-4 cursor-pointer p-5 rounded-2xl transition border-4 border-emerald-200 bg-emerald-50/30 hover:bg-emerald-100 checkbox-label" id="label-pleats-chest">
+                                <input type="checkbox" name="americanGownPleats[]" value="كسرات الصدر" onchange="window.toggleCheckboxStyle(this, 'emerald', 'كسرات الصدر')" class="w-10 h-10 text-emerald-600 rounded-xl border-4 border-emerald-300 focus:ring-emerald-500" style="accent-color: #059669;">
+                                <span class="text-3xl font-black text-gray-800">كسرات الصدر</span>
+                            </label>
+
+                            <label class="flex items-center gap-4 cursor-pointer p-5 rounded-2xl transition border-4 border-emerald-200 bg-emerald-50/30 hover:bg-emerald-100 checkbox-label" id="label-pleats-back">
+                                <input type="checkbox" name="americanGownPleats[]" value="كسرات الظهر" onchange="window.toggleCheckboxStyle(this, 'emerald', 'كسرات الظهر')" class="w-10 h-10 text-emerald-600 rounded-xl border-4 border-emerald-300 focus:ring-emerald-500" style="accent-color: #059669;">
+                                <span class="text-3xl font-black text-gray-800">كسرات الظهر</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="gownContentWrapper" class="hidden space-y-8">
+                    <!-- قسم إضافات الروب -->
+                    <div class="subsection-container border-emerald-200">
+                        <!-- تعليمات إضافات الروب -->
+                        <h3 class="subsection-title text-emerald-900 instruction-trigger" onclick="window.showGroupInstruction('gown-additions-group', 'إضافات الروب')">
+                            <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">2</span>
+                            إضافات الروب
+                        </h3>
+                        
+                        <div class="flex flex-col gap-6 px-10 items-center">
+                             <label class="flex items-center gap-6 cursor-pointer p-6 rounded-3xl transition border-4 border-emerald-200 bg-emerald-50/30 hover:bg-emerald-100 w-full max-w-3xl checkbox-label" id="label-gown-trim">
+                                <input type="checkbox" name="gownAdditions[]" value="تطعيم الردان بلون الوشاح" onchange="window.toggleCheckboxStyle(this, 'emerald', 'تطعيم الردان')" class="w-10 h-10 text-emerald-600 rounded-xl border-4 border-emerald-300 focus:ring-emerald-500" style="accent-color: #059669;">
+                                <span class="text-3xl font-bold text-gray-800">تطعيم الردان بلون الوشاح</span>
+                            </label>
+                            
+                            <label class="flex items-center gap-6 cursor-pointer p-6 rounded-3xl transition border-4 border-emerald-200 bg-emerald-50/30 hover:bg-emerald-100 w-full max-w-3xl checkbox-label" id="label-gown-embroidery">
+                                <input type="checkbox" name="gownAdditions[]" value="تطريز الردان" onchange="window.toggleCheckboxStyle(this, 'emerald', 'تطريز الردان'); window.handleGownEmbroideryChange(this)" class="w-10 h-10 text-emerald-600 rounded-xl border-4 border-emerald-300 focus:ring-emerald-500" style="accent-color: #059669;">
+                                <span class="text-3xl font-bold text-gray-800">تطريز الردان</span>
+                            </label>
+                        </div>
+
+                        <div id="gownEmbroideryUploadSection" class="hidden mt-8 pt-6 border-t-4 border-emerald-100 bg-emerald-50/30 rounded-2xl p-6">
+                            <h4 class="text-2xl font-black text-emerald-800 mb-6 text-center">تفاصيل تطريز الردان</h4>
+                             <div class="flex justify-center">
+                                <div class="upload-container-wrapper w-3/5">
+                                    <label class="block text-2xl font-black text-gray-700 mb-4 text-center">صورة النقش</label>
+                                    <div id="upload-gown-embroidery"></div>
+                                    <textarea name="gownEmbroideryText" class="mt-5 w-full p-5 border-4 border-gray-300 rounded-2xl text-2xl font-bold focus:ring-4 focus:ring-emerald-600 outline-none resize-none bg-white placeholder-gray-400" rows="3" placeholder="وصف التطريز..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="subsection-container border-emerald-200">
+                        <!-- تعليمات ألوان الروب -->
+                        <h3 class="subsection-title text-emerald-900 instruction-trigger" onclick="window.showGroupInstruction('gown-colors-group', 'تنسيق ألوان الروب')">
+                            <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">3</span>
+                            تنسيق الالوان
+                        </h3>
+                        <div class="grid grid-cols-2 gap-8">
+                            <div>
+                                <label class="block text-gray-800 text-3xl font-black mb-4">لون الروب</label>
+                                <input type="text" name="gownColor" class="custom-input w-full p-5 border-4 border-gray-300 rounded-2xl text-3xl font-black bg-gray-50" placeholder="مثلا: أسود">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="subsection-container border-emerald-200">
+                        <!-- تعليمات ملاحظات الروب -->
+                        <h3 class="subsection-title text-emerald-900 instruction-trigger" onclick="window.showGroupInstruction('gown-notes-group', 'ملاحظات الروب الإضافية')">
+                            <span class="bg-emerald-200 text-emerald-800 rounded-full w-12 h-12 flex items-center justify-center text-2xl ml-4 font-black">4</span>
+                            ملاحظات إضافية
+                        </h3>
+                         <div class="flex flex-row gap-8 items-stretch">
+                            <div class="flex-1">
+                                <textarea name="gownNotes" class="custom-input w-full h-full min-h-[250px] p-5 border-4 border-gray-300 rounded-3xl text-2xl font-bold resize-none shadow-sm focus:border-emerald-500 bg-gray-50" placeholder="اكتب أي تفاصيل إضافية هنا..."></textarea>
+                            </div>
+                            <div class="w-[450px] flex-shrink-0 flex flex-col">
+                                <label class="block text-emerald-900 text-2xl font-black mb-4 text-center">صورة توضيحية (اختياري)</label>
+                                <div class="upload-container-wrapper w-full">
+                                    <div id="upload-gown-notes"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="w-full flex justify-center py-12 no-print mt-14 border-t-8 border-gray-200">
+                <button onclick="window.initiateSendProcess()" class="w-2/3 p-10 bg-green-600 text-white rounded-full shadow-2xl hover:bg-green-700 transition transform hover:scale-105 flex items-center justify-center gap-6 font-black text-4xl ring-8 ring-green-200 group">
+                    <span class="group-hover:animate-pulse"><i class="fas fa-paper-plane text-5xl ml-2"></i></span>
+                    إرسال واعتماد الطلب
+                </button>
+            </div>
+
+        </form>
+    </main>
+
+    <!-- IMAGE EDITOR MODAL (Unchanged) -->
+    <div id="image-editor-modal">
+        <div class="editor-header">
+            <button onclick="window.closeEditor()" class="top-action-btn btn-cancel-edit"><i class="fas fa-times"></i> إلغاء</button>
+            <div class="header-controls">
+                <button onclick="window.undoEdit()" class="history-btn" id="btn-undo" disabled><i class="fas fa-undo"></i></button>
+                <button onclick="window.redoEdit()" class="history-btn" id="btn-redo" disabled><i class="fas fa-redo"></i></button>
+            </div>
+            <button onclick="window.saveEditorImage()" class="top-action-btn btn-save-edit"><i class="fas fa-check"></i> إدراج</button>
+        </div>
+        <div class="editor-workspace">
+            <img id="editor-image-target" src="" alt="Editing Image" style="max-width: 100%; display: block;">
+            <button id="btn-floating-save" onclick="window.saveIntermediateChanges()">
+                <i class="fas fa-check-circle"></i> حفظ التغييرات
+            </button>
+            <div class="rotation-controls">
+                <button onclick="window.rotate90(-90)" class="mini-rotate-btn" title="تدوير يسار 90°"><i class="fas fa-undo"></i></button>
+                <div class="flex items-center flex-grow mx-4">
+                    <span class="rotation-label">-45°</span>
+                    <input type="range" min="-45" max="45" value="0" class="rotation-slider" oninput="window.handleRotation(this.value)">
+                    <span class="rotation-label">+45°</span>
+                </div>
+                <button onclick="window.rotate90(90)" class="mini-rotate-btn" title="تدوير يمين 90°"><i class="fas fa-redo"></i></button>
+            </div>
+        </div>
+        <div class="floating-toolbar">
+            <button onclick="window.applyFilter()" class="tool-btn group"><i class="fas fa-wand-magic-sparkles"></i><span>فلتر</span></button>
+            <button onclick="window.resetView()" class="tool-btn active"><i class="fas fa-crop-alt"></i><span>إعادة ضبط</span></button>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL CONFIG ---
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxp_GUP-5YMOVMxQKjTVL65CYPKqLB3r6b3f_wAAGRXvJUiSsmUoVKF3AfTco95bdp6Jg/exec"; 
+        
+        const uploadIDs = [
+            'upload-sash-right', 'upload-sash-left', 'upload-sash-back-1', 'upload-sash-back-2', 'upload-sash-side-1', 
+            'upload-sash-notes', 'upload-cap-top', 'upload-cap-rim', 'upload-cap-notes', 'upload-gown-notes', 'upload-gown-embroidery',
+            'upload-sash-american-1', 'upload-sash-american-2'
+        ];
+        
+        // ==========================================
+        // --- بيانات التعليمات المفصلة (Instruction Data) ---
+        // ==========================================
+        
+        const imageDataBase = {
+             'عادي': ['1.1 .jpg', '1.2 .jpg', '1.3.jpg', '1.4.jpg', '1.5 .jpg'], 
+             'مثلث': ['2.1.jpg', '2.2.jpg', '2.3.jpg', '2.4.jpg', '2.5 .jpg'],
+             'ملكي فرعوني': ['4.1.jpg', '4.2.jpg', '4.3.jpg', '4.4.jpg', '4.5.jpg'],
+             'ملكي مثلث': ['3.1.jpg', '3.2.jpg', '3.3.jpg', '3.4.jpg', '3.5.jpg', '3.6.jpg'],
+             'جانبي': ['5.1.jpg', '5.2.jpg', '5.3.jpg', '5.4.jpg', '5.5.jpg'],
+             'امريكي': ['6.1.jpg', '6.2.jpg', '6.3.jpg', '6.4.jpg', '6.5.jpg'],
+             'نهاية مثلثة': ['7.1.jpg'],
+             'نهاية مائلة': ['7.2.jpg'],
+             'لون الوشاح': ['1.3.1.jpg'],
+             'لون نقش الوشاح': ['1.3.2.1.jpg', '1.3.2.2.jpg'],
+             'لون الكركوشة': ['1.3.3.1.jpg', '1.3.3.2.jpg'],
+             'قبعة عادية': ['2.1.1.1.jpg', '2.1.1.2.jpg'],
+             'قبعة ملكية': ['2.1.2.1.jpg', '2.1.2.2.jpg'],
+             'فوق القبعة': ['2.2.1.jpg'],
+             'طوق القبعة': ['2.2.2.jpg'],
+             'دبل نقش': ['2.2.3.jpg'],
+             'لا اريد نقش': ['2.2.4.jpg'],
+             'لون القبعة': ['2.3.1.1.jpg', '2.3.1.2.jpg'],
+             'لون نقش القبعة': ['2.3.2.1.jpg', '2.3.2.2.jpg'], 
+             'لون كركوشة القبعة': ['2.3.3.1.jpg', '2.3.3.2.jpg'],
+             'روب خليجي': ['3.1.1.1.jpg', '3.1.1.2.jpg'],
+             'روب امريكي': ['3.1.2.1.jpg', '3.1.2.2.jpg', '3.1.2.3.jpg', '3.1.2.4.jpg'],
+             'كسرات كتف': ['3.1.2.5.jpg'],
+             'كسرات الصدر': ['3.1.2.6.jpg'],
+             'كسرات الظهر': ['3.1.2.7.jpg'],
+             'تطريز الردان': ['3.2.1.1.jpg', '3.2.1.2.jpg'],
+             'تطعيم الردان': ['3.2.1.3.jpg'],
+             'لون الروب': ['3.3.1.jpg', '3.3.2.jpg']
+        };
+
+        const instructionGroups = {
+            // === مجموعة الوشاح ===
+            'sash-type-group': [
+                { title: 'الوشاح العادي', desc: 'يضم هذا النوع الوشاح بالتصميم التقليدي البسيط والمميز.', images: imageDataBase['عادي'] },
+                { title: 'الوشاح المثلث', desc: 'يتميز هذا الوشاح بقصته المثلثة من الخلف والأمام.', images: imageDataBase['مثلث'] },
+                { title: 'الوشاح الملكي الفرعوني', desc: 'تصميم فخم ومستوحى من الطراز الفرعوني.', images: imageDataBase['ملكي فرعوني'] },
+                { title: 'الوشاح الملكي المثلث', desc: 'يجمع بين الفخامة الملكية والقصة المثلثة.', images: imageDataBase['ملكي مثلث'] },
+                { title: 'الوشاح الجانبي', desc: 'يوضع على جانب واحد من الكتف بتصميم عصري.', images: imageDataBase['جانبي'] },
+                { title: 'الوشاح الأمريكي', desc: 'النمط الأمريكي الشهير في أوشحة التخرج.', images: imageDataBase['امريكي'] }
+            ],
+            'sash-ends-group': [
+                { title: 'نهاية مثلثة', desc: 'تكون نهاية الوشاح على شكل مثلث حاد.', images: imageDataBase['نهاية مثلثة'] },
+                { title: 'نهاية مائلة', desc: 'تكون نهاية الوشاح بقصة مائلة انسيابية.', images: imageDataBase['نهاية مائلة'] }
+            ],
+            'sash-embroidery-group': [
+                { title: 'النقش على الوشاح', desc: 'يمكنك اختيار النقش والتطريز الذي يناسب ذوقك.', images: [] } 
+            ],
+            'sash-colors-group': [
+                { title: 'لون الوشاح', desc: 'اختر اللون الأساسي لقماش الوشاح.', images: imageDataBase['لون الوشاح'] },
+                { title: 'لون الكركوشة', desc: 'اختر لون الخيوط المتدلية (الكركوشة).', images: imageDataBase['لون الكركوشة'] },
+                { title: 'لون النقش', desc: 'اختر لون خيوط التطريز المستخدمة.', images: imageDataBase['لون نقش الوشاح'] }
+            ],
+            'sash-notes-group': [
+                { title: 'ملاحظات عامة', desc: 'أي تفاصيل إضافية تود ذكرها بخصوص الوشاح...', images: [] }
+            ],
+
+            // === مجموعة القبعة ===
+            'cap-type-group': [
+                { title: 'قبعة عادية (دائرية)', desc: 'القبعة الكلاسيكية ذات التصميم الدائري.', images: imageDataBase['قبعة عادية'] },
+                { title: 'قبعة ملكية (مثلث)', desc: 'قبعة بتصميم خاص ومميز (مثلث).', images: imageDataBase['قبعة ملكية'] }
+            ],
+            'cap-embroidery-group': [
+                { title: 'فوق القبعة', desc: 'النقش يقع في الجزء العلوي المسطح من القبعة.', images: imageDataBase['فوق القبعة'] },
+                { title: 'طوق القبعة', desc: 'النقش يحيط بالطوق الدائري للقبعة.', images: imageDataBase['طوق القبعة'] },
+                { title: 'دبل نقش', desc: 'نقش مزدوج في الأعلى وعلى الطوق.', images: imageDataBase['دبل نقش'] },
+                { title: 'بدون نقش', desc: 'قبعة سادة خالية من أي تطريز.', images: imageDataBase['لا اريد نقش'] }
+            ],
+            'cap-colors-group': [
+                { title: 'لون القبعة', desc: 'اللون الأساسي للقبعة.', images: imageDataBase['لون القبعة'] },
+                { title: 'لون النقش', desc: 'لون التطريز المختار للقبعة.', images: imageDataBase['لون نقش القبعة'] },
+                { title: 'لون الكركوشة', desc: 'لون الخيط المتدلي من القبعة.', images: imageDataBase['لون كركوشة القبعة'] }
+            ],
+            'cap-notes-group': [
+                { title: 'ملاحظات القبعة', desc: 'تفاصيل إضافية...', images: [] }
+            ],
+
+            // === مجموعة الروب ===
+            'gown-type-group': [
+                { title: 'روب خليجي', desc: 'الروب بتصميمه الخليجي الواسع والمريح.', images: imageDataBase['روب خليجي'] },
+                { title: 'روب امريكي', desc: 'الروب بالتصميم الأمريكي الرسمي.', images: imageDataBase['روب امريكي'] }
+            ],
+            'gown-additions-group': [
+                { title: 'كسرات الكتف (للأمريكي)', desc: 'إضافة كسرات مميزة عند منطقة الكتف.', images: imageDataBase['كسرات كتف'] },
+                { title: 'كسرات الصدر (للأمريكي)', desc: 'إضافة كسرات طولية في منطقة الصدر.', images: imageDataBase['كسرات الصدر'] },
+                { title: 'كسرات الظهر (للأمريكي)', desc: 'إضافة كسرات في منطقة الظهر.', images: imageDataBase['كسرات الظهر'] },
+                { title: 'تطريز الردان', desc: 'إضافة نقوش على أكمام الروب.', images: imageDataBase['تطريز الردان'] },
+                { title: 'تطعيم الردان', desc: 'إضافة قماش بلون مختلف على الأكمام.', images: imageDataBase['تطعيم الردان'] }
+            ],
+            'gown-colors-group': [
+                { title: 'لون الروب', desc: 'اللون الأساسي لقماش الروب.', images: imageDataBase['لون الروب'] }
+            ],
+            'gown-notes-group': [
+                { title: 'ملاحظات الروب', desc: 'تفاصيل إضافية...', images: [] }
+            ]
+        };
+
+        const imageStore = {};
+        
+        let currentEditorCropper = null;
+        let currentEditingUploadId = null;
+        let editHistory = []; 
+        let historyIndex = -1; 
+        let filterIndex = 0;
+        const filters = ['', 'grayscale(100%)', 'sepia(0.5)', 'contrast(150%) brightness(110%)'];
+        let currentBaseRotation = 0; 
+        let currentFineRotation = 0; 
+
+        let baseSashType = '';
+        let isAmericanSash = false;
+
+        // --- وضع التعليمات ---
+        let isInstructionMode = false;
+
+        window.toggleInstructionMode = function() {
+            isInstructionMode = !isInstructionMode;
+            const body = document.body;
+            const btn = document.getElementById('btn-instruction-mode');
+            const badge = document.getElementById('instruction-badge');
+
+            if (isInstructionMode) {
+                // تفعيل وضع التعليمات
+                body.classList.add('instruction-mode');
+                btn.classList.remove('bg-gray-100', 'text-gray-800');
+                btn.classList.add('bg-red-100', 'text-red-700', 'border-red-300');
+                badge.style.display = 'flex';
+                
+                updateVisibilityBasedOnMode();
+
+            } else {
+                // تعطيل وضع التعليمات
+                body.classList.remove('instruction-mode');
+                btn.classList.remove('bg-red-100', 'text-red-700', 'border-red-300');
+                btn.classList.add('bg-gray-100', 'text-gray-800');
+                badge.style.display = 'none';
+                
+                updateVisibilityBasedOnMode();
+            }
+        };
+
+        function updateVisibilityBasedOnMode() {
+            const mainWrappers = ['sashContentWrapper', 'capContentWrapper', 'gownContentWrapper'];
+            const subSections = [
+                'americanGownOptions', 
+                'sashEndsContainer', 
+                'sashSectionAmericanNotes',
+                'gownEmbroideryUploadSection'
+            ];
+
+            if (isInstructionMode) {
+                mainWrappers.forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.classList.remove('hidden');
+                });
+                subSections.forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) el.classList.remove('hidden');
+                });
+            } else {
+                handleSashChange();
+                handleCapTypeChange();
+                handleGownChange();
+                
+                const gownEmbCheck = document.querySelector('input[value="تطريز الردان"]');
+                if (gownEmbCheck) handleGownEmbroideryChange(gownEmbCheck);
+            }
+        }
+
+        // --- دالة عرض نافذة التعليمات المجمعة ---
+        window.showGroupInstruction = function(groupKey, mainTitle) {
+            if (!isInstructionMode) return;
+
+            const modal = document.getElementById('custom-instruction-modal');
+            const titleEl = document.getElementById('modal-title');
+            const contentArea = document.getElementById('instruction-content-area');
+
+            titleEl.textContent = mainTitle;
+            contentArea.innerHTML = ''; // تنظيف المحتوى السابق
+
+            const items = instructionGroups[groupKey] || [];
+
+            if (items.length === 0) {
+                contentArea.innerHTML = `<p class="text-3xl text-gray-500 text-center mt-10">لا توجد تفاصيل إضافية لعرضها في هذا القسم.</p>`;
+            } else {
+                // بناء العناصر تحت بعضها البعض
+                items.forEach(item => {
+                    const itemContainer = document.createElement('div');
+                    itemContainer.className = 'instruction-group-item';
+
+                    // العنوان
+                    const itemTitle = document.createElement('h4');
+                    itemTitle.className = 'group-item-title';
+                    itemTitle.innerHTML = `<i class="fas fa-bookmark ml-4 text-blue-400"></i> ${item.title}`;
+                    itemContainer.appendChild(itemTitle);
+
+                    // الوصف
+                    const itemDesc = document.createElement('p');
+                    itemDesc.className = 'group-item-desc';
+                    itemDesc.textContent = item.desc;
+                    itemContainer.appendChild(itemDesc);
+
+                    // معرض الصور الأفقي (إذا وجدت صور)
+                    if (item.images && item.images.length > 0) {
+                        const galleryContainer = document.createElement('div');
+                        galleryContainer.className = 'item-gallery-container';
+
+                        item.images.forEach(imgSrc => {
+                            const imgWrapper = document.createElement('div');
+                            imgWrapper.className = 'gallery-img-wrapper';
+                            imgWrapper.innerHTML = `<img src="${imgSrc}" alt="${item.title}">`;
+                            galleryContainer.appendChild(imgWrapper);
+                        });
+
+                        itemContainer.appendChild(galleryContainer);
+                    } else {
+                        // عنصر نائب اذا لم توجد صور
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'gallery-placeholder-item';
+                        placeholder.innerHTML = `
+                            <i class="fas fa-image"></i>
+                            <span>لا توجد صور متوفرة</span>
+                        `;
+                        // itemContainer.appendChild(placeholder); // اختياري
+                    }
+
+                    contentArea.appendChild(itemContainer);
+                });
+            }
+
+            modal.style.display = 'flex';
+        };
+
+        window.closeInstructionPopup = function() {
+            document.getElementById('custom-instruction-modal').style.display = 'none';
+        }
+
+
+        // --- WINDOW BINDING ---
+        window.selectOption = selectOption;
+        window.handleSashChange = handleSashChange;
+        window.handleCapTypeChange = handleCapTypeChange;
+        window.handleGownChange = handleGownChange;
+        window.handleCapEmbroideryChange = handleCapEmbroideryChange;
+        window.handleGownEmbroideryChange = handleGownEmbroideryChange;
+        window.toggleCheckboxStyle = toggleCheckboxStyle;
+        
+        window.selectSashBase = selectSashBase;
+        window.toggleAmericanCard = toggleAmericanCard;
+        window.selectNoSash = selectNoSash;
+        
+        window.handleNameInput = handleNameInput;
+        window.cleanNameInput = cleanNameInput;
+        window.processFileForEditor = processFileForEditor;
+        window.reEditImage = reEditImage;
+        window.removeImage = removeImage;
+        window.closeEditor = closeEditor;
+        window.saveEditorImage = saveEditorImage;
+        window.saveIntermediateChanges = saveIntermediateChanges;
+        window.undoEdit = undoEdit;
+        window.redoEdit = redoEdit;
+        window.applyFilter = applyFilter;
+        window.handleRotation = handleRotation;
+        window.rotate90 = rotate90;
+        window.resetView = resetView;
+        window.initiateSendProcess = initiateSendProcess;
+        window.compensateVisualZoom = compensateVisualZoom;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initUploadBoxes();
+            updateProgress();
+        });
+
+        // ----------------------------------------------------
+        // --- LOGIC ---
+        // ----------------------------------------------------
+
+        function selectOption(inputId, value, element, theme) {
+            if (isInstructionMode) return; 
+
+            const input = document.getElementById(inputId);
+            if(!input) return;
+            input.value = value;
+            
+            const parent = element.parentElement;
+            parent.querySelectorAll('.option-card').forEach(c => {
+                c.classList.remove('active-purple', 'active-indigo', 'active-emerald', 'active-gray');
+            });
+            element.classList.add(`active-${theme}`);
+            
+            if (inputId === 'capType') handleCapTypeChange();
+            else if (inputId === 'gownType') handleGownChange();
+            else if (inputId === 'capEmbroideryLoc') handleCapEmbroideryChange();
+            
+            updateProgress();
+        }
+
+        function selectSashBase(value, element) {
+            if (isInstructionMode) return;
+
+            baseSashType = value;
+            document.querySelectorAll('.sash-base-card').forEach(c => {
+                c.classList.remove('active-purple', 'active-gray');
+            });
+            element.classList.add('active-purple');
+            updateFinalSashValue();
+        }
+
+        function selectNoSash(element) {
+            if (isInstructionMode) return;
+
+            baseSashType = 'لا اريد وشاح';
+            isAmericanSash = false; 
+            document.querySelectorAll('.sash-base-card').forEach(c => {
+                c.classList.remove('active-purple', 'active-gray');
+            });
+            element.classList.add('active-gray');
+            const amCard = document.getElementById('card-american-toggle');
+            amCard.classList.remove('active-purple');
+            amCard.style.opacity = '0.5';
+            amCard.style.pointerEvents = 'none';
+            updateFinalSashValue();
+        }
+
+        function toggleAmericanCard(element) {
+            if (isInstructionMode) return;
+
+            if(baseSashType === 'لا اريد وشاح') return;
+            isAmericanSash = !isAmericanSash;
+            if (isAmericanSash) {
+                element.classList.add('active-purple');
+            } else {
+                element.classList.remove('active-purple');
+            }
+            updateFinalSashValue();
+        }
+        
+        function toggleCheckboxStyle(checkbox, theme = 'emerald', instructionTitle = 'خيار') {
+            if (isInstructionMode) {
+                checkbox.checked = !checkbox.checked; 
+                return;
+            }
+
+            const label = checkbox.parentElement;
+            const activeClass = `checkbox-wrapper-active`; 
+            if (checkbox.checked) {
+                label.classList.add(activeClass);
+            } else {
+                label.classList.remove(activeClass);
+            }
+        }
+
+        // --- Other logic remains the same ---
+        function cleanNameInput(inputElement) {
+            let val = inputElement.value;
+            if (!val) return;
+            val = val.replace(/[^\u0621-\u064A\s]/g, '');
+            val = val.replace(/\s+/g, ' ').trim();
+            inputElement.value = val;
+            handleNameInput(); 
+        }
+
+        function validateNameSmart(name) {
+            name = name.trim();
+            if (name.length === 0) return { valid: false, msg: "" };
+            if (/[^ \u0621-\u064A]/.test(name)) return { valid: false, msg: "يسمح فقط بالحروف العربية (بدون أرقام أو رموز)." };
+            if (/(.)\1{2,}/.test(name)) return { valid: false, msg: "الاسم يحتوي على تكرار مبالغ فيه للحروف." };
+            const parts = name.split(' ').filter(p => p.length > 1); 
+            if (parts.length < 4) return { valid: false, msg: "يجب كتابة الاسم الرباعي كاملاً (4 مقاطع)." };
+            return { valid: true, msg: "" };
+        }
+
+        function handleNameInput() {
+            const input = document.getElementById('input-fullName');
+            const warningP = document.getElementById('name-warning-msg');
+            const warningText = document.getElementById('name-warning-text');
+            const result = validateNameSmart(input.value);
+            
+            if (!input.value.trim()) {
+                warningP.classList.add('hidden'); 
+            } else if (!result.valid) {
+                warningP.classList.remove('hidden');
+                warningText.textContent = result.msg;
+                input.classList.add('border-red-400');
+                input.classList.remove('border-gray-300', 'border-green-500');
+            } else {
+                warningP.classList.add('hidden');
+                input.classList.remove('border-red-400', 'border-gray-300');
+                input.classList.add('border-green-500'); 
+            }
+            updateProgress();
+        }
+
+        function updateFinalSashValue() {
+            const input = document.getElementById('sashType');
+            const amCard = document.getElementById('card-american-toggle');
+            if (baseSashType !== 'لا اريد وشاح' && baseSashType !== '') {
+                amCard.style.opacity = '1';
+                amCard.style.pointerEvents = 'auto';
+            }
+            if (baseSashType === 'لا اريد وشاح' || baseSashType === '') {
+                input.value = baseSashType;
+            } else {
+                if (isAmericanSash) {
+                    input.value = 'امريكي + ' + baseSashType;
+                } else {
+                    input.value = baseSashType;
+                }
+            }
+            handleSashChange();
+            updateProgress();
+        }
+
+        function handleSashChange() {
+            const val = document.getElementById('sashType').value;
+            const wrapper = document.getElementById('sashContentWrapper');
+            if (!val || val.includes('لا اريد')) { 
+                wrapper.classList.add('hidden'); 
+            } else {
+                wrapper.classList.remove('hidden');
+                document.getElementById('sashSectionTwoSides').classList.toggle('hidden', val.includes('جانبي'));
+                document.getElementById('sashSectionOneSide').classList.toggle('hidden', !val.includes('جانبي'));
+                document.getElementById('sashSectionBack').classList.toggle('hidden', !val.includes('ملكي'));
+                document.getElementById('sashSectionAmericanNotes').classList.toggle('hidden', !val.includes('امريكي'));
+                const endsContainer = document.getElementById('sashEndsContainer');
+                if (val.includes('جانبي')) {
+                    endsContainer.classList.add('hidden');
+                } else {
+                    endsContainer.classList.remove('hidden');
+                }
+            }
+            updateProgress();
+        }
+
+        function handleCapTypeChange() {
+            const val = document.getElementById('capType').value;
+            const wrapper = document.getElementById('capContentWrapper');
+            val && !val.includes('لا اريد') ? wrapper.classList.remove('hidden') : wrapper.classList.add('hidden');
+            updateProgress();
+        }
+
+        function handleCapEmbroideryChange() {
+            const loc = document.getElementById('capEmbroideryLoc').value;
+            const top = document.getElementById('capSectionTop');
+            const rim = document.getElementById('capSectionRim');
+            top.classList.add('hidden'); rim.classList.add('hidden'); 
+            if (loc === 'فوق القبعة') top.classList.remove('hidden');
+            else if (loc === 'طوق القبعة') rim.classList.remove('hidden');
+            else if (loc.includes('دبل')) { top.classList.remove('hidden'); rim.classList.remove('hidden'); }
+        }
+
+        function handleGownChange() {
+            const val = document.getElementById('gownType').value;
+            const wrapper = document.getElementById('gownContentWrapper');
+            val && !val.includes('لا اريد') ? wrapper.classList.remove('hidden') : wrapper.classList.add('hidden');
+            const americanOptions = document.getElementById('americanGownOptions');
+            if (americanOptions) {
+                if (val === 'روب امريكي') {
+                    americanOptions.classList.remove('hidden');
+                } else {
+                    americanOptions.classList.add('hidden');
+                }
+            }
+            updateProgress();
+        }
+
+        function handleGownEmbroideryChange(checkbox) {
+            // Check handled inside toggleCheckboxStyle now for instruction mode
+            if(isInstructionMode) return; 
+
+            const section = document.getElementById('gownEmbroideryUploadSection');
+            if(checkbox.checked) {
+                section.classList.remove('hidden');
+            } else {
+                section.classList.add('hidden');
+            }
+        }
+
+        function initUploadBoxes() {
+            uploadIDs.forEach(id => {
+                const c = document.getElementById(id);
+                if(c && !c.querySelector('.upload-box')) renderEmptyBox(id);
+            });
+        }
+
+        function renderEmptyBox(id) {
+            document.getElementById(id).innerHTML = `<div class="upload-box group" onclick="document.getElementById('file-${id}').click()"><input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="window.processFileForEditor(event, '${id}')"><div class="upload-placeholder"><i class="fas fa-cloud-upload-alt group-hover:text-blue-500 transition mb-2"></i><span class="block">ارفق صورة</span></div></div>`;
+        }
+
+        function renderImageBox(id, base64) {
+            document.getElementById(id).innerHTML = `
+                <div class="upload-box has-image relative">
+                    <img src="${base64}" class="uploaded-img">
+                    <div class="img-actions">
+                        <button onclick="window.reEditImage(event, '${id}')" class="action-btn btn-edit">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <button onclick="window.removeImage(event, '${id}')" class="action-btn btn-delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <input type="file" id="file-${id}" class="hidden" accept="image/*" onchange="window.processFileForEditor(event, '${id}')">
+                </div>`;
+        }
+
+        function processFileForEditor(event, id) {
+            const file = event.target.files[0];
+            if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                openEditor(id, e.target.result);
+                event.target.value = '';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function reEditImage(e, id) {
+            e.stopPropagation();
+            const currentSrc = imageStore[id];
+            if(currentSrc) {
+                openEditor(id, currentSrc);
+            }
+        }
+
+        function removeImage(e, id) { 
+            e.stopPropagation(); 
+            delete imageStore[id]; 
+            renderEmptyBox(id); 
+        }
+
+        function openEditor(id, imageSrc) {
+            currentEditingUploadId = id;
+            const modal = document.getElementById('image-editor-modal');
+            const imgTarget = document.getElementById('editor-image-target');
+            editHistory = [imageSrc];
+            historyIndex = 0;
+            updateHistoryButtons();
+            currentBaseRotation = 0;
+            currentFineRotation = 0;
+            document.querySelector('.rotation-slider').value = 0;
+            filterIndex = 0; 
+            imgTarget.src = editHistory[historyIndex];
+            imgTarget.style.filter = filters[filterIndex]; 
+            modal.style.display = 'flex';
+            lockZoom();
+            document.getElementById('btn-floating-save').classList.remove('visible');
+            initCropper(imgTarget);
+        }
+
+        function initCropper(imgElement) {
+            if(currentEditorCropper) { currentEditorCropper.destroy(); }
+            setTimeout(() => {
+                currentEditorCropper = new Cropper(imgElement, {
+                    viewMode: 1, dragMode: 'none', movable: false, zoomable: false, autoCropArea: 0.8,
+                    background: false, minContainerWidth: 800, minContainerHeight: 600,
+                    cropstart: function() { document.getElementById('btn-floating-save').classList.add('visible'); },
+                    cropmove: function() { document.getElementById('btn-floating-save').classList.add('visible'); },
+                    ready: function() { currentEditorCropper.rotateTo(currentBaseRotation + parseFloat(currentFineRotation)); }
+                });
+            }, 50);
+        }
+
+        function applyCombinedRotation() {
+            if(currentEditorCropper) {
+                let total = currentBaseRotation + parseFloat(currentFineRotation);
+                currentEditorCropper.rotateTo(total);
+                document.getElementById('btn-floating-save').classList.add('visible');
+            }
+        }
+
+        function handleRotation(value) {
+            currentFineRotation = value;
+            applyCombinedRotation();
+        }
+
+        function rotate90(degrees) {
+            currentBaseRotation += degrees;
+            applyCombinedRotation();
+        }
+
+        function applyFilter() {
+            filterIndex = (filterIndex + 1) % filters.length;
+            const f = filters[filterIndex];
+            const imgTarget = document.getElementById('editor-image-target');
+            if(imgTarget) imgTarget.style.filter = f;
+            document.getElementById('btn-floating-save').classList.add('visible');
+        }
+
+        function saveIntermediateChanges() {
+            if (!currentEditorCropper) return;
+            let canvas = currentEditorCropper.getCroppedCanvas({ fillColor: '#fff' });
+            if(filterIndex > 0) {
+                const fCanvas = document.createElement('canvas');
+                fCanvas.width = canvas.width;
+                fCanvas.height = canvas.height;
+                const ctx = fCanvas.getContext('2d');
+                ctx.filter = filters[filterIndex];
+                ctx.drawImage(canvas, 0, 0);
+                canvas = fCanvas; 
+            }
+            const newImageBase64 = canvas.toDataURL('image/jpeg');
+            addToHistory(newImageBase64);
+            loadState(newImageBase64);
+            currentBaseRotation = 0;
+            currentFineRotation = 0;
+            document.querySelector('.rotation-slider').value = 0;
+            filterIndex = 0; 
+            setTimeout(() => {
+                currentEditorCropper.destroy();
+                document.getElementById('editor-image-target').src = newImageBase64;
+                document.getElementById('editor-image-target').style.filter = '';
+                initCropper(document.getElementById('editor-image-target'));
+                document.getElementById('btn-floating-save').classList.remove('visible');
+            }, 100);
+        }
+
+        function resetView() {
+            if(currentEditorCropper) {
+                currentEditorCropper.crop();
+                currentBaseRotation = 0;
+                currentFineRotation = 0;
+                document.querySelector('.rotation-slider').value = 0;
+                currentEditorCropper.rotateTo(0);
+                filterIndex = 0; 
+                document.getElementById('editor-image-target').style.filter = '';
+                loadState(editHistory[0]); 
+                document.getElementById('btn-floating-save').classList.remove('visible');
+            }
+        }
+
+        function addToHistory(newBase64) {
+            editHistory = editHistory.slice(0, historyIndex + 1);
+            editHistory.push(newBase64);
+            historyIndex++;
+            updateHistoryButtons();
+        }
+
+        function undoEdit() {
+            if(historyIndex > 0) {
+                historyIndex--;
+                loadState(editHistory[historyIndex]);
+                currentEditorCropper.destroy();
+                document.getElementById('editor-image-target').src = editHistory[historyIndex];
+                document.getElementById('editor-image-target').style.filter = '';
+                initCropper(document.getElementById('editor-image-target'));
+                updateHistoryButtons();
+                document.getElementById('btn-floating-save').classList.add('visible');
+            }
+        }
+
+        function redoEdit() {
+            if(historyIndex < editHistory.length - 1) {
+                historyIndex++;
+                loadState(editHistory[historyIndex]);
+                currentEditorCropper.destroy();
+                document.getElementById('editor-image-target').src = editHistory[historyIndex];
+                document.getElementById('editor-image-target').style.filter = '';
+                initCropper(document.getElementById('editor-image-target'));
+                updateHistoryButtons();
+                document.getElementById('btn-floating-save').classList.add('visible');
+            }
+        }
+
+        function loadState(base64) {
+            const imgTarget = document.getElementById('editor-image-target');
+            if(imgTarget) imgTarget.src = base64; 
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('btn-undo').disabled = (historyIndex <= 0);
+            document.getElementById('btn-redo').disabled = (historyIndex >= editHistory.length - 1);
+        }
+        
+        function saveEditorImage() {
+            const base64 = editHistory[historyIndex];
+            imageStore[currentEditingUploadId] = base64; 
+            renderImageBox(currentEditingUploadId, base64);
+            closeEditor();
+        }
+        
+        function closeEditor() {
+            document.getElementById('image-editor-modal').style.display = 'none';
+            if(currentEditorCropper) { currentEditorCropper.destroy(); currentEditorCropper = null; }
+            unlockZoom();
+        }
+
+        function lockZoom() {
+            document.querySelector('#viewport-meta').setAttribute('content', 'width=1280, user-scalable=no, initial-scale=1.0, maximum-scale=1.0');
+            window.addEventListener('keydown', preventZoomKeys, { passive: false });
+            window.addEventListener('wheel', preventZoomWheel, { passive: false });
+            window.addEventListener('resize', compensateVisualZoom);
+            compensateVisualZoom(); 
+        }
+
+        function unlockZoom() {
+            const meta = document.querySelector('#viewport-meta');
+            meta.setAttribute('content', 'width=1280, user-scalable=no');
+            window.removeEventListener('keydown', preventZoomKeys);
+            window.removeEventListener('wheel', preventZoomWheel);
+            window.removeEventListener('resize', compensateVisualZoom);
+            const modal = document.getElementById('image-editor-modal');
+            if(modal) {
+                modal.style.transform = ''; modal.style.width = ''; modal.style.height = ''; modal.style.position = 'fixed';
+            }
+            setTimeout(() => { meta.setAttribute('content', 'width=1280, user-scalable=yes'); }, 100);
+        }
+
+        function compensateVisualZoom() {
+            const modal = document.getElementById('image-editor-modal');
+            if (!modal || modal.style.display === 'none') return;
+            const winWidth = window.innerWidth;
+            const winHeight = window.innerHeight;
+            const baseWidth = 1280; 
+            let scale = winWidth / baseWidth;
+            modal.style.width = baseWidth + 'px'; 
+            modal.style.height = (winHeight / scale) + 'px'; 
+            modal.style.transform = `scale(${scale})`; 
+            modal.style.transformOrigin = 'top left'; 
+            modal.style.top = '0'; modal.style.left = '0';
+        }
+
+        function preventZoomKeys(e) {
+            if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '=' || e.key === '0')) {
+                e.preventDefault();
+            }
+        }
+
+        function preventZoomWheel(e) {
+            if (e.ctrlKey) {
+                e.preventDefault();
+            }
+        }
+
+        function updateProgress() {
+            let completedSections = 0;
+            const nameInput = document.getElementById('input-fullName');
+            const nameStatus = validateNameSmart(nameInput.value);
+            if (nameInput.value.trim().length > 0 && nameStatus.valid) completedSections++;
+
+            if (document.getElementById('sashType').value) completedSections++;
+            if (document.getElementById('capType').value) completedSections++;
+            if (document.getElementById('gownType').value) completedSections++;
+            document.getElementById('progress-bar').style.width = `${(completedSections / 4) * 100}%`;
+            document.getElementById('progress-text').innerText = completedSections === 4 ? "مكتمل" : `قيد التعبئة`;
+        }
+
+        function showLoading(show, text = "جاري المعالجة...") {
+            const overlay = document.getElementById('loading-overlay');
+            const loadingText = document.getElementById('loading-text');
+            loadingText.innerText = text;
+            overlay.style.display = show ? 'flex' : 'none';
+        }
+
+        async function initiateSendProcess() {
+            const fullNameInput = document.querySelector('[name="fullName"]');
+            cleanNameInput(fullNameInput);
+            const fullName = fullNameInput.value;
+            const validation = validateNameSmart(fullName);
+
+            if (!fullName) { Swal.fire('خطأ', 'يرجى كتابة الاسم أولاً', 'error'); return; }
+
+            if (!validation.valid) {
+                Swal.fire({
+                    title: 'تنبيه في الاسم', text: validation.msg, icon: 'warning',
+                    confirmButtonText: 'حسناً، سأصحح الاسم', confirmButtonColor: '#d97706'
+                });
+                fullNameInput.focus();
+                return; 
+            }
+
+            const confirmResult = await Swal.fire({
+                title: 'تأكيد الطلب', text: `هل أنت متأكد من إرسال البيانات للاسم: ${fullName}؟`,
+                icon: 'question', showCancelButton: true, confirmButtonColor: '#16a34a', cancelButtonColor: '#d33',
+                confirmButtonText: 'نعم، تحقق وأرسل', cancelButtonText: 'إلغاء'
+            });
+
+            if (!confirmResult.isConfirmed) return;
+
+            showLoading(true, "جاري التحقق من السجلات السابقة...");
+
+            try {
+                const checkResponse = await fetch(SCRIPT_URL, {
+                    method: 'POST', body: JSON.stringify({ action: 'check', name: fullName }) 
+                });
+                
+                const checkData = await checkResponse.json();
+                showLoading(false);
+
+                if (checkData.exists) {
+                    await Swal.fire({
+                        title: 'انت مسجل مسبقاً!', text: 'هناك تسجيلاً سابقاً لك  هل ترغب في استبداله أم حجز جديد؟', icon: 'warning',
+                        showDenyButton: true, confirmButtonText: 'استبدال التسجيل القديم', denyButtonText: 'تسجيل وحجز ثاني',
+                        confirmButtonColor: '#d97706', denyButtonColor: '#2563eb'
+                    }).then((result) => {
+                        if (result.isConfirmed) { finalizeSubmission(fullName, 'replace'); } 
+                        else if (result.isDenied) { finalizeSubmission(fullName, 'second'); }
+                    });
+                } else {
+                    finalizeSubmission(fullName, 'new');
+                }
+
+            } catch (error) {
+                showLoading(false);
+                console.error(error);
+                Swal.fire({ title: 'تنبيه', text: 'حدث خطأ في الاتصال. سيتم الحفظ كملف جديد.', icon: 'info', confirmButtonText: 'موافق' }).then(() => {
+                    finalizeSubmission(fullName, 'new');
+                });
+            }
+        }
+
+        async function finalizeSubmission(fullName, actionType) {
+            let loadingMsg = "جاري حفظ الاستمارة...";
+            if (actionType === 'replace') loadingMsg = "جاري حذف القديم وحفظ الجديد...";
+            showLoading(true, loadingMsg);
+
+            let fileName = "";
+            const dateStr = new Date().toISOString().split('T')[0];
+            const timeSuffix = new Date().getTime().toString().slice(-4);
+            
+            if (actionType === 'replace') { fileName = `${fullName} (أعادة)_${dateStr}.html`; } 
+            else if (actionType === 'second') { fileName = `${fullName} (2)_${dateStr}_${timeSuffix}.html`; } 
+            else { fileName = `${fullName}_${dateStr}_${timeSuffix}.html`; }
+
+            const htmlContent = generateExactStaticHTML(fullName);
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST', body: JSON.stringify({ action: actionType === 'second' ? 'new' : actionType, rawName: fullName, filename: fileName, html: htmlContent })
+                });
+                
+                const data = await response.json();
+                showLoading(false);
+
+                if (data.result === 'success') {
+                    const firstName = fullName.trim().split(/\s+/)[0];
+                    let msg = "";
+                    if (actionType === 'replace') msg = `تم تسليم طلبك الجديد، شكرًا لك يا ${firstName}.`;
+                    else if (actionType === 'second') msg = `تم تسليم طلبك الثاني، شكرًا لك يا ${firstName}.`;
+                    else msg = `تم تسليم طلبك، شكرًا لك يا ${firstName}.`;
+                    Swal.fire('تمت العملية بنجاح!', msg, 'success').then(() => location.reload());
+                } else {
+                    throw new Error(data.error || 'حدث خطأ غير معروف');
+                }
+            } catch (error) {
+                showLoading(false);
+                Swal.fire('خطأ', 'فشل الإرسال، تحقق من الإنترنت', 'error');
+            }
+        }
+
+        function generateExactStaticHTML(fullName) {
+            const originalContainer = document.getElementById('main-form-container');
+            const clone = originalContainer.cloneNode(true);
+            const originalInputs = originalContainer.querySelectorAll('input, textarea, select');
+            const clonedInputs = clone.querySelectorAll('input, textarea, select');
+
+            for (let i = 0; i < originalInputs.length; i++) {
+                const orig = originalInputs[i];
+                const cln = clonedInputs[i];
+                cln.removeAttribute('placeholder'); cln.removeAttribute('oninput'); cln.removeAttribute('onblur');
+                cln.classList.remove('border-red-400', 'border-green-500'); cln.classList.add('border-gray-300');
+
+                if (orig.tagName === 'INPUT' || orig.tagName === 'SELECT') {
+                    let val = orig.value;
+                    if(val.trim() === "") { val = "ــــــــ"; cln.style.color = "#9ca3af"; } 
+                    else { cln.style.color = "#000000"; }
+                    cln.setAttribute('value', val);
+                    if (orig.type === 'checkbox' || orig.type === 'radio') { if (orig.checked) cln.setAttribute('checked', 'checked'); }
+                } else if (orig.tagName === 'TEXTAREA') {
+                    let val = orig.value;
+                    if(val.trim() === "") { val = "ــــــــ"; cln.style.color = "#9ca3af"; } 
+                    else { cln.style.color = "#000000"; }
+                    cln.textContent = val;
+                }
+                cln.setAttribute('readonly', 'true'); cln.classList.add('pointer-events-none', 'bg-white'); 
+            }
+
+            clone.querySelectorAll('*').forEach(el => { el.removeAttribute('onclick'); el.removeAttribute('onchange'); el.removeAttribute('oninput'); el.removeAttribute('onsubmit'); });
+            clone.querySelectorAll('.img-actions').forEach(btn => btn.remove());
+            clone.querySelectorAll('input[type="file"]').forEach(inp => inp.remove());
+            clone.querySelectorAll('.option-card').forEach(card => { card.style.cursor = 'default'; card.style.pointerEvents = 'none'; });
+            const warningMsg = clone.querySelector('#name-warning-msg'); if (warningMsg) warningMsg.remove();
+
+            clone.querySelectorAll('.upload-box').forEach(box => {
+                box.style.pointerEvents = 'none'; box.style.cursor = 'default';
+                if(box.classList.contains('has-image')) { box.style.borderStyle = 'solid'; } 
+                else {
+                    box.innerHTML = `<div class="flex flex-col items-center justify-center text-gray-400 opacity-70"><i class="fas fa-image-slash mb-2" style="font-size: 4rem;"></i><span class="font-bold text-2xl">لم يتم ارفاق صورة</span></div>`;
+                    box.style.backgroundColor = "#f8fafc"; box.style.borderColor = "#e2e8f0";
+                }
+            });
+
+            // Remove hidden embroidery sections
+            const hiddenSections = clone.querySelectorAll('.hidden');
+            hiddenSections.forEach(section => section.remove());
+
+            // Remove instruction related styles/classes
+            clone.querySelectorAll('.instruction-trigger').forEach(el => {
+                el.classList.remove('instruction-trigger');
+                el.removeAttribute('onclick');
+            });
+
+            let headContent = document.head.innerHTML;
+            const desktopViewport = '<meta name="viewport" content="width=1280, user-scalable=yes">';
+            if (headContent.includes('<meta name="viewport"')) { headContent = headContent.replace(/<meta name="viewport"[^>]*>/gi, desktopViewport); } 
+            else { headContent += desktopViewport; }
+
+            headContent = headContent.replace(/<script.*cropper.*><\/script>/g, '').replace(/<link.*cropper.*>/g, '');
+
+            return `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    ${headContent}
+    <style>
+        body { background-color: #f1f5f9; padding-bottom: 50px; min-width: 1280px; width: 1280px; margin: 0 auto; position: relative; font-size: 20px; }
+        .swal2-container { position: absolute !important; width: 100% !important; height: 100% !important; top: 0 !important; left: 0 !important; padding-top: 220px !important; align-items: flex-start !important; }
+        .swal2-popup { font-size: 1.8rem !important; width: 650px !important; padding: 2.5rem !important; border-radius: 1.5rem !important; }
+        .swal2-title { font-size: 2.8rem !important; margin-bottom: 1rem !important; }
+        .swal2-html-container { font-size: 2rem !important; }
+        .swal2-styled { font-size: 1.5rem !important; padding: 1rem 2rem !important; }
+        .no-print { display: none !important; }
+        input:focus, textarea:focus { outline: none; box-shadow: none; border-color: #e2e8f0; }
+        .img-actions { display: none !important; }
+        html { overflow-x: auto; }
+        #image-editor-modal { display: none !important; }
+        #custom-instruction-modal { display: none !important; } 
+        /* تنظيف إضافي للنسخة الثابتة */
+        .instruction-trigger { cursor: default !important; background: none !important; }
+        .instruction-trigger::before { content: none !important; }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <header class="bg-white shadow-lg sticky top-0 z-40 border-b-8 border-gray-200 mb-10 w-full">
+        <div class="w-full px-10 py-6 flex justify-between items-center">
+             <h1 class="text-4xl font-black text-gray-900">استمارة الطالب: ${fullName}</h1>
+             <span class="text-2xl font-black text-blue-800 bg-blue-100 px-6 py-3 rounded-full">نسخة للعرض فقط</span>
+        </div>
+    </header>
+    ${clone.outerHTML}
+    <footer class="text-center py-12 text-gray-600 text-2xl font-black mt-16 border-t-8 border-gray-200">
+        تم حفظ هذه النسخة بتاريخ ${new Date().toLocaleDateString('ar-EG')}
+    </footer>
+</body>
+</html>`;
+        }
+    </script>
+</body>
+</html>
