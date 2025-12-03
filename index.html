@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1280, user-scalable=yes" id="viewport-meta">
-    <title>استمارة التخرج - النسخة الواضحة والكبيرة</title>
+    <title>استمارة التخرج - النسخة السريعة</title>
     
     <!-- المكتبات الخارجية -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -44,9 +44,9 @@
 
         .instruction-sheet {
             background-color: #ffffff;
-            width: 98%; /* عرض كامل تقريباً */
+            width: 98%;
             max-width: 1260px;
-            height: 98vh; /* ارتفاع كامل تقريباً */
+            height: 98vh;
             border-radius: 3rem;
             display: flex;
             flex-direction: column;
@@ -74,7 +74,7 @@
         }
 
         .instruction-title {
-            font-size: 4.5rem; /* تكبير العنوان */
+            font-size: 4.5rem;
             font-weight: 900;
             color: #1e293b;
         }
@@ -82,7 +82,7 @@
         .btn-close-modal {
             background-color: #fee2e2;
             color: #ef4444;
-            width: 100px; /* زر أكبر */
+            width: 100px;
             height: 100px;
             border-radius: 50%;
             border: none;
@@ -114,7 +114,7 @@
         }
 
         .group-item-title {
-            font-size: 4rem; /* تكبير خط العناوين الفرعية */
+            font-size: 4rem;
             font-weight: 900;
             color: #1e3a8a;
             margin-bottom: 2rem;
@@ -125,7 +125,7 @@
         }
 
         .group-item-desc {
-            font-size: 3rem; /* تكبير خط الوصف */
+            font-size: 3rem;
             line-height: 1.6;
             color: #475569;
             margin-bottom: 3rem;
@@ -133,7 +133,7 @@
             font-weight: 700;
         }
 
-        /* معرض الصور الأفقي لكل عنصر (Horizontal Gallery) */
+        /* معرض الصور الأفقي */
         .item-gallery-container {
             width: 100%;
             overflow-x: auto;
@@ -142,7 +142,7 @@
             scrollbar-width: thin;
             scrollbar-color: #3b82f6 #f1f5f9;
             display: flex;
-            gap: 40px; /* مسافة أكبر بين الصور */
+            gap: 40px;
             align-items: center;
         }
 
@@ -152,11 +152,9 @@
 
         .gallery-img-wrapper {
             display: inline-block;
-            /* تكبير الصور بشكل هائل لتكون واضحة جداً */
             width: 900px; 
             height: 900px;
             min-width: 900px; 
-            
             border-radius: 2.5rem;
             overflow: hidden;
             border: 6px solid #e2e8f0;
@@ -169,12 +167,11 @@
         .gallery-img-wrapper img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* تظهر الصورة كاملة */
+            object-fit: contain;
             display: block;
             background-color: #f8fafc;
         }
 
-        /* العنصر البديل (Placeholder) */
         .gallery-placeholder-item {
             width: 900px;
             height: 900px;
@@ -191,8 +188,7 @@
         .gallery-placeholder-item i { font-size: 10rem; margin-bottom: 2rem; }
         .gallery-placeholder-item span { font-size: 3rem; font-weight: 800; }
 
-
-        /* --- Standard Elements (Old Styles Kept) --- */
+        /* --- Standard Elements --- */
         .swal2-container { position: fixed !important; top: 0; left: 0; width: 100%; height: 100%; z-index: 999999; }
         .option-card { cursor: pointer; border: 5px solid #cbd5e1; border-radius: 1.2rem; padding: 2rem 1rem; font-size: 1.7rem; transition: all 0.2s; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background-color: white; min-height: 140px; font-weight: 900; color: #1e293b; position: relative; }
         .option-card:hover { border-color: #64748b; transform: translateY(-5px); box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.15); }
@@ -1059,9 +1055,29 @@
         window.initiateSendProcess = initiateSendProcess;
         window.compensateVisualZoom = compensateVisualZoom;
 
+        // --- دالة التحميل المسبق (Preloading) ---
+        function preloadAllInstructionImages() {
+            // تجميع كافة روابط الصور في مصفوفة واحدة
+            const allImages = [];
+            Object.values(imageDataBase).forEach(arr => {
+                if(Array.isArray(arr)) {
+                    allImages.push(...arr);
+                }
+            });
+
+            // البدء بالتحميل المسبق
+            allImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+            console.log(`Preloading ${allImages.length} images...`);
+        }
+
+        // استدعاء الدالة عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => {
             initUploadBoxes();
             updateProgress();
+            preloadAllInstructionImages(); // تفعيل التحميل المسبق
         });
 
         // ----------------------------------------------------
